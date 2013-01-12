@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tala\AuthorizeNet;
+namespace Tala\Billing\AuthorizeNet;
 
 use Mockery as m;
 use Tala\CreditCard;

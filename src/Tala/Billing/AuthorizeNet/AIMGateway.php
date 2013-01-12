@@ -9,11 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Tala\AuthorizeNet;
+namespace Tala\Billing\AuthorizeNet;
 
 use Tala\AbstractGateway;
 use Tala\Request;
-use Tala\AuthorizeNet\Response;
 
 /**
  * Authorize.Net AIM Class
