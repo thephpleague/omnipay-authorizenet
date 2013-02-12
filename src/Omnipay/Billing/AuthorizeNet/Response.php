@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Tala Payments package.
+ * This file is part of the Omnipay package.
  *
  * (c) Adrian Macneil <adrian@adrianmacneil.com>
  *
@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Tala\Billing\AuthorizeNet;
+namespace Omnipay\Billing\AuthorizeNet;
 
-use Tala\AbstractResponse;
-use Tala\Exception;
-use Tala\Exception\InvalidResponseException;
+use Omnipay\AbstractResponse;
+use Omnipay\Exception;
+use Omnipay\Exception\InvalidResponseException;
 
 /**
  * Authorize.Net Response

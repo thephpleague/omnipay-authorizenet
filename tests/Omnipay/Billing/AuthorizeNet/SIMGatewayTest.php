@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Tala Payments package.
+ * This file is part of the Omnipay package.
  *
  * (c) Adrian Macneil <adrian@adrianmacneil.com>
  *
@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Tala\Billing\AuthorizeNet;
+namespace Omnipay\Billing\AuthorizeNet;
 
 use Mockery as m;
-use Tala\BaseGatewayTest;
-use Tala\Request;
+use Omnipay\BaseGatewayTest;
+use Omnipay\Request;
 
 class SIMGatewayTest extends BaseGatewayTest
 {
     public function setUp()
     {
-        $this->httpClient = m::mock('\Tala\HttpClient\HttpClientInterface');
+        $this->httpClient = m::mock('\Omnipay\HttpClient\HttpClientInterface');
         $this->httpRequest = m::mock('\Symfony\Component\HttpFoundation\Request');
 
         $this->gateway = new SIMGateway($this->httpClient, $this->httpRequest);
@@ -31,7 +31,7 @@ class SIMGatewayTest extends BaseGatewayTest
     }
 
     /**
-     * @expectedException \Tala\Exception\InvalidRequestException
+     * @expectedException \Omnipay\Exception\InvalidRequestException
      * @expectedExceptionMessage The amount parameter is required
      */
     public function testAuthorizeRequiresAmount()
@@ -43,7 +43,7 @@ class SIMGatewayTest extends BaseGatewayTest
     public function testAuthorize()
     {
         $response = $this->gateway->authorize($this->options);
-        $this->assertInstanceOf('\Tala\FormRedirectResponse', $response);
+        $this->assertInstanceOf('\Omnipay\FormRedirectResponse', $response);
         $this->assertNotEmpty($response->getRedirectUrl());
 
         $formData = $response->getFormData();
