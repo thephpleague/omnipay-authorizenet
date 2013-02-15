@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Omnipay\Billing\AuthorizeNet;
+namespace Omnipay\AuthorizeNet;
 
 use Omnipay\GatewayTestCase;
 
@@ -28,7 +28,7 @@ class SIMGatewayTest extends GatewayTestCase
     }
 
     /**
-     * @expectedException \Omnipay\Exception\InvalidRequestException
+     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
      * @expectedExceptionMessage The amount parameter is required
      */
     public function testAuthorizeRequiresAmount()
@@ -40,7 +40,7 @@ class SIMGatewayTest extends GatewayTestCase
     public function testAuthorize()
     {
         $response = $this->gateway->authorize($this->options);
-        $this->assertInstanceOf('\Omnipay\FormRedirectResponse', $response);
+        $this->assertInstanceOf('\Omnipay\Common\FormRedirectResponse', $response);
         $this->assertNotEmpty($response->getRedirectUrl());
 
         $formData = $response->getFormData();

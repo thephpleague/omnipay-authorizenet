@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Omnipay\Billing\AuthorizeNet;
+namespace Omnipay\AuthorizeNet;
 
 use Omnipay\Exception;
-use Omnipay\Exception\InvalidResponseException;
-use Omnipay\FormRedirectResponse;
-use Omnipay\Request;
+use Omnipay\Common\Exception\InvalidResponseException;
+use Omnipay\Common\FormRedirectResponse;
+use Omnipay\Common\Request;
 
 /**
  * Authorize.Net SIM Class
