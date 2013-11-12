@@ -2,7 +2,7 @@
 
 namespace Omnipay\AuthorizeNet;
 
-use Omnipay\GatewayTestCase;
+use Omnipay\Tests\GatewayTestCase;
 
 class AIMGatewayTest extends GatewayTestCase
 {

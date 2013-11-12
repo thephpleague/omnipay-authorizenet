@@ -2,7 +2,7 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Omnipay\TestCase;
+use Omnipay\Tests\TestCase;
 
 class SIMCompleteAuthorizeResponseTest extends TestCase
 {
