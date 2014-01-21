@@ -4,11 +4,12 @@ namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
+use Omnipay\Common\Message\RedirectResponseInterface;
 
 /**
  * Authorize.Net SIM Authorize Response
  */
-class SIMAuthorizeResponse extends AbstractResponse
+class SIMAuthorizeResponse extends AbstractResponse implements RedirectResponseInterface
 {
     protected $redirectUrl;
 
