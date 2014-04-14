@@ -25,7 +25,7 @@
         }
     ],
     "autoload": {
-        "psr-0": { "Omnipay\\AuthorizeNet\\" : "src/" }
+        "psr-4": { "Omnipay\\AuthorizeNet\\" : "src/" }
     },
     "require": {
         "omnipay/common": "~2.0"
