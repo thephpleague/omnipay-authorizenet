@@ -4,7 +4,8 @@ namespace Omnipay\AuthorizeNet;
 
 use Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest;
 use Omnipay\AuthorizeNet\Message\AIMPurchaseRequest;
-use Omnipay\AuthorizeNet\Message\CaptureRequest;
+use Omnipay\AuthorizeNet\Message\AIMVoidRequest;
+use Omnipay\AuthorizeNet\Message\SIMCaptureRequest;
 use Omnipay\Common\AbstractGateway;
 
 /**
@@ -57,21 +58,37 @@ class AIMGateway extends AbstractGateway
         return $this->setParameter('developerMode', $value);
     }
 
+    /**
+     * @param array $parameters
+     * @return AIMAuthorizeRequest
+     */
     public function authorize(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return SIMCaptureRequest
+     */
     public function capture(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\CaptureRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMCaptureRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return AIMPurchaseRequest
+     */
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMPurchaseRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return AIMVoidRequest
+     */
     public function void(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMVoidRequest', $parameters);

@@ -5,7 +5,7 @@ namespace Omnipay\AuthorizeNet\Message;
 /**
  * Authorize.Net AIM Authorize Request
  */
-class AIMAuthorizeRequest extends AbstractRequest
+class AIMAuthorizeRequest extends AIMAbstractRequest
 {
     protected $action = 'AUTH_ONLY';
 

@@ -6,6 +6,8 @@ use Omnipay\Tests\TestCase;
 
 class AIMPurchaseRequestTest extends TestCase
 {
+    private $request;
+
     public function setUp()
     {
         $this->request = new AIMPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
@@ -27,5 +29,6 @@ class AIMPurchaseRequestTest extends TestCase
         $this->assertSame('10.0.0.1', $data['x_customer_ip']);
         $this->assertSame('cust-id', $data['x_cust_id']);
         $this->assertArrayNotHasKey('x_test_request', $data);
+        //<testRequest>1</testRequest>
     }
 }

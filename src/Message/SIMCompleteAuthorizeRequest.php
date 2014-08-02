@@ -7,7 +7,7 @@ use Omnipay\Common\Exception\InvalidRequestException;
 /**
  * Authorize.Net SIM Complete Authorize Request
  */
-class SIMCompleteAuthorizeRequest extends AbstractRequest
+class SIMCompleteAuthorizeRequest extends SIMAbstractRequest
 {
     public function getData()
     {

@@ -2,10 +2,12 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\Common\Message\AbstractRequest;
+
 /**
- * Authorize.Net Abstract Request
+ * Authorize.Net SIM Abstract Request
  */
-abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
+abstract class SIMAbstractRequest extends AbstractRequest
 {
     protected $liveEndpoint = 'https://secure.authorize.net/gateway/transact.dll';
     protected $developerEndpoint = 'https://test.authorize.net/gateway/transact.dll';
@@ -88,7 +90,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             $data['x_last_name'] = $card->getBillingLastName();
             $data['x_company'] = $card->getBillingCompany();
             $data['x_address'] = trim(
-                $card->getBillingAddress1()." \n".
+                $card->getBillingAddress1() . " \n" .
                 $card->getBillingAddress2()
             );
             $data['x_city'] = $card->getBillingCity();
@@ -103,7 +105,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             $data['x_ship_to_last_name'] = $card->getShippingLastName();
             $data['x_ship_to_company'] = $card->getShippingCompany();
             $data['x_ship_to_address'] = trim(
-                $card->getShippingAddress1()." \n".
+                $card->getShippingAddress1() . " \n" .
                 $card->getShippingAddress2()
             );
             $data['x_ship_to_city'] = $card->getShippingCity();

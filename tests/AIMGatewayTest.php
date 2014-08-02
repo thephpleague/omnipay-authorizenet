@@ -8,6 +8,11 @@ class AIMGatewayTest extends GatewayTestCase
 {
     protected $voidOptions;
 
+    /** @var AIMGateway */
+    protected $gateway;
+    protected $purchaseOptions;
+    protected $captureOptions;
+
     public function setUp()
     {
         parent::setUp();

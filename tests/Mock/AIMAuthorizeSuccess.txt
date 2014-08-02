@@ -1,11 +1,13 @@
 HTTP/1.1 200 OK
-Connection: close
-Date: Sat, 16 Feb 2013 04:22:58 GMT
+Date: Sat, 02 Aug 2014 05:17:50 GMT
 Server: Microsoft-IIS/6.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Headers: x-requested-with, cache-control, content-type, origin, method
 X-Powered-By: ASP.NET
-Content-Type: text/html
-Content-Length: 350
-Cache-Control: private, must-revalidate, max-age=0
-Expires: Tue, 01 Jan 1980 00:00:00 GMT
+X-AspNet-Version: 2.0.50727
+Cache-Control: private
+Content-Type: text/xml; charset=utf-8
+Content-Length: 884
 
-|1|,|1|,|1|,|This transaction has been approved.|,|GA4OQP|,|Y|,|2184493132|,|12345|,|first purchase|,|2.00|,|CC|,|auth_only|,||,|fjkdsl|,|fdjskl|,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,|50D842FB596025E1C7779440D0A62496|,|P|,|2|,||,||,||,||,||,||,||,||,||,||,|XXXX1111|,|Visa|,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||
+<?xml version="1.0" encoding="utf-8"?><createTransactionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><refId>123456</refId><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><transactionResponse><responseCode>1</responseCode><authCode>GA4OQP</authCode><avsResultCode>Y</avsResultCode><cvvResultCode>P</cvvResultCode><cavvResultCode>2</cavvResultCode><transId>2184493132</transId><refTransID /><transHash>DEBBE205CFD3D2DD0FD760EEBAAB81CC</transHash><testRequest>0</testRequest><accountNumber>XXXX1111</accountNumber><accountType>Visa</accountType><messages><message><code>1</code><description>This transaction has been approved.</description></message></messages></transactionResponse></createTransactionResponse>
