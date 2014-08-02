@@ -2,29 +2,31 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\Common\CreditCard;
+
 /**
  * Authorize.Net AIM Authorize Request
  */
 class AIMAuthorizeRequest extends AIMAbstractRequest
 {
-    protected $action = 'AUTH_ONLY';
+    protected $action = 'authOnlyTransaction';
 
     public function getData()
     {
         $this->validate('amount', 'card');
-        $this->getCard()->validate();
 
-        $data = $this->getBaseData();
-        $data['x_customer_ip'] = $this->getClientIp();
-        $data['x_card_num'] = $this->getCard()->getNumber();
-        $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
-        $data['x_card_code'] = $this->getCard()->getCvv();
-        $data['x_cust_id'] = $this->getCustomerId();
+        /** @var CreditCard $card */
+        $card = $this->getCard();
+        $card->validate();
 
-        if ($this->getTestMode()) {
-            $data['x_test_request'] = 'TRUE';
-        }
+        $data = parent::getData();
+        $data->transactionRequest->customerIP = $this->getClientIp();
+        $data->transactionRequest->payment->creditCard->cardNumber = $card->getNumber();
+        $data->transactionRequest->payment->creditCard->expirationDate = $card->getExpiryDate('my');
+        $data->transactionRequest->payment->creditCard->cardCode = $card->getCvv();
 
-        return array_merge($data, $this->getBillingData());
+        $this->addBillingData($data);
+
+        return $data;
     }
 }

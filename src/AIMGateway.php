@@ -3,9 +3,9 @@
 namespace Omnipay\AuthorizeNet;
 
 use Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest;
+use Omnipay\AuthorizeNet\Message\AIMCaptureRequest;
 use Omnipay\AuthorizeNet\Message\AIMPurchaseRequest;
 use Omnipay\AuthorizeNet\Message\AIMVoidRequest;
-use Omnipay\AuthorizeNet\Message\SIMCaptureRequest;
 use Omnipay\Common\AbstractGateway;
 
 /**
@@ -69,7 +69,7 @@ class AIMGateway extends AbstractGateway
 
     /**
      * @param array $parameters
-     * @return SIMCaptureRequest
+     * @return AIMCaptureRequest
      */
     public function capture(array $parameters = array())
     {

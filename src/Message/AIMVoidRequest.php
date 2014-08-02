@@ -7,14 +7,14 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class AIMVoidRequest extends SIMAbstractRequest
 {
-    protected $action = 'VOID';
+    protected $action = 'voidTransaction';
 
     public function getData()
     {
         $this->validate('transactionReference');
 
-        $data = $this->getBaseData();
-        $data['x_trans_id'] = $this->getTransactionReference();
+        $data = parent::getData();
+        $data->transactionRequest->refTransId = $this->getTransactionReference();
 
         return $data;
     }

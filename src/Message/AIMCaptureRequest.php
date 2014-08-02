@@ -7,15 +7,15 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class AIMCaptureRequest extends AIMAbstractRequest
 {
-    protected $action = 'PRIOR_AUTH_CAPTURE';
+    protected $action = 'priorAuthCaptureTransaction';
 
     public function getData()
     {
         $this->validate('amount', 'transactionReference');
 
-        $data = $this->getBaseData();
-        $data['x_amount'] = $this->getAmount();
-        $data['x_trans_id'] = $this->getTransactionReference();
+        $data = parent::getData();
+        $data->transactionRequest->amount = $this->getAmount();
+        $data->transactionRequest->refTransId = $this->getTransactionReference();
 
         return $data;
     }

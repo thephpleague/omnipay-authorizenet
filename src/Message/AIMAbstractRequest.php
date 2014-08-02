@@ -2,6 +2,8 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\Common\CreditCard;
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Message\AbstractRequest;
 
 /**
@@ -11,6 +13,8 @@ abstract class AIMAbstractRequest extends AbstractRequest
 {
     protected $liveEndpoint = 'https://api.authorize.net/xml/v1/request.api';
     protected $developerEndpoint = 'https://apitest.authorize.net/xml/v1/request.api';
+
+    protected $action = null;
 
     public function getApiLoginId()
     {
@@ -52,66 +56,76 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->setParameter('customerId', $value);
     }
 
-    public function getHashSecret()
+    /**
+     * @return mixed|\SimpleXMLElement
+     * @throws \Omnipay\Common\Exception\InvalidRequestException
+     */
+    public function getData()
     {
-        return $this->getParameter('hashSecret');
-    }
+        $data = new \SimpleXMLElement('<createTransactionRequest/>');
+        $data->addAttribute('xmlns', 'AnetApi/xml/v1/schema/AnetApiSchema.xsd');
 
-    public function setHashSecret($value)
-    {
-        return $this->setParameter('hashSecret', $value);
-    }
+        // Credentials
+        $data->merchantAuthentication->name = $this->getApiLoginId();
+        $data->merchantAuthentication->transactionKey = $this->getTransactionKey();
 
-    protected function getBaseData()
-    {
-        $data = array();
-        $data['x_login'] = $this->getApiLoginId();
-        $data['x_tran_key'] = $this->getTransactionKey();
-        $data['x_type'] = $this->action;
-        $data['x_version'] = '3.1';
-        $data['x_delim_data'] = 'TRUE';
-        $data['x_delim_char'] = ',';
-        $data['x_encap_char'] = '|';
-        $data['x_relay_response'] = 'FALSE';
+        // User-assigned transaction ID
+        $txnId = $this->getTransactionId();
+        if (!empty($txnId)) $data->refId = $this->getTransactionId();
+
+        // Transaction type
+        if (!$this->action) throw new InvalidRequestException();
+        $data->transactionRequest->transactionType = $this->action;
+
+        // Test mode setting
+        $data->transactionRequest->transactionSettings->setting->settingName = 'testRequest';
+        $data->transactionRequest->transactionSettings->setting->settingValue = $this->getTestMode() ? 'true' : 'false';
 
         return $data;
     }
 
-    protected function getBillingData()
+    /**
+     * Adds billing data to a partially filled request data object.
+     *
+     * @param \SimpleXMLElement $data
+     * @return \SimpleXMLElement
+     */
+    protected function addBillingData(\SimpleXMLElement $data)
     {
-        $data = array();
-        $data['x_amount'] = $this->getAmount();
-        $data['x_invoice_num'] = $this->getTransactionId();
-        $data['x_description'] = $this->getDescription();
+        /** @var mixed $req */
+        $req = $data->transactionRequest;
 
+        // Amount of the purchase
+        $req->amount = $this->getAmount();
+
+        // Description of the purchase
+        $description = $this->getDescription();
+        if (!empty($description)) $req->lineItems->lineItem->description = $description;
+
+        // Merchant assigned customer ID
+        $customer = $this->getCustomerId();
+        if (!empty($customer)) $req->customer->id = $customer;
+
+        /** @var CreditCard $card */
         if ($card = $this->getCard()) {
-            // customer billing details
-            $data['x_first_name'] = $card->getBillingFirstName();
-            $data['x_last_name'] = $card->getBillingLastName();
-            $data['x_company'] = $card->getBillingCompany();
-            $data['x_address'] = trim(
-                $card->getBillingAddress1() . " \n" .
-                $card->getBillingAddress2()
-            );
-            $data['x_city'] = $card->getBillingCity();
-            $data['x_state'] = $card->getBillingState();
-            $data['x_zip'] = $card->getBillingPostcode();
-            $data['x_country'] = $card->getBillingCountry();
-            $data['x_phone'] = $card->getBillingPhone();
-            $data['x_email'] = $card->getEmail();
+            // A card is present, so include billing and shipping details
+            $req->billTo->firstName = $card->getBillingFirstName();
+            $req->billTo->lastName = $card->getBillingLastName();
+            $req->billTo->company = $card->getBillingCompany();
+            $req->billTo->address = trim($card->getBillingAddress1() . " \n" . $card->getBillingAddress2());
+            $req->billTo->city = $card->getBillingCity();
+            $req->billTo->state = $card->getBillingState();
+            $req->billTo->zip = $card->getBillingPostcode();
+            $req->billTo->country = $card->getBillingCountry();
 
-            // customer shipping details
-            $data['x_ship_to_first_name'] = $card->getShippingFirstName();
-            $data['x_ship_to_last_name'] = $card->getShippingLastName();
-            $data['x_ship_to_company'] = $card->getShippingCompany();
-            $data['x_ship_to_address'] = trim(
-                $card->getShippingAddress1() . " \n" .
-                $card->getShippingAddress2()
-            );
-            $data['x_ship_to_city'] = $card->getShippingCity();
-            $data['x_ship_to_state'] = $card->getShippingState();
-            $data['x_ship_to_zip'] = $card->getShippingPostcode();
-            $data['x_ship_to_country'] = $card->getShippingCountry();
+            $req->shipTo->firstName = $card->getShippingLastName();
+            $req->shipTo->lastName = $card->getShippingLastName();
+            $req->shipTo->company = $card->getShippingCompany();
+            $req->shipTo->address = trim($card->getShippingAddress1() . " \n" . $card->getShippingAddress2());
+            $req->shipTo->city = $card->getShippingCity();
+            $req->shipTo->state = $card->getShippingState();
+            $req->shipTo->zip = $card->getShippingPostcode();
+            $req->shipTo->country = $card->getShippingCountry();
         }
 
         return $data;
