@@ -6,6 +6,9 @@ use Omnipay\Tests\GatewayTestCase;
 
 class SIMGatewayTest extends GatewayTestCase
 {
+    /** @var SIMGateway */
+    protected $gateway;
+
     public function setUp()
     {
         parent::setUp();

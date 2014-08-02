@@ -5,7 +5,7 @@ namespace Omnipay\AuthorizeNet\Message;
 /**
  * Authorize.Net AIM Void Request
  */
-class AIMVoidRequest extends SIMAbstractRequest
+class AIMVoidRequest extends AIMAbstractRequest
 {
     protected $action = 'voidTransaction';
 
