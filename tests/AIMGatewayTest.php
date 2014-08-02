@@ -6,12 +6,11 @@ use Omnipay\Tests\GatewayTestCase;
 
 class AIMGatewayTest extends GatewayTestCase
 {
-    protected $voidOptions;
-
     /** @var AIMGateway */
     protected $gateway;
     protected $purchaseOptions;
     protected $captureOptions;
+    protected $voidOptions;
 
     public function setUp()
     {

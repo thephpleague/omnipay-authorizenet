@@ -13,9 +13,10 @@ class AIMCaptureRequest extends AIMAbstractRequest
     {
         $this->validate('amount', 'transactionReference');
 
-        $data = parent::getData();
+        $data = $this->getBaseData();
         $data->transactionRequest->amount = $this->getAmount();
         $data->transactionRequest->refTransId = $this->getTransactionReference();
+        $this->addTestModeSetting($data);
 
         return $data;
     }

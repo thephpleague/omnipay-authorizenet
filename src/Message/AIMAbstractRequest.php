@@ -60,7 +60,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
      * @return mixed|\SimpleXMLElement
      * @throws \Omnipay\Common\Exception\InvalidRequestException
      */
-    public function getData()
+    public function getBaseData()
     {
         $data = new \SimpleXMLElement('<createTransactionRequest/>');
         $data->addAttribute('xmlns', 'AnetApi/xml/v1/schema/AnetApiSchema.xsd');
@@ -82,10 +82,6 @@ abstract class AIMAbstractRequest extends AbstractRequest
         }
         $data->transactionRequest->transactionType = $this->action;
 
-        // Test mode setting
-        $data->transactionRequest->transactionSettings->setting->settingName = 'testRequest';
-        $data->transactionRequest->transactionSettings->setting->settingValue = $this->getTestMode() ? 'true' : 'false';
-
         return $data;
     }
 
@@ -99,9 +95,6 @@ abstract class AIMAbstractRequest extends AbstractRequest
     {
         /** @var mixed $req */
         $req = $data->transactionRequest;
-
-        // Amount of the purchase
-        $req->amount = $this->getAmount();
 
         // Description of the purchase
         $description = $this->getDescription();
@@ -140,9 +133,20 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $data;
     }
 
+    protected function addTestModeSetting(\SimpleXMLElement $data)
+    {
+        // Test mode setting
+        $data->transactionRequest->transactionSettings->setting->settingName = 'testRequest';
+        $data->transactionRequest->transactionSettings->setting->settingValue = $this->getTestMode() ? 'true' : 'false';
+
+        return $data;
+    }
+
     public function sendData($data)
     {
-        $httpResponse = $this->httpClient->post($this->getEndpoint(), null, $data)->send();
+        $headers = array('Content-Type' => 'text/xml; charset=utf-8');
+        $data = $data->saveXml();
+        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
 
         return $this->response = new AIMResponse($this, $httpResponse->getBody());
     }
