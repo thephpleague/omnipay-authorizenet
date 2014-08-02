@@ -71,10 +71,15 @@ abstract class AIMAbstractRequest extends AbstractRequest
 
         // User-assigned transaction ID
         $txnId = $this->getTransactionId();
-        if (!empty($txnId)) $data->refId = $this->getTransactionId();
+        if (!empty($txnId)) {
+            $data->refId = $this->getTransactionId();
+        }
 
         // Transaction type
-        if (!$this->action) throw new InvalidRequestException();
+        if (!$this->action) {
+            // The extending class probably hasn't specified an "action"
+            throw new InvalidRequestException();
+        }
         $data->transactionRequest->transactionType = $this->action;
 
         // Test mode setting
@@ -100,11 +105,15 @@ abstract class AIMAbstractRequest extends AbstractRequest
 
         // Description of the purchase
         $description = $this->getDescription();
-        if (!empty($description)) $req->lineItems->lineItem->description = $description;
+        if (!empty($description)) {
+            $req->lineItems->lineItem->description = $description;
+        }
 
         // Merchant assigned customer ID
         $customer = $this->getCustomerId();
-        if (!empty($customer)) $req->customer->id = $customer;
+        if (!empty($customer)) {
+            $req->customer->id = $customer;
+        }
 
         /** @var CreditCard $card */
         if ($card = $this->getCard()) {

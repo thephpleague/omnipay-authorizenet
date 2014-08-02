@@ -2,9 +2,9 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
-use Omnipay\Common\Exception\InvalidResponseException;
 
 /**
  * Authorize.Net AIM Response
@@ -20,11 +20,11 @@ class AIMResponse extends AbstractResponse
 
         try {
             $xml = simplexml_load_string($xml);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new InvalidResponseException();
         }
 
-        if(!$xml) {
+        if (!$xml) {
             throw new InvalidResponseException();
         }
 
@@ -55,11 +55,11 @@ class AIMResponse extends AbstractResponse
     {
         $code = null;
 
-        if(isset($this->data->transactionResponse[0]->messages)) {
+        if (isset($this->data->transactionResponse[0]->messages)) {
             // In case of a successful transaction, a "messages" element is present
             $code = intval((string)$this->data->transactionResponse[0]->messages[0]->message[0]->code);
 
-        } elseif(isset($this->data->transactionResponse[0]->errors)) {
+        } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
             $code = intval((string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorCode);
         }
@@ -76,11 +76,11 @@ class AIMResponse extends AbstractResponse
     {
         $message = null;
 
-        if(isset($this->data->transactionResponse[0]->messages)) {
+        if (isset($this->data->transactionResponse[0]->messages)) {
             // In case of a successful transaction, a "messages" element is present
             $message = (string)$this->data->transactionResponse[0]->messages[0]->message[0]->description;
 
-        } elseif(isset($this->data->transactionResponse[0]->errors)) {
+        } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
             $message = (string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorText;
         }
