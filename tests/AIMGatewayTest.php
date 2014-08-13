@@ -11,6 +11,7 @@ class AIMGatewayTest extends GatewayTestCase
     protected $purchaseOptions;
     protected $captureOptions;
     protected $voidOptions;
+    protected $refundOptions;
 
     public function setUp()
     {
@@ -30,6 +31,12 @@ class AIMGatewayTest extends GatewayTestCase
 
         $this->voidOptions = array(
             'transactionReference' => '12345',
+        );
+
+        $this->refundOptions = array(
+            'amount' => '10.00',
+            'transactionReference' => '12345',
+            'card' => $this->getValidCard()
         );
     }
 
@@ -121,4 +128,25 @@ class AIMGatewayTest extends GatewayTestCase
         $this->assertSame('A valid referenced transaction ID is required.', $response->getMessage());
     }
 
+    public function testRefundSuccess()
+    {
+        $this->setMockHttpResponse('AIMRefundSuccess.txt');
+
+        $response = $this->gateway->refund($this->refundOptions)->send();
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame('2217770693', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
+    }
+
+    public function testRefundFailure()
+    {
+        $this->setMockHttpResponse('AIMRefundFailure.txt');
+
+        $response = $this->gateway->refund($this->refundOptions)->send();
+
+        $this->assertFalse($response->isSuccessful());
+        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertSame('The referenced transaction does not meet the criteria for issuing a credit.', $response->getMessage());
+    }
 }
