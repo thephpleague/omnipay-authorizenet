@@ -96,12 +96,6 @@ abstract class AIMAbstractRequest extends AbstractRequest
         /** @var mixed $req */
         $req = $data->transactionRequest;
 
-        // Description of the purchase
-        $description = $this->getDescription();
-        if (!empty($description)) {
-            $req->lineItems->lineItem->description = $description;
-        }
-
         // Merchant assigned customer ID
         $customer = $this->getCustomerId();
         if (!empty($customer)) {
