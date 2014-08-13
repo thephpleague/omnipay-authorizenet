@@ -93,4 +93,14 @@ class AIMGateway extends AbstractGateway
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMVoidRequest', $parameters);
     }
+
+    /**
+     * @param array $parameters
+     * @return AIMRefundRequest
+     */
+    public function refund(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMRefundRequest', $parameters);
+    }
+
 }
