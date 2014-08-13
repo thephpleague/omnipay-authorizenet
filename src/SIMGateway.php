@@ -2,10 +2,12 @@
 
 namespace Omnipay\AuthorizeNet;
 
+use Omnipay\Common\AbstractGateway;
+
 /**
  * Authorize.Net SIM Class
  */
-class SIMGateway extends AIMGateway
+class SIMGateway extends AbstractGateway
 {
     public function getName()
     {
@@ -14,10 +16,43 @@ class SIMGateway extends AIMGateway
 
     public function getDefaultParameters()
     {
-        $parameters = parent::getDefaultParameters();
-        $parameters['hashSecret'] = '';
+        return array(
+            'apiLoginId' => '',
+            'transactionKey' => '',
+            'testMode' => false,
+            'developerMode' => false,
+            'hashSecret' => ''
+        );
+    }
 
-        return $parameters;
+    public function getApiLoginId()
+    {
+        return $this->getParameter('apiLoginId');
+    }
+
+    public function setApiLoginId($value)
+    {
+        return $this->setParameter('apiLoginId', $value);
+    }
+
+    public function getTransactionKey()
+    {
+        return $this->getParameter('transactionKey');
+    }
+
+    public function setTransactionKey($value)
+    {
+        return $this->setParameter('transactionKey', $value);
+    }
+
+    public function getDeveloperMode()
+    {
+        return $this->getParameter('developerMode');
+    }
+
+    public function setDeveloperMode($value)
+    {
+        return $this->setParameter('developerMode', $value);
     }
 
     public function getHashSecret()
