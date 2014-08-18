@@ -44,7 +44,7 @@ class AIMRefundRequestTest extends TestCase
                 'transactionReference' => 'authnet-transaction-reference',
                 'amount' => 12.12,
                 'card' => array(
-                    'number' => 1111,   // Refunds require only the last 4 digits of the credit card
+                    'number' => '1111',   // Refunds require only the last 4 digits of the credit card
                     'expiryMonth' => 5,
                     'expiryYear' => 2020
                 )
