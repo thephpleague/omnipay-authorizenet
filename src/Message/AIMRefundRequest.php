@@ -17,7 +17,6 @@ class AIMRefundRequest extends AIMAbstractRequest
 
         /** @var CreditCard $card */
         $card = $this->getCard();
-        $card->validate();
 
         $data = $this->getBaseData();
         $data->transactionRequest->amount = $this->getParameter('amount');
