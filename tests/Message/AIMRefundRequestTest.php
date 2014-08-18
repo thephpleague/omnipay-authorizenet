@@ -43,7 +43,11 @@ class AIMRefundRequestTest extends TestCase
             array(
                 'transactionReference' => 'authnet-transaction-reference',
                 'amount' => 12.12,
-                'card' => $this->getValidCard()
+                'card' => array(
+                    'number' => 1111,   // Refunds require only the last 4 digits of the credit card
+                    'expiryMonth' => 5,
+                    'expiryYear' => 2020
+                )
             )
         );
 
