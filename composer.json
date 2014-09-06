@@ -12,7 +12,7 @@
         "pay",
         "payment"
     ],
-    "homepage": "https://github.com/omnipay/authorizenet",
+    "homepage": "https://github.com/thephpleague/omnipay-authorizenet",
     "license": "MIT",
     "authors": [
         {
@@ -21,7 +21,7 @@
         },
         {
             "name": "Omnipay Contributors",
-            "homepage": "https://github.com/omnipay/authorizenet/contributors"
+            "homepage": "https://github.com/thephpleague/omnipay-authorizenet/contributors"
         }
     ],
     "autoload": {
