@@ -3,7 +3,6 @@
 namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Common\CreditCard;
-use Omnipay\Common\Exception\InvalidRequestException;
 
 /**
  * Create Credit Card Request.
@@ -23,22 +22,6 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         $this->addBillingData($data);
         $this->addPaymentData($data);
         $this->addTestModeSetting($data);
-
-        return $data;
-    }
-
-    /**
-     * @throws InvalidRequestException
-     * @return mixed|\SimpleXMLElement
-     */
-    public function getBaseData()
-    {
-        $data = new \SimpleXMLElement('<createCustomerProfileRequest/>');
-        $data->addAttribute('xmlns', 'AnetApi/xml/v1/schema/AnetApiSchema.xsd');
-
-        // Credentials
-        $data->merchantAuthentication->name = $this->getApiLoginId();
-        $data->merchantAuthentication->transactionKey = $this->getTransactionKey();
 
         return $data;
     }
