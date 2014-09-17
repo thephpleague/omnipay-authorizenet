@@ -9,6 +9,8 @@ use Omnipay\Common\CreditCard;
  */
 class CIMCreateCardRequest extends CIMAbstractRequest
 {
+    protected $xmlRootElement = 'createCustomerProfileRequest';
+
     public function getData()
     {
         $this->validate('card');

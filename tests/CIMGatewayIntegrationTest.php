@@ -55,10 +55,10 @@ class CIMGatewayIntegrationTest extends TestCase
         }
     }
 
-    public function testCreateCard()
+    public function testIntegration()
     {
-        $rand = rand(100000, 999999);
         // Create card
+        $rand = rand(100000, 999999);
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
@@ -69,6 +69,61 @@ class CIMGatewayIntegrationTest extends TestCase
 
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Profile should get created');
-        $this->assertNotNull($response->getCardReference(), 'Card response should be returned');
+        $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
+
+        $cardRef = $response->getCardReference();
+
+        // Create Authorize only transaction
+        $params = array(
+            'cardReference' => $cardRef,
+            'amount' => 100.00,
+        );
+        $request = $this->gateway->authorize($params);
+        $request->setTestMode(true);
+
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Authorize transaction should get created');
+        $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
+
+        $transRef = $response->getTransactionReference();
+
+        // Capture the authorised transaction
+        $params = array(
+            'transactionReference' => $transRef,
+            'amount' => 100.00,
+        );
+        $request = $this->gateway->capture($params);
+        $request->setTestMode(true);
+
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Capture transaction should get created');
+        $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
+        $captureTransRef = $response->getTransactionReference();
+
+        // Make a purchase using the saved card. i.e auth and capture
+        $params = array(
+            'cardReference' => $cardRef,
+            'amount' => 110.00,
+        );
+        $request = $this->gateway->purchase($params);
+        $request->setTestMode(true);
+
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Purchase transaction should get created');
+        $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
+        $purchaseTransRef = $response->getTransactionReference();
+
+        // Make a refund on the purchase transaction
+        $params = array(
+            'transactionReference' => $purchaseTransRef,
+            'amount' => 110.00,
+        );
+        $request = $this->gateway->refund($params);
+        $request->setTestMode(true);
+
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Refund transaction should get created');
+        $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
+
     }
 }

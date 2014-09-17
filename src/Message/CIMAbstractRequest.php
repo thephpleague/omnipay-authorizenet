@@ -9,7 +9,7 @@ use Omnipay\Common\Exception\InvalidRequestException;
  */
 abstract class CIMAbstractRequest extends AIMAbstractRequest
 {
-    private $xmlRootElement = 'createCustomerProfileRequest';
+    protected $xmlRootElement = null;
 
     // Need the below setters and getters for accessing this data within createCardRequest.send
     public function setEmail($value)
