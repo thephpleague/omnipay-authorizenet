@@ -95,14 +95,30 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             $req->creditCard->cardCode = $card->getCvv();
 
             $req = $data->profile;
-            $req->shipToList->firstName = $card->getShippingFirstName();
-            $req->shipToList->lastName = $card->getShippingLastName();
-            $req->shipToList->company = $card->getShippingCompany();
-            $req->shipToList->address = trim($card->getShippingAddress1() . " \n" . $card->getShippingAddress2());
-            $req->shipToList->city = $card->getShippingCity();
-            $req->shipToList->state = $card->getShippingState();
-            $req->shipToList->zip = $card->getShippingPostcode();
-            $req->shipToList->country = $card->getShippingCountry();
+            if ($card->getShippingFirstName()) {
+                $req->shipToList->firstName = $card->getShippingFirstName();
+            }
+            if ($card->getShippingLastName()) {
+                $req->shipToList->lastName = $card->getShippingLastName();
+            }
+            if ($card->getShippingCompany()) {
+                $req->shipToList->company = $card->getShippingCompany();
+            }
+            if ($card->getShippingAddress1() || $card->getShippingAddress2()) {
+                $req->shipToList->address = trim($card->getShippingAddress1() . " \n" . $card->getShippingAddress2());
+            }
+            if ($card->getShippingCity()) {
+                $req->shipToList->city = $card->getShippingCity();
+            }
+            if ($card->getShippingState()) {
+                $req->shipToList->state = $card->getShippingState();
+            }
+            if ($card->getShippingPostcode()) {
+                $req->shipToList->zip = $card->getShippingPostcode();
+            }
+            if ($card->getShippingCountry()) {
+                $req->shipToList->country = $card->getShippingCountry();
+            }
         }
 
         return $data;
@@ -111,7 +127,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
     protected function addTestModeSetting(\SimpleXMLElement $data)
     {
         // Test mode setting
-        $data->validationMode = $this->getTestMode() ? 'testMode' : 'liveMode';
+        $data->validationMode = $this->getDeveloperMode() ? 'testMode' : 'liveMode';
 
         return $data;
     }

@@ -52,7 +52,7 @@ class CIMGatewayIntegrationTest extends TestCase
             'email' => "kaylee$rand@serenity.com",
         );
         $request = $this->gateway->createCard($params);
-        $request->setTestMode(true);
+        $request->setDeveloperMode(true);
 
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Profile should get created');
@@ -67,7 +67,7 @@ class CIMGatewayIntegrationTest extends TestCase
             'description'
         );
         $request = $this->gateway->authorize($params);
-        $request->setTestMode(true);
+        $request->setDeveloperMode(true);
 
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Authorize transaction should get created');
@@ -81,7 +81,7 @@ class CIMGatewayIntegrationTest extends TestCase
             'amount' => 100.00,
         );
         $request = $this->gateway->capture($params);
-        $request->setTestMode(true);
+        $request->setDeveloperMode(true);
 
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Capture transaction should get created');
@@ -94,7 +94,7 @@ class CIMGatewayIntegrationTest extends TestCase
             'amount' => 110.00,
         );
         $request = $this->gateway->purchase($params);
-        $request->setTestMode(true);
+        $request->setDeveloperMode(true);
 
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Purchase transaction should get created');
@@ -107,7 +107,7 @@ class CIMGatewayIntegrationTest extends TestCase
             'amount' => 110.00,
         );
         $request = $this->gateway->refund($params);
-        $request->setTestMode(true);
+        $request->setDeveloperMode(true);
 
         $response = $request->send();
         // todo: Fix refunds, and add unit tests using mocks
