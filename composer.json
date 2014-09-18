@@ -31,12 +31,7 @@
         "omnipay/common": "~2.0"
     },
     "require-dev": {
-        "omnipay/tests": "~2.0",
-        "monolog/monolog": "dev-master",
-        "guzzle/http": "~3.7",
-        "guzzle/plugin": "~3.7",
-        "guzzle/log": "~3.7",
-        "psr/log": "1.0"
+        "omnipay/tests": "~2.0"
     },
     "extra": {
         "branch-alias": {

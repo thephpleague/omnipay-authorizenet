@@ -28,24 +28,11 @@ class CIMGatewayIntegrationTest extends TestCase
     {
         parent::setUp();
 
-//        $apiLoginId = getenv('AUTHORIZE_NET_API_LOGIN_ID');
-//        $transactionKey = getenv('AUTHORIZE_NET_TRANSACTION_KEY');
-        //todo: Remove this before final commit
-        $apiLoginId = '3wM8sJ9qR';
-        $transactionKey = '4d3v32QJtB78tBTT';
+        $apiLoginId = getenv('AUTHORIZE_NET_API_LOGIN_ID');
+        $transactionKey = getenv('AUTHORIZE_NET_TRANSACTION_KEY');
 
         if ($apiLoginId && $transactionKey) {
-
-            $logger = new \Monolog\Logger('authorizenet_cim');
-            $logger->pushHandler(new \Monolog\Handler\StreamHandler('/var/log/php/debug.log', \Monolog\Logger::DEBUG));
-            $logger->pushHandler(new \Monolog\Handler\FirePHPHandler());
-            $adapter = new PsrLogAdapter($logger);
-            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
-
-            $client = new Client();
-            $client->addSubscriber($logPlugin);
-
-            $this->gateway = new CIMGateway($client, $this->getHttpRequest());
+            $this->gateway = new CIMGateway($this->getHttpClient(), $this->getHttpRequest());
             $this->gateway->setDeveloperMode(true);
             $this->gateway->setApiLoginId($apiLoginId);
             $this->gateway->setTransactionKey($transactionKey);
@@ -123,7 +110,7 @@ class CIMGatewayIntegrationTest extends TestCase
         $request->setTestMode(true);
 
         $response = $request->send();
-        // todo: Fix refunds
+        // todo: Fix refunds, and add unit tests using mocks
 //        $this->assertTrue($response->isSuccessful(), 'Refund transaction should get created');
 //        $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
 
