@@ -37,7 +37,9 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
         $cardRef = json_decode($this->getCardReference(), true);
         $action->customerProfileId = $cardRef['customerProfileId'];
         $action->customerPaymentProfileId = $cardRef['customerPaymentProfileId'];
-        $action->customerShippingAddressId = $cardRef['customerShippingAddressId'];
+        if (!empty($cardRef['customerShippingAddressId'])) {
+            $action->customerShippingAddressId = $cardRef['customerShippingAddressId'];
+        }
 
         $desc = $this->getDescription();
         if (!empty($desc)) {
