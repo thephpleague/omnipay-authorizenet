@@ -95,7 +95,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             $req->creditCard->cardCode = $card->getCvv();
 
             $req = $data->profile;
-            $req->shipToList->firstName = $card->getShippingLastName();
+            $req->shipToList->firstName = $card->getShippingFirstName();
             $req->shipToList->lastName = $card->getShippingLastName();
             $req->shipToList->company = $card->getShippingCompany();
             $req->shipToList->address = trim($card->getShippingAddress1() . " \n" . $card->getShippingAddress2());

@@ -17,8 +17,12 @@ class CIMAbstractResponse extends AbstractResponse
     {
         $this->request = $request;
 
+        // Check if this is an error response
+        $isError = strpos((string)$data, '<ErrorResponse');
+
+        $xmlRootElement = $isError !== false ? 'ErrorResponse' : $this->xmlRootElement;
         // Strip out the xmlns junk so that PHP can parse the XML
-        $xml = preg_replace('/<' . $this->xmlRootElement . '[^>]+>/', '<' . $this->xmlRootElement . '>', (string)$data);
+        $xml = preg_replace('/<' . $xmlRootElement . '[^>]+>/', '<' . $xmlRootElement . '>', (string)$data);
 
         try {
             $xml = simplexml_load_string($xml);

@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Cache-Control: private
+Content-Length: 746
+Content-Type: text/xml;
+charset=utf-8
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 2.0.50727
+X-Powered-By: ASP.NET
+Access-Control-Allow-Headers: x-requested-with,cache-control,content-type,origin,method
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Date: Thu, 18 Sep 2014 03:59:27 GMT
+
+<?xml version="1.0" encoding="utf-8"?><createCustomerProfileResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><customerProfileId>28972084</customerProfileId><customerPaymentProfileIdList><numericString>26317840</numericString></customerPaymentProfileIdList><customerShippingAddressIdList><numericString>27057149</numericString></customerShippingAddressIdList><validationDirectResponseList><string>1,1,1,(TESTMODE) This transaction has been approved.,000000,P,0,none,Test transaction for ValidateCustomerPaymentProfile.,1.00,CC,auth_only,,Example,User,,123 Billing St Billsville,Billstown,CA,12345,US,,,kaylee427330@serenity.com,,,,,,,,,0.00,0.00,0.00,FALSE,none,9ACE39F249AB996589D58E6FCCCFFFA3,,,,,,,,,,,,,XXXX1111,Visa,,,,,,,,,,,,,,,,</string></validationDirectResponseList></createCustomerProfileResponse>

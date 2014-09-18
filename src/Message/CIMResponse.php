@@ -11,6 +11,9 @@ class CIMResponse extends CIMAbstractResponse
 
     public function getTransactionReference()
     {
+        if (!$this->isSuccessful()) {
+            return null;
+        }
         $transRef = null;
         if (isset($this->data->directResponse)) {
             $transRef = array();
@@ -18,10 +21,11 @@ class CIMResponse extends CIMAbstractResponse
             $directResponse = explode(',', (string)$this->data->directResponse);
             // Required for capturing an authorized transaction
             $transRef['approvalCode'] = $directResponse[4];
-            // Required for second and subsequent transactions related to a partial authorization transaction
+            // Required for refund a transaction
             $transRef['transId'] = $directResponse[6];
 
-            // Save the card reference also as it is needed for making further transactions
+            // Save the card reference also as it is needed for making further transactions.
+            // This card reference is got from the request. (transaction response does not have it)
             $transRef['cardReference'] = $this->request->getCardReference();
             $transRef = json_encode($transRef);
         }
