@@ -4,16 +4,17 @@ namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Tests\TestCase;
 
-class CIMCreateCardRequestTest extends TestCase
+class CIMCreatePaymentProfileRequestTest extends TestCase
 {
-    /** @var CIMCreateCardRequest */
+    /** @var CIMCreatePaymentProfileRequest */
     protected $request;
 
     public function setUp()
     {
-        $this->request = new CIMCreateCardRequest($this->getHttpClient(), $this->getHttpRequest());
+        $this->request = new CIMCreatePaymentProfileRequest($this->getHttpClient(), $this->getHttpRequest());
         $this->request->initialize(
             array(
+                'customerProfileId' => '28775801',
                 'email' => "kaylee@serenity.com",
                 'card' => $this->getValidCard(),
                 'developerMode' => true
@@ -24,9 +25,10 @@ class CIMCreateCardRequestTest extends TestCase
     public function testGetData()
     {
         $data = $this->request->getData();
+
         $card = $this->getValidCard();
-        $this->assertEquals('12345', $data->profile->paymentProfiles->billTo->zip);
-        $this->assertEquals($card['number'], $data->profile->paymentProfiles->payment->creditCard->cardNumber);
+        $this->assertEquals('28775801', $data->customerProfileId);
+        $this->assertEquals($card['number'], $data->paymentProfile->payment->creditCard->cardNumber);
         $this->assertEquals('testMode', $data->validationMode);
     }
 }

@@ -28,11 +28,24 @@ class CIMGatewayIntegrationTest extends TestCase
     {
         parent::setUp();
 
-        $apiLoginId = getenv('AUTHORIZE_NET_API_LOGIN_ID');
-        $transactionKey = getenv('AUTHORIZE_NET_TRANSACTION_KEY');
+//        $apiLoginId = getenv('AUTHORIZE_NET_API_LOGIN_ID');
+//        $transactionKey = getenv('AUTHORIZE_NET_TRANSACTION_KEY');
+        //todo: Remove this before final commit
+        $apiLoginId = '3wM8sJ9qR';
+        $transactionKey = '4u53d55me4NHTE9h';
 
         if ($apiLoginId && $transactionKey) {
-            $this->gateway = new CIMGateway($this->getHttpClient(), $this->getHttpRequest());
+
+            $logger = new \Monolog\Logger('authorizenet_cim');
+            $logger->pushHandler(new \Monolog\Handler\StreamHandler('/var/log/php/debug.log', \Monolog\Logger::DEBUG));
+            $logger->pushHandler(new \Monolog\Handler\FirePHPHandler());
+            $adapter = new PsrLogAdapter($logger);
+            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
+
+            $client = new Client();
+            $client->addSubscriber($logPlugin);
+
+            $this->gateway = new CIMGateway($client, $this->getHttpRequest());
             $this->gateway->setDeveloperMode(true);
             $this->gateway->setApiLoginId($apiLoginId);
             $this->gateway->setTransactionKey($transactionKey);
@@ -49,7 +62,7 @@ class CIMGatewayIntegrationTest extends TestCase
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
-            'email' => "kaylee$rand@serenity.com",
+            'email' => "kaylee@serenity.com",
         );
         $request = $this->gateway->createCard($params);
         $request->setDeveloperMode(true);

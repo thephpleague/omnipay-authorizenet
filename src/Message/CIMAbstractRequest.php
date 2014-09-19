@@ -32,6 +32,26 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
         return $this->getParameter('name');
     }
 
+    public function setCustomerProfileId($value)
+    {
+        return $this->setParameter('customerProfileId', $value);
+    }
+
+    public function getCustomerProfileId()
+    {
+        return $this->getParameter('customerProfileId');
+    }
+
+    public function setCustomerPaymentProfileId($value)
+    {
+        return $this->setParameter('customerPaymentProfileId', $value);
+    }
+
+    public function getCustomerPaymentProfileId()
+    {
+        return $this->getParameter('customerPaymentProfileId');
+    }
+
     /**
      * @throws InvalidRequestException
      * @return mixed|\SimpleXMLElement
