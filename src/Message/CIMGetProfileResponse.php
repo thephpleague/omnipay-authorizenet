@@ -9,15 +9,19 @@ class CIMGetProfileResponse extends CIMAbstractResponse
 {
     protected $xmlRootElement = 'getCustomerProfileResponse';
 
+    /**
+     * Get the payment profile id corresponding to the specified last4 by looking into the payment profiles
+     * of the customer
+     *
+     * @param $last4
+     *
+     * @return null|string
+     */
     public function getMatchingPaymentProfileId($last4)
     {
         if (!$this->isSuccessful()) {
             return null;
         }
-
-//        $card = $this->request->getCard();
-//        if ($card && $card->getNumber()) {
-//            $last4 = substr($card->getNumber(), -4);
 
         foreach ($this->data->profile->paymentProfiles as $paymentProfile) {
             // For every payment  profile check if the last4 matches the last4 of the card in request.
