@@ -31,8 +31,8 @@ class CIMGatewayIntegrationTest extends TestCase
         $apiLoginId = getenv('AUTHORIZE_NET_API_LOGIN_ID');
         $transactionKey = getenv('AUTHORIZE_NET_TRANSACTION_KEY');
 //        //todo: Remove this before final commit
-//        $apiLoginId = '3wM8sJ9qR';
-//        $transactionKey = '8V529R4p6sc8bY88';
+        $apiLoginId = '3wM8sJ9qR';
+        $transactionKey = '3K2e3z44EKz3g326';
 
         if ($apiLoginId && $transactionKey) {
 

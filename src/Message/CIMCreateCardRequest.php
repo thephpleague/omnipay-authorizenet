@@ -148,7 +148,13 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         if (!$response->isSuccessful() && $response->getReasonCode() == 'E00039') {
             // Duplicate profile. Try adding a new payment profile for the same profile and get the response
             $response = $this->createPaymentProfile($response);
-
+        } elseif ($response->isSuccessful()) {
+            $parameters = array(
+                'customerProfileId' => $response->getCustomerProfileId(),
+                'customerPaymentProfileId' => $response->getCustomerPaymentProfileId()
+            );
+            // Get the payment profile for the specified card.
+            $response = $this->makeGetPaymentProfileRequest($parameters);
         }
 
         return $this->response = $response;
@@ -199,21 +205,21 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             }
 
             $parameters['customerPaymentProfileId'] = $customerPaymentProfileId;
-            $updatePaymentProfileRequest = $this->makeUpdatePaymentProfileRequest($parameters);
-            if (!$updatePaymentProfileRequest->isSuccessful()) {
+            $updatePaymentProfileResponse = $this->makeUpdatePaymentProfileRequest($parameters);
+            if (!$updatePaymentProfileResponse->isSuccessful()) {
                 // Could not update payment profile. Return the original response
-                return $createCardResponse;
-            }
-
-            // return the updated customer profile
-            $getProfileResponse = $this->makeGetProfileRequest($parameters);
-            if (!$getProfileResponse->isSuccessful()) {
-                // Could not get the updated customer profile. Return the original response
                 return $createCardResponse;
             }
         }
 
-        return $getProfileResponse;
+        // return the updated customer profile
+        $getPaymentProfileResponse = $this->makeGetPaymentProfileRequest($parameters);
+        if (!$getPaymentProfileResponse->isSuccessful()) {
+            // Could not get the updated customer profile. Return the original response
+            return $createCardResponse;
+        }
+
+        return $getPaymentProfileResponse;
     }
 
     /**
@@ -240,6 +246,20 @@ class CIMCreateCardRequest extends CIMAbstractRequest
     public function makeGetProfileRequest($parameters)
     {
         $obj = new CIMGetProfileRequest($this->httpClient, $this->httpRequest);
+        $obj->initialize(array_replace($this->getParameters(), $parameters));
+        return $obj->send();
+    }
+
+    /**
+     * Get the customer payment profile
+     *
+     * @param array $parameters
+     *
+     * @return CIMGetPaymentProfileResponse
+     */
+    public function makeGetPaymentProfileRequest($parameters)
+    {
+        $obj = new CIMGetPaymentProfileRequest($this->httpClient, $this->httpRequest);
         $obj->initialize(array_replace($this->getParameters(), $parameters));
         return $obj->send();
     }

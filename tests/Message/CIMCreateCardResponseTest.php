@@ -23,10 +23,6 @@ class CIMCreateCardResponseTest extends TestCase
         $this->assertEquals('I00001', $response->getReasonCode());
         $this->assertEquals("1", $response->getResultCode());
         $this->assertEquals("Successful.", $response->getMessage());
-        $this->assertEquals(
-            '{"customerProfileId":"28972084","customerPaymentProfileId":"26317840"}',
-            $response->getCardReference()
-        );
     }
 
     public function testCreateCardFailure()

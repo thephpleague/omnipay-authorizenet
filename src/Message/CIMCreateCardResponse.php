@@ -9,22 +9,19 @@ class CIMCreateCardResponse extends CIMAbstractResponse
 {
     protected $xmlRootElement = 'createCustomerProfileResponse';
 
-    public function getCardReference()
+    public function getCustomerProfileId()
     {
-        $cardRef = null;
-        $data = array();
-        if (isset($this->data->customerProfileId)) {
-            // In case of a successful transaction, a "customerPaymentProfileId" element is present
-            $data['customerProfileId'] = (string)$this->data->customerProfileId;
+        if ($this->isSuccessful()) {
+            return (string)$this->data->customerProfileId;
         }
-        if (!empty($this->data->customerPaymentProfileIdList->numericString)) {
-            $data['customerPaymentProfileId'] = (string)$this->data->customerPaymentProfileIdList->numericString;
-        }
+        return null;
+    }
 
-        if (!empty($data)) {
-            $cardRef = json_encode($data);
+    public function getCustomerPaymentProfileId()
+    {
+        if ($this->isSuccessful()) {
+            return (string)$this->data->customerPaymentProfileIdList->numericString;
         }
-
-        return $cardRef;
+        return null;
     }
 }

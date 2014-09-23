@@ -53,13 +53,13 @@ class CIMGatewayTest extends GatewayTestCase
 
     public function testCreateCardSuccess()
     {
-        $this->setMockHttpResponse('CIMCreateCardSuccess.txt');
+        $this->setMockHttpResponse(array('CIMCreateCardSuccess.txt','CIMGetPaymentProfileSuccess.txt'));
 
         $response = $this->gateway->createCard($this->createCardOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
         $this->assertSame(
-            '{"customerProfileId":"28972084","customerPaymentProfileId":"26317840"}',
+            '{"customerProfileId":"28972084","customerPaymentProfileId":"26485433"}',
             $response->getCardReference()
         );
         $this->assertSame('Successful.', $response->getMessage());
