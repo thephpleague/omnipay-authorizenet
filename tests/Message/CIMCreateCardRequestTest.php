@@ -29,4 +29,14 @@ class CIMCreateCardRequestTest extends TestCase
         $this->assertEquals($card['number'], $data->profile->paymentProfiles->payment->creditCard->cardNumber);
         $this->assertEquals('testMode', $data->validationMode);
     }
+
+    public function testCreatePaymentProfile()
+    {
+        $httpResponse = $this->getMockHttpResponse('CIMCreateCardFailureWithDuplicate.txt');
+        $duplicateProfileResponse = new CIMCreateCardResponse($this->getMockRequest(), $httpResponse->getBody());
+        $this->setMockHttpResponse(array('CIMCreatePaymentProfileFailure.txt'));
+
+        $response = $this->request->createPaymentProfile($duplicateProfileResponse);
+
+    }
 }

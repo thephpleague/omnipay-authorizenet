@@ -5,7 +5,7 @@ namespace Omnipay\AuthorizeNet\Message;
 /**
  * Authorize.Net CIM Get payment profiles Response
  */
-class CIMGetProfileResponse extends CIMAbstractResponse
+class CIMGetProfileResponse extends CIMCreateCardResponse
 {
     protected $xmlRootElement = 'getCustomerProfileResponse';
 
@@ -32,5 +32,16 @@ class CIMGetProfileResponse extends CIMAbstractResponse
         }
 
         return null;
+    }
+
+    public function getCardReference()
+    {
+        $cardRef = null;
+        if ($this->isSuccessful() && $this->request->getCustomerPaymentProfileId()) {
+            $data['customerProfileId'] = $this->request->getCustomerProfileId();
+            $data['customerPaymentProfileId'] = $this->request->getCustomerPaymentProfileId();
+            $cardRef = json_encode($data);
+        }
+        return $cardRef;
     }
 }

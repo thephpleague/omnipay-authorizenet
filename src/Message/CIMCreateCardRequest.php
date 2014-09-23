@@ -155,45 +155,79 @@ class CIMCreateCardRequest extends CIMAbstractRequest
     }
 
     /**
-     * Attempts to add a payment profile to the existing customer profile.
+     * Attempts to add a payment profile to the existing customer profile and return the updated customer profile
      *
-     * @param CIMCreateCardResponse $response Duplicate customer profile response
+     * @param CIMCreateCardResponse $createCardResponse Duplicate customer profile response
      *
      * @return CIMCreateCardResponse
      */
-    public function createPaymentProfile(CIMCreateCardResponse $response)
+    public function createPaymentProfile(CIMCreateCardResponse $createCardResponse)
     {
         // Parse the customer profile Id from the message
-        $msg = $response->getMessage();
+        $msg = $createCardResponse->getMessage();
         preg_match("/ID (.+) already/i", $msg, $matches);
         if (empty($matches[1])) {
             // Duplicate profile id not found. Return current response
-            return $response;
+            return $createCardResponse;
         }
 
         // Use the customerProfileId and create a payment profile for the customer
         $parameters = array_replace($this->getParameters(), array('customerProfileId' => $matches[1]));
-        $obj = new CIMCreatePaymentProfileRequest($this->httpClient, $this->httpRequest);
-        $obj->initialize($parameters);
-        $paymentProfileResponse = $obj->send();
-        if (!$paymentProfileResponse->isSuccessful() &&
-            $paymentProfileResponse->getReasonCode() == 'E00039' && $this->getForceCardUpdate() == true
+        $createPaymentProfileResponse = $this->makeCreatePaymentProfileRequest($parameters);
+        if ($createPaymentProfileResponse->isSuccessful()) {
+            $parameters['customerPaymentProfileId'] = $createPaymentProfileResponse->getCustomerPaymentProfileId();
+        } elseif ($this->getForceCardUpdate() !== true) {
+            // force card update flag turned off. No need to further process.
+            return $createCardResponse;
+        }
+
+        $getProfileResponse = $this->makeGetProfileRequest($parameters);
+
+        if (!$createPaymentProfileResponse->isSuccessful() &&
+            $createPaymentProfileResponse->getReasonCode() == 'E00039'
         ) {
             // Found a duplicate payment profile existing for the same card data. Force update is turned on,
-            // so get the complete profile of the user and find the payment profile id matching the credit card number
-            // and update the payment profile with the card details.
+            // So find matching payment profile id from the customer profile and update it.
             $card = $this->getCard();
             $last4 = substr($card->getNumber(), -4);
-            $getProfileResponse = $this->getProfile($parameters);
+
             $customerPaymentProfileId = $getProfileResponse->getMatchingPaymentProfileId($last4);
+
             if (!$customerPaymentProfileId) {
-                // Matching customer payment profile id not found. Return the original response
-                return $response;
+                // Failed. Matching customer payment profile id not found. Return the original response
+                return $createCardResponse;
             }
 
             $parameters['customerPaymentProfileId'] = $customerPaymentProfileId;
-            return $this->updatePaymentProfile($parameters);
+            $updatePaymentProfileRequest = $this->makeUpdatePaymentProfileRequest($parameters);
+            if (!$updatePaymentProfileRequest->isSuccessful()) {
+                // Could not update payment profile. Return the original response
+                return $createCardResponse;
+            }
+
+            // return the updated customer profile
+            $getProfileResponse = $this->makeGetProfileRequest($parameters);
+            if (!$getProfileResponse->isSuccessful()) {
+                // Could not get the updated customer profile. Return the original response
+                return $createCardResponse;
+            }
         }
+
+        return $getProfileResponse;
+    }
+
+    /**
+     * Make a request to add a payment profile to the current customer profile
+     *
+     * @param $parameters
+     *
+     * @return CIMCreatePaymentProfileResponse
+     */
+    public function makeCreatePaymentProfileRequest($parameters)
+    {
+        $obj = new CIMCreatePaymentProfileRequest($this->httpClient, $this->httpRequest);
+        $obj->initialize($parameters);
+        return $obj->send();
     }
 
     /**
@@ -203,7 +237,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
      *
      * @return CIMGetProfileResponse
      */
-    public function getProfile($parameters)
+    public function makeGetProfileRequest($parameters)
     {
         $obj = new CIMGetProfileRequest($this->httpClient, $this->httpRequest);
         $obj->initialize(array_replace($this->getParameters(), $parameters));
@@ -217,7 +251,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
      *
      * @return CIMCreateCardResponse
      */
-    public function updatePaymentProfile($parameters)
+    public function makeUpdatePaymentProfileRequest($parameters)
     {
         $obj = new CIMUpdatePaymentProfileRequest($this->httpClient, $this->httpRequest);
         $obj->initialize(array_replace($this->getParameters(), $parameters));

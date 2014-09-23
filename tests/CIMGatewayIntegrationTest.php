@@ -30,9 +30,22 @@ class CIMGatewayIntegrationTest extends TestCase
 
         $apiLoginId = getenv('AUTHORIZE_NET_API_LOGIN_ID');
         $transactionKey = getenv('AUTHORIZE_NET_TRANSACTION_KEY');
+//        //todo: Remove this before final commit
+//        $apiLoginId = '3wM8sJ9qR';
+//        $transactionKey = '8V529R4p6sc8bY88';
 
         if ($apiLoginId && $transactionKey) {
-            $this->gateway = new CIMGateway($this->getHttpClient(), $this->getHttpRequest());
+
+            $logger = new \Monolog\Logger('authorizenet_cim');
+            $logger->pushHandler(new \Monolog\Handler\StreamHandler('/var/log/php/debug.log', \Monolog\Logger::DEBUG));
+            $logger->pushHandler(new \Monolog\Handler\FirePHPHandler());
+            $adapter = new PsrLogAdapter($logger);
+            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
+
+            $client = new Client();
+            $client->addSubscriber($logPlugin);
+
+            $this->gateway = new CIMGateway($client, $this->getHttpRequest());
             $this->gateway->setDeveloperMode(true);
             $this->gateway->setApiLoginId($apiLoginId);
             $this->gateway->setTransactionKey($transactionKey);
@@ -45,10 +58,11 @@ class CIMGatewayIntegrationTest extends TestCase
     public function testIntegration()
     {
         // Create card
+        $rand = rand(100000, 999999);
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
-            'email' => "kaylee@serenity.com",
+            'email' => "kaylee$rand@serenity.com",
         );
         $request = $this->gateway->createCard($params);
         $request->setDeveloperMode(true);
@@ -59,20 +73,36 @@ class CIMGatewayIntegrationTest extends TestCase
 
         $cardRef = $response->getCardReference();
 
-        // Try creating card for the same user.
+        // Try creating card for the same user again.
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
-            'email' => "kaylee@serenity.com",
+            'email' => "kaylee$rand@serenity.com",
         );
         $request = $this->gateway->createCard($params);
         $request->setDeveloperMode(true);
 
         $response = $request->send();
-        $this->assertTrue($response->isSuccessful(), 'Profile should get created');
-        $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
+        $this->assertFalse($response->isSuccessful(), 'Should not success as we tried creating duplicate profile');
+        $this->assertNull($response->getCardReference(), 'Card reference should be returned');
 
-        $this->assertEquals($cardRef, $response->getCardReference(), 'Card reference should be same when creating card for already existing user');
+        // Try creating card for the same user again with force card update flag.
+        $params = array(
+            'card' => $this->getValidCard(),
+            'name' => 'Kaywinnet Lee Frye',
+            'email' => "kaylee$rand@serenity.com",
+            'forceCardUpdate' => true
+        );
+        $request = $this->gateway->createCard($params);
+        $request->setDeveloperMode(true);
+
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Should succeed updating of the existing payment profile');
+        $this->assertEquals(
+            $cardRef,
+            $response->getCardReference(),
+            'Card reference should be same as with the one newly created'
+        );
 
         // Create Authorize only transaction
         $params = array(

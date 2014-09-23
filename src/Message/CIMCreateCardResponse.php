@@ -17,11 +17,8 @@ class CIMCreateCardResponse extends CIMAbstractResponse
             // In case of a successful transaction, a "customerPaymentProfileId" element is present
             $data['customerProfileId'] = (string)$this->data->customerProfileId;
         }
-        if (isset($this->data->customerPaymentProfileIdList)) {
+        if (!empty($this->data->customerPaymentProfileIdList->numericString)) {
             $data['customerPaymentProfileId'] = (string)$this->data->customerPaymentProfileIdList->numericString;
-        }
-        if (isset($this->data->customerShippingAddressIdList)) {
-            $data['customerShippingAddressId'] = (string)$this->data->customerShippingAddressIdList->numericString;
         }
 
         if (!empty($data)) {

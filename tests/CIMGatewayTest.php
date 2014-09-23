@@ -59,7 +59,7 @@ class CIMGatewayTest extends GatewayTestCase
 
         $this->assertTrue($response->isSuccessful());
         $this->assertSame(
-            '{"customerProfileId":"28972084","customerPaymentProfileId":"26317840","customerShippingAddressId":"27057149"}',
+            '{"customerProfileId":"28972084","customerPaymentProfileId":"26317840"}',
             $response->getCardReference()
         );
         $this->assertSame('Successful.', $response->getMessage());
