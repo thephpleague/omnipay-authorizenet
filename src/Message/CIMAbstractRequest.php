@@ -53,6 +53,23 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
     }
 
     /**
+     * Flag to force update consumer payment profile if duplicate is found
+     *
+     * @param $value
+     *
+     * @return $this
+     */
+    public function setForceCardUpdate($value)
+    {
+        return $this->setParameter('forceCardUpdate', $value);
+    }
+
+    public function getForceCardUpdate()
+    {
+        return $this->getParameter('forceCardUpdate');
+    }
+
+    /**
      * @throws InvalidRequestException
      * @return mixed|\SimpleXMLElement
      */

@@ -177,10 +177,11 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         $obj->initialize($parameters);
         $paymentProfileResponse = $obj->send();
         if (!$paymentProfileResponse->isSuccessful() &&
-            $paymentProfileResponse->getReasonCode() == 'E00039'
+            $paymentProfileResponse->getReasonCode() == 'E00039' && $this->getForceCardUpdate() == true
         ) {
-            // Found a duplicate payment profile existing for the same card data. So get the complete profile of the user
-            // and find the payment profile id matching the credit card number
+            // Found a duplicate payment profile existing for the same card data. Force update is turned on,
+            // so get the complete profile of the user and find the payment profile id matching the credit card number
+            // and update the payment profile with the card details.
             $card = $this->getCard();
             $last4 = substr($card->getNumber(), -4);
             $getProfileResponse = $this->getProfile($parameters);

@@ -45,7 +45,6 @@ class CIMGatewayIntegrationTest extends TestCase
     public function testIntegration()
     {
         // Create card
-        $rand = rand(100000, 999999);
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
@@ -59,6 +58,21 @@ class CIMGatewayIntegrationTest extends TestCase
         $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
 
         $cardRef = $response->getCardReference();
+
+        // Try creating card for the same user.
+        $params = array(
+            'card' => $this->getValidCard(),
+            'name' => 'Kaywinnet Lee Frye',
+            'email' => "kaylee@serenity.com",
+        );
+        $request = $this->gateway->createCard($params);
+        $request->setDeveloperMode(true);
+
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Profile should get created');
+        $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
+
+        $this->assertEquals($cardRef, $response->getCardReference(), 'Card reference should be same when creating card for already existing user');
 
         // Create Authorize only transaction
         $params = array(
