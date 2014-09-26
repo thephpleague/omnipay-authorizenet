@@ -157,26 +157,8 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             $response = $this->makeGetPaymentProfileRequest($parameters);
         }
 
-        return $this->response = $this->augmentResponse($response);
-    }
-
-    /**
-     * Authorize net does not provide finger print and brand of the card hence we build the parameters from the
-     * request data
-     *
-     * @param $response
-     *
-     * @return mixed
-     */
-    public function augmentResponse($response)
-    {
-        if ($response->isSuccessful()) {
-            $card = $this->getCard();
-            $response->data['fingerPrint'] = md5($card['number'] . $card['expiryMonth'] . $card['expiryYear']);
-            $response->data['brand'] = $card->getBrand();
-        }
-
-        return $response;
+        $response->augmentResponse();
+        return $this->response = $response;
     }
 
     /**

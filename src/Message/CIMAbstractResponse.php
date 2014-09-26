@@ -2,6 +2,7 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\Common\CreditCard;
 use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
@@ -144,5 +145,25 @@ class CIMAbstractResponse extends AbstractResponse
     public function getCustomerPaymentProfileId()
     {
         return null;
+    }
+
+    /**
+     * Authorize net does not provide finger print and brand of the card hence we build the parameters from the
+     * requested card data
+     *
+     */
+    public function augmentResponse()
+    {
+        if ($this->isSuccessful()) {
+            /** @var CreditCard $card */
+            $card = $this->request->getCard();
+            if ($card) {
+                $ccString = $card->getNumber() . $card->getExpiryMonth() . $card->getExpiryYear();
+                $this->data['hash'] = md5($ccString);
+                $this->data['brand'] = $card->getBrand();
+                $this->data['expiryYear'] = $card->getExpiryYear();
+                $this->data['expiryMonth'] = $card->getExpiryMonth();
+            }
+        }
     }
 }
