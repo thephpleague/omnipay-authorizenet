@@ -19,7 +19,9 @@ class CIMResponseTest extends TestCase
     {
         $httpResponse = $this->getMockHttpResponse('CIMAuthorizeSuccess.txt');
         $mockRequest = \Mockery::mock('\Omnipay\Common\Message\RequestInterface');
-        $mockRequest->shouldReceive('getCardReference')->times(1)->andReturn('{"customerProfileId":"28972085","customerPaymentProfileId":"26317841","customerShippingAddressId":"27057151"}');
+        $mockRequest->shouldReceive('getCardReference')->times(1)->andReturn(
+            '{"customerProfileId":"28972085","customerPaymentProfileId":"26317841","customerShippingAddressId":"27057151"}'
+        );
         $response = new CIMResponse($mockRequest, $httpResponse->getBody());
 
         $this->assertEquals(

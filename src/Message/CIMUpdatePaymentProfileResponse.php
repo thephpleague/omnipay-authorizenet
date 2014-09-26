@@ -9,17 +9,8 @@ class CIMUpdatePaymentProfileResponse extends CIMCreatePaymentProfileResponse
 {
     protected $xmlRootElement = 'updateCustomerPaymentProfileResponse';
 
-    public function getCardReference()
+    public function getCustomerPaymentProfileId()
     {
-        $cardRef = null;
-        if ($this->isSuccessful()) {
-            // Update payment profile never returns customer profileId or payment profile Id. So use the request
-            // data to generate the card reference
-            $data['customerProfileId'] = $this->request->getCustomerProfileId();
-            $data['customerPaymentProfileId'] = $this->request->getCustomerPaymentProfileId();
-
-            $cardRef = json_encode($data);
-        }
-        return $cardRef;
+        return $this->request->getCustomerPaymentProfileId();
     }
 }

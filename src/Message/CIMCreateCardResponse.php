@@ -12,7 +12,7 @@ class CIMCreateCardResponse extends CIMAbstractResponse
     public function getCustomerProfileId()
     {
         if ($this->isSuccessful()) {
-            return (string)$this->data->customerProfileId;
+            return $this->data['customerProfileId'][0];
         }
         return null;
     }
@@ -20,7 +20,7 @@ class CIMCreateCardResponse extends CIMAbstractResponse
     public function getCustomerPaymentProfileId()
     {
         if ($this->isSuccessful()) {
-            return (string)$this->data->customerPaymentProfileIdList->numericString;
+            return $this->data['customerPaymentProfileIdList'][0]['numericString'][0];
         }
         return null;
     }

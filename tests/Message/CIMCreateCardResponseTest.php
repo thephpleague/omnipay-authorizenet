@@ -23,6 +23,9 @@ class CIMCreateCardResponseTest extends TestCase
         $this->assertEquals('I00001', $response->getReasonCode());
         $this->assertEquals("1", $response->getResultCode());
         $this->assertEquals("Successful.", $response->getMessage());
+
+        $this->assertEquals('28972084', $response->getCustomerProfileId());
+        $this->assertEquals('26317840', $response->getCustomerPaymentProfileId());
     }
 
     public function testCreateCardFailure()
@@ -34,6 +37,10 @@ class CIMCreateCardResponseTest extends TestCase
         $this->assertEquals('E00041', $response->getReasonCode());
         $this->assertEquals("3", $response->getResultCode());
         $this->assertEquals("One or more fields in the profile must contain a value.", $response->getMessage());
+
+        $this->assertNull($response->getCustomerProfileId());
+        $this->assertNull($response->getCustomerPaymentProfileId());
+
         $this->assertNull($response->getCardReference());
     }
 }

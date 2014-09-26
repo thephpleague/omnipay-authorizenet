@@ -73,7 +73,21 @@ class CIMGatewayIntegrationTest extends TestCase
 
         $cardRef = $response->getCardReference();
 
-        // Try creating card for the same user again.
+        // Try different creating card for same user
+        $params = array(
+            'card' => $this->getValidCard(),
+            'name' => 'Kaywinnet Lee Frye',
+            'email' => "kaylee$rand@serenity.com",
+        );
+        $params['card']['number'] = '4007000000027';
+        $request = $this->gateway->createCard($params);
+        $request->setDeveloperMode(true);
+
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Should be a success as we create a payment profile');
+        $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
+
+        // Try creating same card for the same user without force card update flag.
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
@@ -86,7 +100,7 @@ class CIMGatewayIntegrationTest extends TestCase
         $this->assertFalse($response->isSuccessful(), 'Should not success as we tried creating duplicate profile');
         $this->assertNull($response->getCardReference(), 'Card reference should be returned');
 
-        // Try creating card for the same user again with force card update flag.
+        // Try creating same card for the same user again with force card update flag.
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',

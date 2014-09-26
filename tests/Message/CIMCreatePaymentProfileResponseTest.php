@@ -18,6 +18,7 @@ class CIMCreatePaymentProfileResponseTest extends TestCase
     {
         $httpResponse = $this->getMockHttpResponse('CIMCreatePaymentProfileSuccess.txt');
         $mockRequest = \Mockery::mock('\Omnipay\Common\Message\RequestInterface');
+        $mockRequest->shouldReceive('getCustomerProfileId')->times(1)->andReturn('28775801');
         $response = new CIMCreatePaymentProfileResponse($mockRequest, $httpResponse->getBody());
 
         $this->assertTrue($response->isSuccessful());
@@ -25,6 +26,7 @@ class CIMCreatePaymentProfileResponseTest extends TestCase
         $this->assertEquals("1", $response->getResultCode());
         $this->assertEquals("Successful.", $response->getMessage());
         $this->assertEquals("26455709", $response->getCustomerPaymentProfileId());
+        $this->assertEquals("28775801", $response->getCustomerProfileId());
     }
 
     public function testCreateCardFailure()

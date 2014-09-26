@@ -34,7 +34,7 @@ class CIMAbstractResponse extends AbstractResponse
             throw new InvalidResponseException();
         }
 
-        $this->data = $xml;
+        $this->data = $this->xml2array($xml);
     }
 
     public function isSuccessful()
@@ -49,7 +49,7 @@ class CIMAbstractResponse extends AbstractResponse
      */
     public function getResultCode()
     {
-        $result = (string)$this->data->messages[0]->resultCode;
+        $result = (string)$this->data['messages'][0]['resultCode'][0];
         switch ($result) {
             case 'Ok':
                 return 1;
@@ -70,9 +70,9 @@ class CIMAbstractResponse extends AbstractResponse
     {
         $code = null;
 
-        if (isset($this->data->messages)) {
+        if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
-            $code = (string)$this->data->messages[0]->message[0]->code;
+            $code = (string)$this->data['messages'][0]['message'][0]['code'][0];
 
         }
 
@@ -88,9 +88,9 @@ class CIMAbstractResponse extends AbstractResponse
     {
         $message = null;
 
-        if (isset($this->data->messages)) {
+        if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
-            $message = (string)$this->data->messages[0]->message[0]->text;
+            $message = (string)$this->data['messages'][0]['message'][0]['text'][0];
 
         }
 
@@ -98,6 +98,50 @@ class CIMAbstractResponse extends AbstractResponse
     }
 
     public function getCardReference()
+    {
+        $cardRef = null;
+        if ($this->isSuccessful()) {
+            $data['customerProfileId'] = $this->getCustomerProfileId();
+            $data['customerPaymentProfileId'] = $this->getCustomerPaymentProfileId();
+            if (!empty($data['customerProfileId']) && !empty($data['customerPaymentProfileId'])) {
+                // For card reference both profileId and payment profileId should exist
+                $cardRef = json_encode($data);
+            }
+        }
+        return $cardRef;
+    }
+
+    /**
+     * http://bookofzeus.com/articles/convert-simplexml-object-into-php-array/
+     *
+     * Convert a simpleXMLElement in to an array
+     *
+     * @param \SimpleXMLElement $xml
+     *
+     * @return array
+     */
+    public function xml2array(\SimpleXMLElement $xml)
+    {
+        $arr = array();
+        foreach ($xml as $element) {
+            $tag = $element->getName();
+            $e = get_object_vars($element);
+            if (!empty($e)) {
+                $arr[$tag][] = $element instanceof \SimpleXMLElement ? $this->xml2array($element) : $e;
+            } else {
+                $arr[$tag][] = trim($element);
+            }
+        }
+
+        return $arr;
+    }
+
+    public function getCustomerProfileId()
+    {
+        return null;
+    }
+
+    public function getCustomerPaymentProfileId()
     {
         return null;
     }

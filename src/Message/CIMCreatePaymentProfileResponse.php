@@ -9,8 +9,19 @@ class CIMCreatePaymentProfileResponse extends CIMAbstractResponse
 {
     protected $xmlRootElement = 'createCustomerPaymentProfileResponse';
 
+    public function getCustomerProfileId()
+    {
+        if ($this->isSuccessful()) {
+            return $this->request->getCustomerProfileId();
+        }
+        return null;
+    }
+
     public function getCustomerPaymentProfileId()
     {
-        return (string)$this->data->customerPaymentProfileId;
+        if ($this->isSuccessful()) {
+            return $this->data['customerPaymentProfileId'][0];
+        }
+        return null;
     }
 }

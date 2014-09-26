@@ -15,10 +15,10 @@ class CIMResponse extends CIMAbstractResponse
             return null;
         }
         $transRef = null;
-        if (isset($this->data->directResponse)) {
+        if (isset($this->data['directResponse'])) {
             $transRef = array();
             // In case of a successful transaction, a "directResponse" element is present
-            $directResponse = explode(',', (string)$this->data->directResponse);
+            $directResponse = explode(',', (string)$this->data['directResponse'][0]);
             // Required for capturing an authorized transaction
             $transRef['approvalCode'] = $directResponse[4];
             // Required for refund a transaction
