@@ -45,7 +45,7 @@ class SIMGateway extends AIMGateway
 
     public function purchase(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\SIMAuthorizeRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\SIMPurchaseRequest', $parameters);
     }
 
     public function completePurchase(array $parameters = array())
