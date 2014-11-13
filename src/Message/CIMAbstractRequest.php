@@ -2,8 +2,6 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Omnipay\Common\Exception\InvalidRequestException;
-
 /**
  * Authorize.Net CIM Abstract Request
  */
@@ -70,7 +68,8 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
     }
 
     /**
-     * @throws InvalidRequestException
+     * Create and return the base XML data required to create a new request
+     *
      * @return mixed|\SimpleXMLElement
      */
     public function getBaseData()

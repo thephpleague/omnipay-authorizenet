@@ -15,6 +15,8 @@ class CIMGateway extends AIMGateway
     }
 
     /**
+     * Create a new debit or credit card
+     *
      * @param array $parameters
      *
      * @return CIMCreateCardRequest

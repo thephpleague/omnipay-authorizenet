@@ -2,8 +2,6 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Omnipay\Common\CreditCard;
-
 /**
  * Create Request to get customer profile
  */
