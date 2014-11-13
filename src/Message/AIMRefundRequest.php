@@ -27,4 +27,4 @@ class AIMRefundRequest extends AIMAbstractRequest
 
         return $data;
     }
-} 
+}

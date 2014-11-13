@@ -1,4 +1,4 @@
-{
+    {
     "name": "omnipay/authorizenet",
     "type": "library",
     "description": "Authorize.Net gateway for the Omnipay payment processing library",

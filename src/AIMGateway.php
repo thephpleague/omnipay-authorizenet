@@ -5,6 +5,7 @@ namespace Omnipay\AuthorizeNet;
 use Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest;
 use Omnipay\AuthorizeNet\Message\AIMCaptureRequest;
 use Omnipay\AuthorizeNet\Message\AIMPurchaseRequest;
+use Omnipay\AuthorizeNet\Message\AIMRefundRequest;
 use Omnipay\AuthorizeNet\Message\AIMVoidRequest;
 use Omnipay\Common\AbstractGateway;
 
@@ -102,5 +103,4 @@ class AIMGateway extends AbstractGateway
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMRefundRequest', $parameters);
     }
-
 }

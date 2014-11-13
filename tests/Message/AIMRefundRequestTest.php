@@ -15,7 +15,7 @@ class AIMRefundRequestTest extends TestCase
         $this->request = new AIMRefundRequest($this->getHttpClient(), $this->getHttpRequest());
     }
 
-    public function testGetData_MissingCardInfo()
+    public function testGetDataMissingCardInfo()
     {
         $this->request->initialize(
             array(
@@ -26,10 +26,12 @@ class AIMRefundRequestTest extends TestCase
 
         try {
             $this->request->getData();
-        } catch(InvalidRequestException $irex) {
-            return $this->assertEquals($irex->getMessage(), "The card parameter is required");
-        } catch(\Exception $e) {
-            return $this->fail("Invalid exception was thrown: " . $e->getMessage());
+        } catch (InvalidRequestException $irex) {
+            $this->assertEquals($irex->getMessage(), "The card parameter is required");
+            return;
+        } catch (\Exception $e) {
+            $this->fail("Invalid exception was thrown: " . $e->getMessage());
+            return;
         }
 
         $this->fail("InvalidRequestException should get thrown because card is missing");
@@ -52,11 +54,11 @@ class AIMRefundRequestTest extends TestCase
         $data = $this->request->getData();
 
         $this->assertEquals('refundTransaction', $data->transactionRequest->transactionType);
-        $this->assertEquals('12.12', (string) $data->transactionRequest->amount[0]);
+        $this->assertEquals('12.12', (string)$data->transactionRequest->amount[0]);
         $this->assertEquals('authnet-transaction-reference', $data->transactionRequest->refTransId);
 
         $setting = $data->transactionRequest->transactionSettings->setting[0];
         $this->assertEquals('testRequest', $setting->settingName);
         $this->assertEquals('false', $setting->settingValue);
     }
-} 
+}
