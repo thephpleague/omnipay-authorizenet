@@ -32,7 +32,7 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
     {
         $transaction = $data->addChild('transaction');
         $action = $transaction->addChild($this->action);
-        $action->amount = number_format($this->getAmount(), 2);
+        $action->amount = $this->getAmount();
 
         $cardRef = json_decode($this->getCardReference(), true);
         $action->customerProfileId = $cardRef['customerProfileId'];
