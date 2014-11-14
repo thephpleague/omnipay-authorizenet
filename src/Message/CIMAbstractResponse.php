@@ -50,7 +50,7 @@ class CIMAbstractResponse extends AbstractResponse
      */
     public function getResultCode()
     {
-        $result = (string)$this->data['messages'][0]['resultCode'][0];
+        $result = (string)$this->data['messages'][0]['resultCode'];
         switch ($result) {
             case 'Ok':
                 return 1;
@@ -73,7 +73,7 @@ class CIMAbstractResponse extends AbstractResponse
 
         if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
-            $code = (string)$this->data['messages'][0]['message'][0]['code'][0];
+            $code = (string)$this->data['messages'][0]['message'][0]['code'];
 
         }
 
@@ -91,7 +91,7 @@ class CIMAbstractResponse extends AbstractResponse
 
         if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
-            $message = (string)$this->data['messages'][0]['message'][0]['text'][0];
+            $message = (string)$this->data['messages'][0]['message'][0]['text'];
 
         }
 
@@ -130,7 +130,7 @@ class CIMAbstractResponse extends AbstractResponse
             if (!empty($e)) {
                 $arr[$tag][] = $element instanceof \SimpleXMLElement ? $this->xml2array($element) : $e;
             } else {
-                $arr[$tag][] = trim($element);
+                $arr[$tag] = trim($element);
             }
         }
 
