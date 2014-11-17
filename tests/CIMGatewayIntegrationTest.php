@@ -2,11 +2,9 @@
 
 namespace Omnipay\AuthorizeNet;
 
-use Omnipay\Tests\TestCase;
 use Guzzle\Http\Client;
-use Guzzle\Log\MessageFormatter;
-use Guzzle\Log\PsrLogAdapter;
-use Guzzle\Plugin\Log\LogPlugin;
+use Omnipay\AuthorizeNet\Message\CIMResponse;
+use Omnipay\Tests\TestCase;
 
 /**
  * Integration tests for the CIM Gateway. These tests make real requests to Authorize.NET sandbox environment.
@@ -32,17 +30,7 @@ class CIMGatewayIntegrationTest extends TestCase
         $transactionKey = getenv('AUTHORIZE_NET_TRANSACTION_KEY');
 
         if ($apiLoginId && $transactionKey) {
-
-            /*
-            $logger = new \Monolog\Logger('authorizenet_cim');
-            $logger->pushHandler(new \Monolog\Handler\StreamHandler('/var/log/php/debug.log', \Monolog\Logger::DEBUG));
-            $logger->pushHandler(new \Monolog\Handler\FirePHPHandler());
-            $adapter = new PsrLogAdapter($logger);
-            $logPlugin = new LogPlugin($adapter, MessageFormatter::DEBUG_FORMAT);
-            */
-
             $client = new Client();
-            // $client->addSubscriber($logPlugin);
 
             $this->gateway = new CIMGateway($client, $this->getHttpRequest());
             $this->gateway->setDeveloperMode(true);
@@ -54,10 +42,10 @@ class CIMGatewayIntegrationTest extends TestCase
         }
     }
 
-    public function testIntegration()
+    public function testCreateCustomerAndPaymentProfile()
     {
         // Create card
-        $rand = rand(100000, 999999);
+        $rand = uniqid();
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
@@ -66,13 +54,14 @@ class CIMGatewayIntegrationTest extends TestCase
         $request = $this->gateway->createCard($params);
         $request->setDeveloperMode(true);
 
+        /* @var $response CIMResponse */
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Profile should get created');
         $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
 
         $cardRef = $response->getCardReference();
 
-        // Try different creating card for same user
+        // Try creating a different card for the same user
         $params = array(
             'card' => $this->getValidCard(),
             'name' => 'Kaywinnet Lee Frye',
@@ -83,7 +72,7 @@ class CIMGatewayIntegrationTest extends TestCase
         $request->setDeveloperMode(true);
 
         $response = $request->send();
-        $this->assertTrue($response->isSuccessful(), 'Should be a success as we create a payment profile');
+        $this->assertTrue($response->isSuccessful(), 'Should be successful as we have created a payment profile');
         $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
 
         // Try creating same card for the same user without force card update flag.
@@ -96,7 +85,7 @@ class CIMGatewayIntegrationTest extends TestCase
         $request->setDeveloperMode(true);
 
         $response = $request->send();
-        $this->assertFalse($response->isSuccessful(), 'Should not success as we tried creating duplicate profile');
+        $this->assertFalse($response->isSuccessful(), 'Should fail as we tried creating a duplicate profile');
         $this->assertNull($response->getCardReference(), 'Card reference should be returned');
 
         // Try creating same card for the same user again with force card update flag.
@@ -110,18 +99,37 @@ class CIMGatewayIntegrationTest extends TestCase
         $request->setDeveloperMode(true);
 
         $response = $request->send();
-        $this->assertTrue($response->isSuccessful(), 'Should succeed updating of the existing payment profile');
+        $this->assertTrue($response->isSuccessful(), 'Should succeed in updating the existing payment profile');
         $this->assertEquals(
             $cardRef,
             $response->getCardReference(),
             'Card reference should be same as with the one newly created'
         );
+    }
+
+    public function testAuthorizeAndVoid()
+    {
+        // Create card
+        $rand = uniqid();
+        $params = array(
+            'card' => $this->getValidCard(),
+            'name' => 'Kaywinnet Lee Frye ' . $rand,
+            'email' => "kaylee$rand@serenity.com",
+        );
+        $request = $this->gateway->createCard($params);
+        $request->setDeveloperMode(true);
+
+        /* @var $response CIMResponse */
+        $response = $request->send();
+        $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
+
+        $cardRef = $response->getCardReference();
 
         // Create Authorize only transaction
         $params = array(
             'cardReference' => $cardRef,
             'amount' => 100.00,
-            'description'
+            'description' => 'Hello World'
         );
         $request = $this->gateway->authorize($params);
         $request->setDeveloperMode(true);
@@ -143,7 +151,6 @@ class CIMGatewayIntegrationTest extends TestCase
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Capture transaction should get created');
         $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
-        $captureTransRef = $response->getTransactionReference();
 
         // Make a purchase using the saved card. i.e auth and capture
         $params = array(
@@ -156,20 +163,16 @@ class CIMGatewayIntegrationTest extends TestCase
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Purchase transaction should get created');
         $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
-        $purchaseTransRef = $response->getTransactionReference();
+
+        $transactionRef = json_decode($response->getTransactionReference(), true);
 
         // Make a refund on the purchase transaction
-        $params = array(
-            'transactionReference' => $purchaseTransRef,
-            'amount' => 110.00,
-        );
-        $request = $this->gateway->refund($params);
+        $params = array('transactionReference' => $transactionRef['transId']);
+        $request = $this->gateway->void($params);
         $request->setDeveloperMode(true);
 
         $response = $request->send();
-        // todo: Fix refunds, and add unit tests using mocks
-//        $this->assertTrue($response->isSuccessful(), 'Refund transaction should get created');
-//        $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
-
+        $this->assertTrue($response->isSuccessful(), 'Refund transaction should get created');
+        $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
     }
 }

@@ -14,6 +14,7 @@ class CIMResponse extends CIMAbstractResponse
         if (!$this->isSuccessful()) {
             return null;
         }
+
         $transRef = null;
         if (isset($this->data['directResponse'])) {
             $transRef = array();

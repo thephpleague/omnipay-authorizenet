@@ -74,7 +74,6 @@ class CIMAbstractResponse extends AbstractResponse
         if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
             $code = (string)$this->data['messages'][0]['message'][0]['code'];
-
         }
 
         return $code;
@@ -148,22 +147,23 @@ class CIMAbstractResponse extends AbstractResponse
     }
 
     /**
-     * Authorize net does not provide finger print and brand of the card hence we build the parameters from the
+     * Authorize net does not provide fingerprint and brand of the card hence we build the parameters from the
      * requested card data
-     *
      */
     public function augmentResponse()
     {
-        if ($this->isSuccessful()) {
-            /** @var CreditCard $card */
-            $card = $this->request->getCard();
-            if ($card) {
-                $ccString = $card->getNumber() . $card->getExpiryMonth() . $card->getExpiryYear();
-                $this->data['hash'] = md5($ccString);
-                $this->data['brand'] = $card->getBrand();
-                $this->data['expiryYear'] = $card->getExpiryYear();
-                $this->data['expiryMonth'] = $card->getExpiryMonth();
-            }
+        if (!$this->isSuccessful()) {
+            return;
+        }
+
+        /** @var CreditCard $card */
+        $card = $this->request->getCard();
+        if ($card) {
+            $ccString = $card->getNumber() . $card->getExpiryMonth() . $card->getExpiryYear();
+            $this->data['hash'] = md5($ccString);
+            $this->data['brand'] = $card->getBrand();
+            $this->data['expiryYear'] = $card->getExpiryYear();
+            $this->data['expiryMonth'] = $card->getExpiryMonth();
         }
     }
 }
