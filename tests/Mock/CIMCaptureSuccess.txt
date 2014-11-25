@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Cache-Control: private
+Content-Length: 1027
+Content-Type: text/xml;
+charset=utf-8
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 2.0.50727
+X-Powered-By: ASP.NET
+Access-Control-Allow-Headers: x-requested-with,cache-control,content-type,origin,method
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Date: Thu, 18 Sep 2014 04:15:23 GMT
+
+<?xml version="1.0" encoding="utf-8"?><createCustomerProfileTransactionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><directResponse>1,1,1,This transaction has been approved.,DMK100,P,2220001903,,,100.00,CC,capture_only,,Example,User,,123 Billing St Billsville,Billstown,CA,12345,US,,,kaylee346183@serenity.com,Example,User,,123 Shipping St Shipsville,Shipstown,NY,54321,US,,,,,,28AF50C3CB7ED3D132E6BED4558CDE8F,,,,,,,,,,,,,XXXX1111,Visa,,,,,,,,,,,,,,,,,27057177</directResponse></createCustomerProfileTransactionResponse>

@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Cache-Control: private
+Content-Length: 746
+Content-Type: text/xml;
+charset=utf-8
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 2.0.50727
+X-Powered-By: ASP.NET
+Access-Control-Allow-Headers: x-requested-with,cache-control,content-type,origin,method
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Date: Thu, 18 Sep 2014 04:15:24 GMT
+
+<?xml version="1.0" encoding="utf-8"?><createCustomerProfileTransactionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><messages><resultCode>Error</resultCode><message><code>E00027</code><text>This transaction has been declined.</text></message></messages><directResponse>2,1,2,This transaction has been declined.,,Y,2220009663,,,110.00,CC,auth_capture,,Example,User,,123 Billing St Billsville,Billstown,CA,46282,US,,,kaylee729813@serenity.com,Example,User,,123 Shipping St Shipsville,Shipstown,NY,54321,US,,,,,,CE96C60797B394AF0BFFD6FEBEDE7C2A,,2,,,,,,,,,,,XXXX1111,Visa,,,,,,,,,,,,,,,,,27058978</directResponse></createCustomerProfileTransactionResponse>

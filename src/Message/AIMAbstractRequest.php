@@ -89,6 +89,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
      * Adds billing data to a partially filled request data object.
      *
      * @param \SimpleXMLElement $data
+     *
      * @return \SimpleXMLElement
      */
     protected function addBillingData(\SimpleXMLElement $data)
