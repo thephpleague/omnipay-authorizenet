@@ -29,5 +29,4 @@ class CIMGetPaymentProfileRequest extends CIMAbstractRequest
 
         return $this->response = new CIMGetPaymentProfileResponse($this, $httpResponse->getBody());
     }
-
 }

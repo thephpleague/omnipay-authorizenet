@@ -28,5 +28,4 @@ class CIMGetProfileRequest extends CIMAbstractRequest
 
         return $this->response = new CIMGetProfileResponse($this, $httpResponse->getBody());
     }
-
 }

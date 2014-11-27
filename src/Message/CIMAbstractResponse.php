@@ -27,7 +27,7 @@ class CIMAbstractResponse extends AbstractResponse
 
         try {
             $xml = simplexml_load_string($xml);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new InvalidResponseException();
         }
 

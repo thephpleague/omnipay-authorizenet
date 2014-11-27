@@ -278,5 +278,4 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         $obj->initialize(array_replace($this->getParameters(), $parameters));
         return $obj->send();
     }
-
 }

@@ -57,5 +57,4 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
 
         return $this->response = new CIMResponse($this, $httpResponse->getBody());
     }
-
 }
