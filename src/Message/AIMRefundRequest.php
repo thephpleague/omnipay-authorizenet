@@ -7,18 +7,19 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class AIMRefundRequest extends AbstractRequest
 {
-  protected  $action = 'CREDIT';
-  public function getData()
-  {
-    $data = $this->getBaseData('RefundTransaction');
+    protected $action = 'CREDIT';
 
-    $this->validate('amount', 'transactionReference');
+    public function getData()
+    {
+        $data = $this->getBaseData('RefundTransaction');
 
-    $data['x_trans_id'] = $this->getTransactionReference();
-    $data['x_card_num'] = $this->getCard()->getNumber();
-    $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
-    $data['x_amount']   = $this->getAmount();
+        $this->validate('amount', 'transactionReference');
 
-    return $data;
-  }
+        $data['x_trans_id'] = $this->getTransactionReference();
+        $data['x_card_num'] = $this->getCard()->getNumber();
+        $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
+        $data['x_amount'] = $this->getAmount();
+
+        return $data;
+    }
 }
