@@ -66,8 +66,7 @@ class AIMResponse extends AbstractResponse
 
         $response = array();
 
-        foreach($response_fields as $field)
-        {
+        foreach ($response_fields as $field) {
             $response[$field] = array_shift($temp);
         }
 
