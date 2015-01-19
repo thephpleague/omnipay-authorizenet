@@ -97,4 +97,32 @@ class AIMResponseTest extends TestCase
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
     }
+
+    public function testRefundSuccess()
+    {
+        $httpResponse = $this->getMockHttpResponse('AIMRefundSuccess.txt');
+
+        $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame('2184492509', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
+        $this->assertSame('1', $response->getCode());
+        $this->assertSame('1', $response->getReasonCode());
+        $this->assertSame('P', $response->getAVSCode());
+    }
+
+    public function testRefundFailure()
+    {
+        $httpResponse = $this->getMockHttpResponse('AIMRefundFailure.txt');
+        $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertFalse($response->isSuccessful());
+        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertSame('The credit card number is invalid.', $response->getMessage());
+        $this->assertSame('3', $response->getCode());
+        $this->assertSame('6', $response->getReasonCode());
+        $this->assertSame('', $response->getAuthorizationCode());
+        $this->assertSame('P', $response->getAVSCode());
+    }
 }
