@@ -29,4 +29,29 @@ class CIMCreateCardRequestTest extends TestCase
         $this->assertEquals($card['number'], $data->profile->paymentProfiles->payment->creditCard->cardNumber);
         $this->assertEquals('testMode', $data->validationMode);
     }
+
+    public function testGetDataShouldHaveCustomBillTo()
+    {
+        $card = $this->getValidCard();
+        unset($card['billingAddress1']);
+        unset($card['billingAddress2']);
+        unset($card['billingCity']);
+        $this->request->initialize(
+            array(
+                'email' => "kaylee@serenity.com",
+                'card' => $card,
+                'developerMode' => true,
+                'forceCardUpdate' => true,
+                'populateBillTo' => [
+                    'address' => '1234 Test Street',
+                    'city' => 'Blacksburg'
+                ]
+            )
+        );
+
+        $data = $this->request->getData();
+        $this->assertEquals('12345', $data->profile->paymentProfiles->billTo->zip);
+        $this->assertEquals('1234 Test Street', $data->profile->paymentProfiles->billTo->address);
+        $this->assertEquals('Blacksburg', $data->profile->paymentProfiles->billTo->city);
+    }
 }

@@ -38,12 +38,6 @@ class CIMGatewayTest extends GatewayTestCase
             'transactionReference' => '{"approvalCode":"DMK100","transId":"2220001902","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}',
         );
 
-        $this->authorizeOptions = array(
-            'cardReference' => '{"customerProfileId":"28972084","customerPaymentProfileId":"26317840","customerShippingAddressId":"27057149"}',
-            'amount' => 10.00,
-            'description' => 'purchase'
-        );
-
         $this->refundOptions = array(
             'amount' => '10.00',
             'transactionReference' => '{"approvalCode":"DMK100","transId":"2220001902","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}',

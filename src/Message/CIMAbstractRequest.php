@@ -67,6 +67,16 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
         return $this->getParameter('forceCardUpdate');
     }
 
+    public function setPopulateBillTo($populateBillTo)
+    {
+        return $this->setParameter('populateBillTo', $populateBillTo);
+    }
+
+    public function getPopulateBillTo()
+    {
+        return $this->getParameter('populateBillTo');
+    }
+
     /**
      * Create and return the base XML data required to create a new request
      *
