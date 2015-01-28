@@ -42,7 +42,7 @@ class CIMCreateCardRequestTest extends TestCase
                 'card' => $card,
                 'developerMode' => true,
                 'forceCardUpdate' => true,
-                'populateBillTo' => [
+                'defaultBillTo' => [
                     'address' => '1234 Test Street',
                     'city' => 'Blacksburg'
                 ]

@@ -9,9 +9,41 @@ use Omnipay\AuthorizeNet\Message\CIMCreateCardRequest;
  */
 class CIMGateway extends AIMGateway
 {
+    public function getDefaultParameters()
+    {
+        return array(
+            'apiLoginId' => '',
+            'transactionKey' => '',
+            'testMode' => false,
+            'developerMode' => false,
+            'forceCardUpdate' => false,
+            'defaultBillTo' => [[]]
+        );
+    }
+
     public function getName()
     {
         return 'Authorize.Net CIM';
+    }
+
+    public function setForceCardUpdate($forceCardUpdate)
+    {
+        return $this->setParameter('forceCardUpdate', $forceCardUpdate);
+    }
+
+    public function getForceCardUpdate()
+    {
+        return $this->getParameter('forceCardUpdate');
+    }
+
+    public function setDefaultBillTo($defaultBillTo)
+    {
+        return $this->setParameter('defaultBillTo', $defaultBillTo);
+    }
+
+    public function getDefaultBillTo()
+    {
+        return $this->getParameter('defaultBillTo');
     }
 
     /**
@@ -44,5 +76,10 @@ class CIMGateway extends AIMGateway
     public function refund(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\CIMRefundRequest', $parameters);
+    }
+
+    public function void(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\CIMVoidRequest', $parameters);
     }
 }
