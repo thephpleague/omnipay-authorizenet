@@ -88,6 +88,18 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             $req->zip = $card->getBillingPostcode();
             $req->country = $card->getBillingCountry();
 
+            $defaultBillTo = $this->getParameter('defaultBillTo');
+            if (is_array($defaultBillTo)) {
+                // A configuration parameter to populate billTo has been specified
+                foreach ($defaultBillTo as $field => $value) {
+                    if (empty($req->{$field}) && !empty($value)) {
+                        // This particular field is empty and default value in populateBillTo has been specified
+                        // so use it
+                        $req->{$field} = $value;
+                    }
+                }
+            }
+
             $req = $data->addChild('payment');
             $req->creditCard->cardNumber = $card->getNumber();
             $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
