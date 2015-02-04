@@ -5,6 +5,15 @@ namespace Omnipay\AuthorizeNet;
 /**
  * Authorize.Net DPM (Direct Post Method) Class
  */
-class DPMGateway extends AIMGateway
+class DPMGateway extends SIMGateway
 {
+    public function getName()
+    {
+        return 'Authorize.Net DPM';
+    }
+
+    public function authorize(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMAuthorizeRequest', $parameters);
+    }
 }
