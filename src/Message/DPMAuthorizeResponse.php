@@ -4,13 +4,14 @@ namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
+use Omnipay\Common\Message\RedirectResponseInterface;
 
 /**
  * Authorize.Net DPM Authorize Response
  * Here we want the application to present a POST form to the user. This object will
  * provide the helper methods for doing so.
  */
-class DPMAuthorizeResponse extends AbstractResponse
+class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseInterface
 {
     protected $postUrl;
 
@@ -61,9 +62,20 @@ class DPMAuthorizeResponse extends AbstractResponse
     /**
      * The URL the form will be posted to.
      */
-    public function getPostUrl()
+    public function getRedirectUrl()
     {
         return $this->postUrl;
+    }
+
+    public function getRedirectMethod()
+    {
+        return "post";
+    }
+
+    // CHECKME: do we still need getHiddenData()?
+    public function getRedirectData()
+    {
+        return $this->getHiddenData();
     }
 
     /**

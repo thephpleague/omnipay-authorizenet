@@ -55,9 +55,12 @@ class DPMAuthorizeRequest extends SIMAuthorizeRequest
             $data['x_cust_id'] = $this->getCustomerId();
         }
 
-        $data['x_card_num'] = $this->getCard()->getNumber();
-        $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
-        $data['x_card_code'] = $this->getCard()->getCvv();
+        // The card details at this point are optional.
+        if ($this->getCard()) {
+            $data['x_card_num'] = $this->getCard()->getNumber();
+            $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
+            $data['x_card_code'] = $this->getCard()->getCvv();
+        }
 
         return $data;
     }

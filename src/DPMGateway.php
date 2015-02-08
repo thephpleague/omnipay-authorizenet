@@ -12,10 +12,6 @@ class DPMGateway extends SIMGateway
         return 'Authorize.Net DPM';
     }
 
-/*    public function setHashSecret()
-    {
-    } */
-
     public function authorize(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMAuthorizeRequest', $parameters);
@@ -23,6 +19,16 @@ class DPMGateway extends SIMGateway
 
     public function completeAuthorize(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMCompleteAuthorizeRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMCompleteRequest', $parameters);
+    }
+
+    public function payment(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMPaymentRequest', $parameters);
+    }
+
+    public function completePayment(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMCompleteRequest', $parameters);
     }
 }

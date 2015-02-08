@@ -14,7 +14,7 @@ use Omnipay\Common\Message\RedirectResponseInterface;
  * We may want to return to the success page, the failed page or the retry
  * page (so the user can correct the form).
  */
-class DPMCompleteAuthorizeResponse extends SIMCompleteAuthorizeResponse implements RedirectResponseInterface
+class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements RedirectResponseInterface
 {
     const RESPONSE_CODE_APPROVED    = '1';
     const RESPONSE_CODE_DECLINED    = '2';

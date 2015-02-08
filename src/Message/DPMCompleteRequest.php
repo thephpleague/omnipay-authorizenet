@@ -7,7 +7,7 @@ use Omnipay\Common\Exception\InvalidRequestException;
 /**
  * Authorize.Net DPM Complete Authorize Request
  */
-class DPMCompleteAuthorizeRequest extends SIMCompleteAuthorizeRequest
+class DPMCompleteRequest extends SIMCompleteAuthorizeRequest
 {
     public function getData()
     {
@@ -59,6 +59,6 @@ class DPMCompleteAuthorizeRequest extends SIMCompleteAuthorizeRequest
 
     public function sendData($data)
     {
-        return $this->response = new DPMCompleteAuthorizeResponse($this, $data);
+        return $this->response = new DPMCompleteResponse($this, $data);
     }
 }
