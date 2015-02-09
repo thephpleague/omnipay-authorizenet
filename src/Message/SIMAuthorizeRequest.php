@@ -23,6 +23,9 @@ class SIMAuthorizeRequest extends AbstractRequest
         $data['x_relay_response'] = 'TRUE';
         $data['x_relay_url'] = $this->getReturnUrl();
         $data['x_cancel_url'] = $this->getCancelUrl();
+        if ($this->getCustomerId() !== null) {
+            $data['x_cust_id'] = $this->getCustomerId();
+        }
 
         if ($this->getTestMode()) {
             $data['x_test_request'] = 'TRUE';
