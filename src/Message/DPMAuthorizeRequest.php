@@ -38,8 +38,14 @@ class DPMAuthorizeRequest extends SIMAuthorizeRequest
     {
         $data = parent::getData();
 
-        // This is the DPM trigger.
-        $data['x_show_form'] = 'PAYMENT_FORM';
+        // If x_show_form is swet, then the form will be displayed on the Authorize.Net
+        // gateway, which acts a bit like the SIM gateway. The documentation does NOT
+        // make this clear.
+        // TODO: revisit this - maybe much of what is in the DPM can be used to enhance
+        // the SIM gateway, with very little in the DPM messages.
+
+        //$data['x_show_form'] = 'PAYMENT_FORM';
+        unset($data['x_show_form']);
 
         // Support multiple currencies.
         // CHECKME: should this be back-ported to SIMAuthorizeRequest and AIMAuthorizeRequest?
