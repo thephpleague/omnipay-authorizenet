@@ -18,6 +18,9 @@ class DPMCompleteRequest extends SIMCompleteAuthorizeRequest
 
         if ($hash_posted !== $hash_calculated) {
             // If the hash is incorrect, then we can't trust the source nor anything sent.
+            // Throwing exceptions here is a *really* bad idea. We are trying to get the data,
+            // and if it is invalid, then we need to be able to log that data for analysis.
+            // Except we can't, baceuse the exception means we can't get to the data.
 
             throw new InvalidRequestException('Incorrect hash');
         }
@@ -49,12 +52,12 @@ class DPMCompleteRequest extends SIMCompleteAuthorizeRequest
      */
     public function getDpmHash($transaction_reference, $amount)
     {
-        return md5(
-            $this->getHashSecret()
+        $key = $this->getHashSecret()
             . $this->getApiLoginId()
             . $transaction_reference
-            . $amount
-        );
+            . $amount;
+
+        return md5($key);
     }
 
     public function sendData($data)

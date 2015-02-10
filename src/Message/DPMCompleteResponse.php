@@ -81,5 +81,7 @@ class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements Redire
      */
     public function getRedirectUrl()
     {
+        // Leave it for the applicatino to decide where to sent the user.
+        return;
     }
 }
