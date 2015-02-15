@@ -15,6 +15,9 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
 {
     protected $postUrl;
 
+    /**
+     * These will be hidden fields in the direct-post form.
+     */
     protected $hiddenFields = array(
         'x_fp_hash',
         'x_amount',
@@ -30,6 +33,7 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
         'x_login',
         'x_invoice_num',
         'x_description',
+        'x_cust_id',
     );
 
     public function __construct(RequestInterface $request, $data, $postUrl)
@@ -79,11 +83,11 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
     }
 
     /**
-     * Add a field to the list of hidden fields.
+     * Move a field to the list of hidden form fields.
      * The hidden fields are those we don't want to show the user, but
      * must still be posted.
      */
-    public function setHiddenField($field_name)
+    public function hideField($field_name)
     {
         if (!in_array($field_name, $this->hiddenFields)) {
             $this->hiddenFields[] = $field_name;
@@ -93,7 +97,7 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
     /**
      * Remove a field from the list of hidden fields.
      */
-    public function unsetHiddenField($field_name)
+    public function unhideField($field_name)
     {
         if (($key = array_search($field_name, $this->hiddenFields)) !== false) {
             unset($this->hiddenFields[$key]);
@@ -113,7 +117,7 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
      * These are not all mandatory, so you do not have to present all these
      * to the user.
      */
-    public function getNonHiddenData()
+    public function getVisibleData()
     {
         return array_diff_key($this->getData(), array_flip($this->hiddenFields));
     }
