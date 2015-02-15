@@ -62,6 +62,11 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
         return true;
     }
 
+    public function isRedirect()
+    {
+        return true;
+    }
+
     // Helpers to build the form.
 
     /**

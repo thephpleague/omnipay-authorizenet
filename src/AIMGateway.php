@@ -62,6 +62,26 @@ class AIMGateway extends AbstractGateway
         return $this->setParameter('developerEndpoint', $endpoints['developer']);
     }
 
+    public function getLiveEndpoint()
+    {
+        return $this->getParameter('liveEndpoint');
+    }
+
+    public function setLiveEndpoint($value)
+    {
+        return $this->setParameter('liveEndpoint', $value);
+    }
+
+    public function getDeveloperEndpoint()
+    {
+        return $this->getParameter('developerEndpoint');
+    }
+
+    public function setDeveloperEndpoint($value)
+    {
+        return $this->setParameter('developerEndpoint', $value);
+    }
+
     public function authorize(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest', $parameters);

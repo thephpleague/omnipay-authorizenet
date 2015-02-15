@@ -57,6 +57,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('hashSecret', $value);
     }
 
+    public function getLiveEndpoint()
+    {
+        return $this->getParameter('liveEndpoint');
+    }
+
     public function setLiveEndpoint($value)
     {
         return $this->setParameter('liveEndpoint', $value);
@@ -65,6 +70,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function setDeveloperEndpoint($value)
     {
         return $this->setParameter('developerEndpoint', $value);
+    }
+
+    public function getDeveloperEndpoint()
+    {
+        return $this->getParameter('developerEndpoint');
     }
 
     protected function getBaseData()
