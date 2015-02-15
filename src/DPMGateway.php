@@ -22,12 +22,12 @@ class DPMGateway extends SIMGateway
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMCompleteRequest', $parameters);
     }
 
-    public function payment(array $parameters = array())
+    public function purchase(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMPaymentRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMPurchaseRequest', $parameters);
     }
 
-    public function completePayment(array $parameters = array())
+    public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMCompleteRequest', $parameters);
     }

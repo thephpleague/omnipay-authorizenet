@@ -3,7 +3,7 @@
 namespace Omnipay\AuthorizeNet\Message;
 
 /**
- * Authorize.Net DPM Purchase Request (known as "Authorization and Capture")
+ * Authorize.Net DPM Purchase Request (aka "Authorize and Capture")
  */
 class DPMPurchaseRequest extends DPMAuthorizeRequest
 {
