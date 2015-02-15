@@ -29,7 +29,9 @@ class DPMAuthorizeRequest extends SIMAuthorizeRequest
 
         if ($this->getCard()) {
             $data['x_card_num'] = $this->getCard()->getNumber();
-            $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
+            // Workaround for https://github.com/thephpleague/omnipay-common/issues/29
+            $expiry_date = $this->getCard()->getExpiryDate('my');
+            $data['x_exp_date'] = ($expiry_date === '1299' ? '' : $expiry_date);
             $data['x_card_code'] = $this->getCard()->getCvv();
         } else {
             $data['x_card_num'] = '';
