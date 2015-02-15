@@ -16,34 +16,25 @@ class DPMAuthorizeRequest extends SIMAuthorizeRequest
     {
         $data = parent::getData();
 
-        // If x_show_form is swet, then the form will be displayed on the Authorize.Net
-        // gateway, which acts a bit like the SIM gateway. The documentation does NOT
-        // make this clear.
-        // TODO: revisit this - maybe much of what is in the DPM can be used to enhance
-        // the SIM gateway, with very little in the DPM messages.
+        // If x_show_form is set, then the form will be displayed on the Authorize.Net
+        // gateway, in a similar way to the SIM gateway. The DPM documentation does NOT
+        // make this clear at all.
+        // Since x_show_form is set in the SIM gateway, make sure we unset it here.
 
-        //$data['x_show_form'] = 'PAYMENT_FORM';
         unset($data['x_show_form']);
 
-        // Support multiple currencies.
-        // CHECKME: should this be back-ported to SIMAuthorizeRequest and AIMAuthorizeRequest?
+        // The card details are optional.
+        // They will most likely only be used for development and testing.
+        // The card fields are still needed in the direct-post form regardless.
 
-        if ($this->getCurrency()) {
-            $data['x_currency_code'] = $this->getCurrency();
-        }
-
-        // CHECKME: x_recurring_billing is (ambiguously) listed as mandatory in the DPM docs.
-
-        // The customer ID is optional.
-        if ($this->getCustomerId()) {
-            $data['x_cust_id'] = $this->getCustomerId();
-        }
-
-        // The card details at this point are optional.
         if ($this->getCard()) {
             $data['x_card_num'] = $this->getCard()->getNumber();
             $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
             $data['x_card_code'] = $this->getCard()->getCvv();
+        } else {
+            $data['x_card_num'] = '';
+            $data['x_exp_date'] = '';
+            $data['x_card_code'] = '';
         }
 
         return $data;

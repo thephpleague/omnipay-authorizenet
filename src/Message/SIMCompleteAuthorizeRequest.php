@@ -18,6 +18,9 @@ class SIMCompleteAuthorizeRequest extends AbstractRequest
         return $this->httpRequest->request->all();
     }
 
+    /**
+     * CHECKME: DPM uses the transactionReference in the hash, not the transactionID.
+     */
     public function getHash()
     {
         return md5($this->getHashSecret().$this->getApiLoginId().$this->getTransactionId().$this->getAmount());

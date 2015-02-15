@@ -21,12 +21,18 @@ class SIMAuthorizeRequest extends AbstractRequest
         $data['x_delim_data'] = 'FALSE';
         $data['x_show_form'] = 'PAYMENT_FORM';
         $data['x_relay_response'] = 'TRUE';
+
         // The returnUrl MUST be set in Authorize.net admin panel as a
         // "Response/Receipt URLs" URL, but not necessarily the default.
         $data['x_relay_url'] = $this->getReturnUrl();
         $data['x_cancel_url'] = $this->getCancelUrl();
+
         if ($this->getCustomerId() !== null) {
             $data['x_cust_id'] = $this->getCustomerId();
+        }
+
+        if ($this->getCurrency() !== null) {
+            $data['x_currency_code'] = $this->getCurrency();
         }
 
         if ($this->getTestMode()) {

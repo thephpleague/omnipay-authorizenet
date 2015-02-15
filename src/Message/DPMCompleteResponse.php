@@ -9,10 +9,10 @@ use Omnipay\Common\Message\RedirectResponseInterface;
  * Authorize.Net DPM Complete Authorize Response
  * This is the result of handling the callback.
  * The result will always be a HTML redirect snippet. This gets
- * returned to the gateway, displayed in the user's browser, and a GET
- * redirect is performed using JavaScript and meta refresh (belt and braces).
+ * returned to the gateway, displayed in the user's browser, and a
+ * redirect is performed using JavaScript and meta refresh (for backup).
  * We may want to return to the success page, the failed page or the retry
- * page (so the user can correct the form).
+ * page (so the user can correct the form to try again).
  */
 class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements RedirectResponseInterface
 {
@@ -35,11 +35,6 @@ class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements Redire
         return isset($this->data['x_response_code']) && static::RESPONSE_CODE_ERROR === $this->data['x_response_code'];
     }
 
-    public function getMessage()
-    {
-        return parent::getReasonCode() . '|' . parent::getMessage();
-    }
-
     /**
      * We are in the callback, and we MUST return a HTML fragment to do a redirect.
      * All headers we may return are discarded by the gateway, so we cannot use
@@ -51,11 +46,10 @@ class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements Redire
     }
 
     /**
-    * We default here to POST because the default redirect mechanism
-    * in Omnipay Common only generates a HTML snippet for POST and not
-    * GET.
-    * TODO: We could fix that here so both GET and POST can be supported.
-    * Our fix should also include the "form data" with the URL.
+    * We set POST because the default redirect mechanism in Omnipay Common only
+    * generates a HTML snippet for POST and not for the GET method.
+    * The redirect method is actually "HTML", where a HTML page is supplied
+    * to do a redirect using any method it likes.
     */
     public function getRedirectMethod()
     {
@@ -66,7 +60,7 @@ class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements Redire
      * We probably do not require any redirect data, if the incomplete transaction
      * is still in the user's session and we can inspect the results from the saved
      * transaction in the database. We cannot send the result through the redirect
-     * unless it is hashed in some way so the authorisation result cannot be faked.
+     * unless it is hashed so the authorisation result cannot be faked.
      */
     public function getRedirectData()
     {
@@ -75,9 +69,6 @@ class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements Redire
 
     /**
      * The cancel URL is never handled here - that is a direct link from the gateway.
-     * The best approach is to have just one redirect URL, and once there, check the
-     * result of the authorisation in the database (assuming it has been saved in the
-     * callback) and take action from there.
      */
     public function getRedirectUrl()
     {

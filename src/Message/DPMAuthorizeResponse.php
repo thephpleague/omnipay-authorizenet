@@ -21,6 +21,7 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
     protected $hiddenFields = array(
         'x_fp_hash',
         'x_amount',
+        'x_currency_code',
         'x_test_request',
         'x_cancel_url',
         'x_relay_url',
@@ -64,7 +65,7 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
     // Helpers to build the form.
 
     /**
-     * The URL the form will be posted to.
+     * The URL the form will POST to.
      */
     public function getRedirectUrl()
     {
@@ -76,10 +77,12 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
         return "post";
     }
 
-    // CHECKME: do we still need getHiddenData()?
+    /**
+     * Data that must be included as hidden fields.
+     */
     public function getRedirectData()
     {
-        return $this->getHiddenData();
+        return array_intersect_key($this->getData(), array_flip($this->hiddenFields));
     }
 
     /**
@@ -105,17 +108,10 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
     }
 
     /**
-     * Data that must be included as hidden fields, if they are available at all.
-     */
-    public function getHiddenData()
-    {
-        return array_intersect_key($this->getData(), array_flip($this->hiddenFields));
-    }
-
-    /**
      * Data not in the hidden fields list.
      * These are not all mandatory, so you do not have to present all these
-     * to the user.
+     * to the user. You may also have custom fields you want to post, such
+     * as the merchant transactionId (if not using invoiceId for this purpose).
      */
     public function getVisibleData()
     {
