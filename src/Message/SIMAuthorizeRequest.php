@@ -25,6 +25,9 @@ class SIMAuthorizeRequest extends AbstractRequest
         // "Response/Receipt URLs" URL, but not necessarily the default.
         $data['x_relay_url'] = $this->getReturnUrl();
         $data['x_cancel_url'] = $this->getCancelUrl();
+        if ($this->getCustomerId() !== null) {
+            $data['x_cust_id'] = $this->getCustomerId();
+        }
 
         if ($this->getTestMode()) {
             $data['x_test_request'] = 'TRUE';
