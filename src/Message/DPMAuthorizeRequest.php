@@ -5,34 +5,12 @@ namespace Omnipay\AuthorizeNet\Message;
 use Omnipay\AuthorizeNet\Message\SIMAbstractRequest;
 
 /**
- * Authorize.Net DPM Authorize Request
+ * Authorize.Net DPM Authorize Request.
+ * Takes the data that will be used to create the direct-post form.
  */
 class DPMAuthorizeRequest extends SIMAuthorizeRequest
 {
     protected $action = 'AUTH_ONLY';
-
-    public function getHash($data)
-    {
-        $fingerprint = implode(
-            '^',
-            array(
-                $this->getApiLoginId(),
-                $data['x_fp_sequence'],
-                $data['x_fp_timestamp'],
-                $data['x_amount']
-            )
-        ).'^';
-
-        // If x_currency_code is specified, then it must follow the final trailing carat.
-        // CHECKME: this may need to be back-ported to SIMAuthorizeRequest and AIMAuthorizeRequest
-        // in order to supprot multiple currencies.
-
-        if ($this->getCurrency()) {
-            $fingerprint .= $this->getCurrency();
-        }
-
-        return hash_hmac('md5', $fingerprint, $this->getTransactionKey());
-    }
 
     public function getData()
     {

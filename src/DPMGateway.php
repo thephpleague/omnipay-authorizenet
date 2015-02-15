@@ -12,21 +12,33 @@ class DPMGateway extends SIMGateway
         return 'Authorize.Net DPM';
     }
 
+    /**
+     * Helper to generate the authorize direct-post form.
+     */
     public function authorize(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMAuthorizeRequest', $parameters);
     }
 
+    /**
+     * Get, validate, interpret and respond to the Authorize.Net callback.
+     */
     public function completeAuthorize(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMCompleteRequest', $parameters);
     }
 
+    /**
+     * Helper to generate the purchase direct-post form.
+     */
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMPurchaseRequest', $parameters);
     }
 
+    /**
+     * Get, validate, interpret and respond to the Authorize.Net callback.
+     */
     public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\DPMCompleteRequest', $parameters);

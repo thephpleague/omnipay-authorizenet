@@ -36,6 +36,12 @@ class SIMAuthorizeRequest extends AbstractRequest
         return $data;
     }
 
+    /**
+     * This hash is put into the form to confirm the amount has not been
+     * modified en-route.
+     * It uses the TransactionKey, which is a shared secret between the merchant
+     * and Authorize.Net The sequence and timestamp provide additional salt.
+     */
     public function getHash($data)
     {
         $fingerprint = implode(
@@ -47,6 +53,11 @@ class SIMAuthorizeRequest extends AbstractRequest
                 $data['x_amount']
             )
         ).'^';
+
+        // If x_currency_code is specified, then it must follow the final trailing carat.
+        if ($this->getCurrency()) {
+            $fingerprint .= $this->getCurrency();
+        }
 
         return hash_hmac('md5', $fingerprint, $this->getTransactionKey());
     }
