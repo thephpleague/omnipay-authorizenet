@@ -35,6 +35,10 @@ class DPMGatewayTest extends GatewayTestCase //SIMGatewayTest
         $this->assertSame('https://www.example.com/return', $redirectData['x_relay_url']);
     }
 
+    /**
+     * The MD4 Hash consists of the shared secret, the login ID, the transaction *reference* (as
+     * generated on the remote gateway for the transaction) and the amount.
+     */
     public function testCompleteAuthorize()
     {
         $this->getHttpRequest()->request->replace(
@@ -51,6 +55,30 @@ class DPMGatewayTest extends GatewayTestCase //SIMGatewayTest
         $this->assertTrue($response->isSuccessful());
         $this->assertSame('12345', $response->getTransactionReference());
         $this->assertNull($response->getMessage());
+    }
+
+    /**
+     * @expectedException Omnipay\Common\Exception\InvalidRequestException
+     * @expectedExceptionMessage Incorrect amount
+     *
+     * The hash is correct, so the sender knows the shared secret, but the amount
+     * is not what we expected, i.e. what we had requested to be authorized.
+     */
+    public function testCompleteAuthorizeWrongAmount()
+    {
+        $this->getHttpRequest()->request->replace(
+            array(
+                'x_response_code' => '1',
+                'x_trans_id' => '12345',
+                'x_amount' => '20.00',
+                'x_MD5_Hash' => md5('elpmaxe' . 'example' . '12345' . '20.00'),
+            )
+        );
+
+        $response = $this->gateway->completeAuthorize($this->options)->send();
+        //$this->assertTrue($response->isSuccessful());
+        //$this->assertSame('12345', $response->getTransactionReference());
+        //$this->assertNull($response->getMessage());
     }
 
     public function testPurchase()

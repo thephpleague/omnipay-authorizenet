@@ -57,7 +57,7 @@ class SIMAuthorizeRequestTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertTrue($response->isRedirect());
-        $this->assertNotEmpty($response->getRedirectUrl());
+        $this->assertNotEmpty($response->getRedirectUrl()); // This test is failing; not sure why.
         $this->assertSame('POST', $response->getRedirectMethod());
 
         $redirectData = $response->getRedirectData();
