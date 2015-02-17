@@ -23,6 +23,11 @@ class DPMAuthorizeRequest extends SIMAuthorizeRequest
 
         unset($data['x_show_form']);
 
+        // Must be set for DPM.
+        // This directs all errors to the relay response.
+
+        $data['x_relay_always'] = 'TRUE';
+
         // The card details are optional.
         // They will most likely only be used for development and testing.
         // The card fields are still needed in the direct-post form regardless.

@@ -76,9 +76,6 @@ class DPMGatewayTest extends GatewayTestCase //SIMGatewayTest
         );
 
         $response = $this->gateway->completeAuthorize($this->options)->send();
-        //$this->assertTrue($response->isSuccessful());
-        //$this->assertSame('12345', $response->getTransactionReference());
-        //$this->assertNull($response->getMessage());
     }
 
     public function testPurchase()
