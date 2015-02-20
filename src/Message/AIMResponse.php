@@ -14,7 +14,12 @@ class AIMResponse extends AbstractResponse
     public function __construct(RequestInterface $request, $data)
     {
         $this->request = $request;
-        $temp = explode('|,|', substr($data, 1, -1));
+        $rawFields = substr($data, 1, - 1);
+        if ($rawFields !== false) {
+            $temp = explode('|,|', $rawFields);
+        } else {
+            $temp = [];
+        }
 
         $response_fields = array(
             'Response Code',
@@ -67,7 +72,10 @@ class AIMResponse extends AbstractResponse
         $response = array();
 
         foreach ($response_fields as $field) {
-            $response[$field] = array_shift($temp);
+            $responseField    = array_shift($temp);
+            if (!is_null($responseField)) {
+                $response[$field] = $responseField;
+            }
         }
 
         $response_codes = array(
@@ -93,8 +101,17 @@ class AIMResponse extends AbstractResponse
             'Z' => 'Five digit ZIP matches, Address (Street) does not'
         );
 
-        $response['Response Code'] = $response_codes[$response['Response Code']];
-        $response['AVS Response'] = $avs_response_codes[$response['AVS Response']];
+        if (isset($response['Response Code']) && isset($response_codes[$response['Response Code']])) {
+            $response['Response Code'] = $response_codes[$response['Response Code']];
+        } else {
+            $response['Response Code'] = null;
+        }
+        
+        if (isset($response['AVS Response']) && isset($avs_response_codes[$response['AVS Response']])) {
+            $response['AVS Response'] = $avs_response_codes[$response['AVS Response']];
+        } else {
+            $response['AVS Response'] = null;
+        }
 
         $this->data = $response;
 
