@@ -18,7 +18,7 @@ class AIMResponse extends AbstractResponse
         if ($rawFields !== false) {
             $temp = explode('|,|', $rawFields);
         } else {
-            $temp = [];
+            $temp = array();
         }
 
         $response_fields = array(
@@ -72,7 +72,7 @@ class AIMResponse extends AbstractResponse
         $response = array();
 
         foreach ($response_fields as $field) {
-            $responseField    = array_shift($temp);
+            $responseField = array_shift($temp);
             if (!is_null($responseField)) {
                 $response[$field] = $responseField;
             }
@@ -106,7 +106,7 @@ class AIMResponse extends AbstractResponse
         } else {
             $response['Response Code'] = null;
         }
-        
+
         if (isset($response['AVS Response']) && isset($avs_response_codes[$response['AVS Response']])) {
             $response['AVS Response'] = $avs_response_codes[$response['AVS Response']];
         } else {
