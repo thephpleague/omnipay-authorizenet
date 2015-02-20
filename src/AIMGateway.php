@@ -2,9 +2,6 @@
 
 namespace Omnipay\AuthorizeNet;
 
-use Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest;
-use Omnipay\AuthorizeNet\Message\AIMPurchaseRequest;
-use Omnipay\AuthorizeNet\Message\CaptureRequest;
 use Omnipay\Common\AbstractGateway;
 
 /**
@@ -20,10 +17,10 @@ class AIMGateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'apiLoginId' => '',
+            'apiLoginId'     => '',
             'transactionKey' => '',
-            'testMode' => false,
-            'developerMode' => false,
+            'testMode'       => false,
+            'developerMode'  => false,
         );
     }
 
@@ -75,5 +72,10 @@ class AIMGateway extends AbstractGateway
     public function void(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMVoidRequest', $parameters);
+    }
+
+    public function refund(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMRefundRequest', $parameters);
     }
 }

@@ -2,9 +2,6 @@
 
 namespace Omnipay\AuthorizeNet;
 
-use Omnipay\AuthorizeNet\Message\SIMAuthorizeRequest;
-use Omnipay\AuthorizeNet\Message\SIMCompleteAuthorizeRequest;
-
 /**
  * Authorize.Net SIM Class
  */
