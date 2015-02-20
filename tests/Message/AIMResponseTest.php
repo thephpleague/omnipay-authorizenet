@@ -107,9 +107,9 @@ class AIMResponseTest extends TestCase
         $this->assertTrue($response->isSuccessful());
         $this->assertSame('2184492509', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
-        $this->assertSame('1', $response->getCode());
+        $this->assertSame('Approved', $response->getCode());
         $this->assertSame('1', $response->getReasonCode());
-        $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCode());
     }
 
     public function testRefundFailure()
@@ -120,9 +120,9 @@ class AIMResponseTest extends TestCase
         $this->assertFalse($response->isSuccessful());
         $this->assertSame('0', $response->getTransactionReference());
         $this->assertSame('The credit card number is invalid.', $response->getMessage());
-        $this->assertSame('3', $response->getCode());
+        $this->assertSame('Error', $response->getCode());
         $this->assertSame('6', $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
-        $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCode());
     }
 }
