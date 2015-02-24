@@ -77,6 +77,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getParameter('developerEndpoint');
     }
 
+    /**
+     * Base data used only for the AIM API.
+     */
     protected function getBaseData()
     {
         $data = array();

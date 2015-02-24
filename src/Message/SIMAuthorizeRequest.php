@@ -16,6 +16,8 @@ class SIMAuthorizeRequest extends AbstractRequest
         $data = array();
         $data['x_login'] = $this->getApiLoginId();
         $data['x_type'] = $this->action;
+        $data['x_version'] = '3.1';
+        $data['x_method'] = 'CC';
         $data['x_fp_sequence'] = mt_rand();
         $data['x_fp_timestamp'] = time();
         $data['x_delim_data'] = 'FALSE';

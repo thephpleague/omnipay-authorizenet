@@ -17,25 +17,54 @@ class DPMResponse extends AbstractResponse implements RedirectResponseInterface
 
     /**
      * These will be hidden fields in the direct-post form.
+     * Not all are required
      */
     protected $hiddenFields = array(
+        // Merchant
+        'x_login',
+
+        // Fingerprint
         'x_fp_hash',
+        'x_fp_sequence',
+        'x_fp_timestamp',
+
+        // Transaction
+        'x_type',
+        'x_version',
+        'x_method',
+
+        // Payment
         'x_amount',
         'x_currency_code',
-        'x_test_request',
-        'x_cancel_url',
-        'x_relay_url',
+        'x_tax',
+        'x_freight',
+        'x_duty',
+        'x_tax_exempt',
+
+        // Relay response
         'x_relay_response',
-        'x_show_form',
-        'x_delim_data',
-        'x_fp_timestamp',
-        'x_fp_sequence',
-        'x_type',
-        'x_login',
+        'x_relay_url',
+        'x_relay_always',
+        'x_cancel_url',
+
+        // AFDS
+        'x_customer_ip',
+
+        // Testing
+        'x_test_request',
+
         'x_invoice_num',
         'x_description',
         'x_cust_id',
-        'x_customer_ip',
+        'x_email_customer',
+
+        'x_delim_data',
+    );
+
+    /**
+     * Maps OmniPay field names to Authorize.Net field names.
+     */
+    protected $fieldMapping = array(
     );
 
     public function __construct(RequestInterface $request, $data, $postUrl)
