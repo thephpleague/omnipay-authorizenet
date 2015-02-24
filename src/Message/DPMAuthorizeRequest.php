@@ -2,8 +2,6 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Omnipay\AuthorizeNet\Message\SIMAbstractRequest;
-
 /**
  * Authorize.Net DPM Authorize Request.
  * Takes the data that will be used to create the direct-post form.

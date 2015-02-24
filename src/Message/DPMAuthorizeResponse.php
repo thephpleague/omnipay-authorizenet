@@ -35,6 +35,7 @@ class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
         'x_invoice_num',
         'x_description',
         'x_cust_id',
+        'x_customer_ip',
     );
 
     public function __construct(RequestInterface $request, $data, $postUrl)

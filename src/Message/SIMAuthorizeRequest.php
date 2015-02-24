@@ -22,6 +22,10 @@ class SIMAuthorizeRequest extends AbstractRequest
         $data['x_show_form'] = 'PAYMENT_FORM';
         $data['x_relay_response'] = 'TRUE';
 
+        if ($this->getClientIp()) {
+            $data['x_customer_ip'] = $this->getClientIp();
+        }
+
         // The returnUrl MUST be set in Authorize.net admin panel under
         // "Response/Receipt URLs".
         $data['x_relay_url'] = $this->getReturnUrl();
