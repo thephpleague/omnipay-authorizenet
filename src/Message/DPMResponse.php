@@ -7,11 +7,11 @@ use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Common\Message\RedirectResponseInterface;
 
 /**
- * Authorize.Net DPM Authorize Response
- * Here we want the application to present a POST form to the user. This object will
+ * Authorize.Net DPM Authorize and Purchase Response
+ * We want the application to present a POST form to the user. This object will
  * provide the helper methods for doing so.
  */
-class DPMAuthorizeResponse extends AbstractResponse implements RedirectResponseInterface
+class DPMResponse extends AbstractResponse implements RedirectResponseInterface
 {
     protected $postUrl;
 

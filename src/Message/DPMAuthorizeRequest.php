@@ -56,6 +56,6 @@ class DPMAuthorizeRequest extends SIMAuthorizeRequest
      */
     public function sendData($data)
     {
-        return $this->response = new DPMAuthorizeResponse($this, $data, $this->getEndpoint());
+        return $this->response = new DPMResponse($this, $data, $this->getEndpoint());
     }
 }
