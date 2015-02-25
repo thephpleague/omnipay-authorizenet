@@ -22,7 +22,7 @@ class AIMGateway extends AbstractGateway
             'testMode'          => false,
             'developerMode'     => false,
             'liveEndpoint'      => 'https://secure.authorize.net/gateway/transact.dll',
-            'developerEndpoint' => 'https://test.authorize.net/gateway/transact.dll'
+            'developerEndpoint' => 'https://test.authorize.net/gateway/transact.dll',
         );
     }
 

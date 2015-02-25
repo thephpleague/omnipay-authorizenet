@@ -109,7 +109,7 @@ class DPMResponse extends AbstractResponse implements RedirectResponseInterface
 
     public function getRedirectMethod()
     {
-        return "post";
+        return 'POST';
     }
 
     /**
