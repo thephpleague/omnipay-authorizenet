@@ -144,6 +144,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->getDeveloperMode() ? $this->getParameter('developerEndpoint') : $this->getParameter('liveEndpoint');
+        if ($this->getDeveloperMode()) {
+            return $this->getParameter('developerEndpoint');
+        } else {
+            return $this->getParameter('liveEndpoint');
+        }
     }
 }
