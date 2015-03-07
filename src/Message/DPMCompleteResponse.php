@@ -23,7 +23,8 @@ class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements Redire
 
     public function isSuccessful()
     {
-        return isset($this->data['x_response_code']) && static::RESPONSE_CODE_APPROVED === $this->data['x_response_code'];
+        return isset($this->data['x_response_code'])
+            && static::RESPONSE_CODE_APPROVED === $this->data['x_response_code'];
     }
 
     /**
@@ -32,7 +33,8 @@ class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements Redire
      */
     public function isError()
     {
-        return isset($this->data['x_response_code']) && static::RESPONSE_CODE_ERROR === $this->data['x_response_code'];
+        return isset($this->data['x_response_code'])
+            && static::RESPONSE_CODE_ERROR === $this->data['x_response_code'];
     }
 
     /**
