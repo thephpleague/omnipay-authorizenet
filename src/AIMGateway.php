@@ -22,10 +22,10 @@ class AIMGateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'apiLoginId' => '',
+            'apiLoginId'     => '',
             'transactionKey' => '',
-            'testMode' => false,
-            'developerMode' => false,
+            'testMode'       => false,
+            'developerMode'  => false,
         );
     }
 

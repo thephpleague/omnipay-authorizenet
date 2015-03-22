@@ -13,10 +13,6 @@ class AIMRefundRequestTest extends TestCase
     public function setUp()
     {
         $this->request = new AIMRefundRequest($this->getHttpClient(), $this->getHttpRequest());
-    }
-
-    public function testGetDataMissingCardInfo()
-    {
         $this->request->initialize(
             array(
                 'transactionReference' => '123',
