@@ -17,7 +17,7 @@ class CIMGateway extends AIMGateway
             'testMode' => false,
             'developerMode' => false,
             'forceCardUpdate' => false,
-            'defaultBillTo' => [[]]
+            'defaultBillTo' => array(array())
         );
     }
 
