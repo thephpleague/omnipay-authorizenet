@@ -33,6 +33,7 @@ The following gateways are provided by this package:
 
 * AuthorizeNet_AIM
 * AuthorizeNet_SIM
+* AuthorizeNet_DPM
 
 For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay)
 repository.

@@ -4,15 +4,29 @@ namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Tests\TestCase;
 
-class SIMAuthorizeRequestTest extends TestCase
+class DPMPurchaseRequestTest extends TestCase
 {
     public function setUp()
     {
-        $this->request = new SIMAuthorizeRequest($this->getHttpClient(), $this->getHttpRequest());
+        // The card for DPM will always start out blank, so remove the card details.
+
+        $validCard = array_merge(
+            $this->getValidCard(),
+            array(
+                'number' => '',
+                'expiryMonth' => '',
+                'expiryYear' => '',
+                'cvv' => '',
+            )
+        );
+
+        $this->request = new DPMPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
         $this->request->initialize(
             array(
                 'clientIp' => '10.0.0.1',
                 'amount' => '12.00',
+                'customerId' => 'cust-id',
+                'card' => $validCard,
                 'returnUrl' => 'https://www.example.com/return',
                 'liveEndpoint'      => 'https://secure.authorize.net/gateway/transact.dll',
                 'developerEndpoint' => 'https://test.authorize.net/gateway/transact.dll',
@@ -24,8 +38,14 @@ class SIMAuthorizeRequestTest extends TestCase
     {
         $data = $this->request->getData();
 
-        $this->assertSame('AUTH_ONLY', $data['x_type']);
-        $this->assertSame('PAYMENT_FORM', $data['x_show_form']);
+        $this->assertSame('AUTH_CAPTURE', $data['x_type']);
+        $this->assertSame('10.0.0.1', $data['x_customer_ip']);
+        $this->assertSame('cust-id', $data['x_cust_id']);
+
+        $this->assertSame('', $data['x_card_num']);
+        $this->assertSame('', $data['x_exp_date']);
+        $this->assertSame('', $data['x_card_code']);
+
         $this->assertArrayNotHasKey('x_test_request', $data);
     }
 

@@ -17,10 +17,12 @@ class AIMGateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'apiLoginId'     => '',
-            'transactionKey' => '',
-            'testMode'       => false,
-            'developerMode'  => false,
+            'apiLoginId'        => '',
+            'transactionKey'    => '',
+            'testMode'          => false,
+            'developerMode'     => false,
+            'liveEndpoint'      => 'https://secure.authorize.net/gateway/transact.dll',
+            'developerEndpoint' => 'https://test.authorize.net/gateway/transact.dll',
         );
     }
 
@@ -52,6 +54,32 @@ class AIMGateway extends AbstractGateway
     public function setDeveloperMode($value)
     {
         return $this->setParameter('developerMode', $value);
+    }
+
+    public function setEndpoints($endpoints)
+    {
+        $this->setParameter('liveEndpoint', $endpoints['live']);
+        return $this->setParameter('developerEndpoint', $endpoints['developer']);
+    }
+
+    public function getLiveEndpoint()
+    {
+        return $this->getParameter('liveEndpoint');
+    }
+
+    public function setLiveEndpoint($value)
+    {
+        return $this->setParameter('liveEndpoint', $value);
+    }
+
+    public function getDeveloperEndpoint()
+    {
+        return $this->getParameter('developerEndpoint');
+    }
+
+    public function setDeveloperEndpoint($value)
+    {
+        return $this->setParameter('developerEndpoint', $value);
     }
 
     public function authorize(array $parameters = array())

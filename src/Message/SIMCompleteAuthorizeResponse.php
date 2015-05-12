@@ -23,4 +23,14 @@ class SIMCompleteAuthorizeResponse extends AbstractResponse
     {
         return isset($this->data['x_response_reason_text']) ? $this->data['x_response_reason_text'] : null;
     }
+
+    public function getReasonCode()
+    {
+        return isset($this->data['x_response_reason_code']) ? $this->data['x_response_reason_code'] : null;
+    }
+
+    public function getCode()
+    {
+        return isset($this->data['x_response_code']) ? $this->data['x_response_code'] : null;
+    }
 }
