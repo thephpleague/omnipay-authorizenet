@@ -102,15 +102,15 @@ class AIMResponse extends AbstractResponse
         );
 
         if (isset($response['Response Code']) && isset($response_codes[$response['Response Code']])) {
-            $response['Response Code'] = $response_codes[$response['Response Code']];
+            $response['Response Code Message'] = $response_codes[$response['Response Code']];
         } else {
-            $response['Response Code'] = null;
+            $response['Response Code Message'] = null;
         }
 
         if (isset($response['AVS Response']) && isset($avs_response_codes[$response['AVS Response']])) {
-            $response['AVS Response'] = $avs_response_codes[$response['AVS Response']];
+            $response['AVS Response Message'] = $avs_response_codes[$response['AVS Response']];
         } else {
-            $response['AVS Response'] = null;
+            $response['AVS Response Message'] = null;
         }
 
         $this->data = $response;
@@ -122,12 +122,17 @@ class AIMResponse extends AbstractResponse
 
     public function isSuccessful()
     {
-        return $this->getCode() == 'Approved';
+        return $this->getCodeMessage() == 'Approved';
     }
 
     public function getCode()
     {
         return $this->data['Response Code'];
+    }
+
+    public function getCodeMessage()
+    {
+        return $this->data['Response Code Message'];
     }
 
     public function getReasonCode()
@@ -148,6 +153,11 @@ class AIMResponse extends AbstractResponse
     public function getAVSCode()
     {
         return $this->data['AVS Response'];
+    }
+
+    public function getAVSCodeMessage()
+    {
+        return $this->data['AVS Response Message'];
     }
 
     public function getTransactionReference()
