@@ -11,7 +11,7 @@ use Omnipay\Common\Message\AbstractRequest as CommonAbstractRequest;
 abstract class AbstractRequest extends CommonAbstractRequest
 {
     /**
-     * Recommended custom field name to send the transaction ID to the notify handler.
+     * Custom field name to send the transaction ID to the notify handler.
      */
     const TRANSACTION_ID_PARAM = 'omnipay_transaction_id';
 

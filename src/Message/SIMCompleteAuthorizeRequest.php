@@ -9,6 +9,15 @@ use Omnipay\Common\Exception\InvalidRequestException;
  */
 class SIMCompleteAuthorizeRequest extends AbstractRequest
 {
+    /**
+     * Get the transaction ID passed in through the custom field.
+     * This is used to look up the transaction in storage.
+     */
+    public function getTransactionId()
+    {
+        return $this->httpRequest->request->get(static::TRANSACTION_ID_PARAM);
+    }
+
     public function getData()
     {
         // The hash sent in the callback from the Authorize.Net gateway.
