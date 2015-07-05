@@ -28,7 +28,7 @@ class SIMAuthorizeRequest extends AbstractRequest
             $data['x_customer_ip'] = $this->getClientIp();
         }
 
-        // The returnUrl MUST be set in Authorize.net admin panel under
+        // The returnUrl MUST be whitelisted in Authorize.net admin panel under
         // "Response/Receipt URLs".
         $data['x_relay_url'] = $this->getReturnUrl();
         $data['x_cancel_url'] = $this->getCancelUrl();

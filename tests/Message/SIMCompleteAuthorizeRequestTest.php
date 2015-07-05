@@ -23,34 +23,36 @@ class SIMCompleteAuthorizeRequestTest extends TestCase
 
     public function testGetHash()
     {
-        $this->assertSame(md5(''), $this->request->getHash());
+        $this->assertSame(md5(''), $this->request->getHash('', ''));
 
         $this->request->setHashSecret('hashsec');
         $this->request->setApiLoginId('apilogin');
-        $this->request->setTransactionId('trnid');
-        $this->request->setAmount('10.00');
 
-        $this->assertSame(md5('hashsecapilogintrnid10.00'), $this->request->getHash());
+        $this->assertSame(md5('hashsec' . 'apilogin' . 'trnref ' . '10.00'), $this->request->getHash('trnref ', '10.00'));
     }
 
     public function testSend()
     {
+        $posted_trans_id = '12345'; // transactionReference in POST.
+        $posted_amount = '10.00'; // amount authothorised in POST.
+
         $this->getHttpRequest()->request->replace(
             array(
                 'x_response_code' => '1',
-                'x_trans_id' => '12345',
-                'x_MD5_Hash' => md5('shhhuser9910.00'),
+                'x_trans_id' => $posted_trans_id,
+                'x_amount' => $posted_amount,
+                'x_MD5_Hash' => md5('shhh' . 'user' . $posted_trans_id . $posted_amount),
             )
         );
         $this->request->setApiLoginId('user');
         $this->request->setHashSecret('shhh');
         $this->request->setAmount('10.00');
-        $this->request->setTransactionId(99);
+        //$this->request->setTransactionId(99);
 
         $response = $this->request->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('12345', $response->getTransactionReference());
+        $this->assertSame($posted_trans_id, $response->getTransactionReference());
         $this->assertNull($response->getMessage());
     }
 }

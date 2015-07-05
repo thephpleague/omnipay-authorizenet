@@ -39,7 +39,8 @@ class SIMGatewayTest extends GatewayTestCase
             array(
                 'x_response_code' => '1',
                 'x_trans_id' => '12345',
-                'x_MD5_Hash' => md5('elpmaxeexample9910.00'),
+                'x_amount' => '10.00',
+                'x_MD5_Hash' => md5('elpmaxe' . 'example' . '12345' . '10.00'),
             )
         );
 
@@ -68,7 +69,8 @@ class SIMGatewayTest extends GatewayTestCase
             array(
                 'x_response_code' => '1',
                 'x_trans_id' => '12345',
-                'x_MD5_Hash' => md5('elpmaxeexample9910.00'),
+                'x_amount' => '10.00',
+                'x_MD5_Hash' => md5('elpmaxe' . 'example' . '12345' . '10.00'),
             )
         );
 

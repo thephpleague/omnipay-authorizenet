@@ -16,11 +16,6 @@ use Omnipay\Common\Message\RedirectResponseInterface;
  */
 class DPMCompleteResponse extends SIMCompleteAuthorizeResponse implements RedirectResponseInterface
 {
-    const RESPONSE_CODE_APPROVED    = '1';
-    const RESPONSE_CODE_DECLINED    = '2';
-    const RESPONSE_CODE_ERROR       = '3';
-    const RESPONSE_CODE_REVIEW      = '4';
-
     public function isSuccessful()
     {
         return isset($this->data['x_response_code'])

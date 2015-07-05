@@ -9,9 +9,16 @@ use Omnipay\Common\Message\AbstractResponse;
  */
 class SIMCompleteAuthorizeResponse extends AbstractResponse
 {
+    // Response codes returned by Authorize.Net
+
+    const RESPONSE_CODE_APPROVED    = '1';
+    const RESPONSE_CODE_DECLINED    = '2';
+    const RESPONSE_CODE_ERROR       = '3';
+    const RESPONSE_CODE_REVIEW      = '4';
+
     public function isSuccessful()
     {
-        return isset($this->data['x_response_code']) && '1' === $this->data['x_response_code'];
+        return isset($this->data['x_response_code']) && static::RESPONSE_CODE_APPROVED === $this->data['x_response_code'];
     }
 
     public function getTransactionReference()

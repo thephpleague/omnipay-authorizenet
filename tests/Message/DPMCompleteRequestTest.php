@@ -25,14 +25,14 @@ class DPMCompleteAuthorizeRequestTest extends TestCase
         $this->request->getData();
     }
 
-    public function testGetDpmHash()
+    public function testGetHash()
     {
-        $this->assertSame(md5(''), $this->request->getHash());
+        $this->assertSame(md5(''), $this->request->getHash('', ''));
 
         $this->request->setHashSecret('hashsec');
         $this->request->setApiLoginId('apilogin');
 
-        $this->assertSame(md5('hashsec' . 'apilogin' . 'trnid' . '10.00'), $this->request->getDpmHash('trnid', '10.00'));
+        $this->assertSame(md5('hashsec' . 'apilogin' . 'trnid' . '10.00'), $this->request->getHash('trnid', '10.00'));
     }
 
     public function testSend()
