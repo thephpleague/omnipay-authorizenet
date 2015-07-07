@@ -3,11 +3,13 @@
 namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
+use Omnipay\Common\Message\RedirectResponseInterface;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
  * Authorize.Net SIM Complete Authorize Response
  */
-class SIMCompleteAuthorizeResponse extends AbstractResponse
+class SIMCompleteAuthorizeResponse extends AbstractResponse implements RedirectResponseInterface
 {
     // Response codes returned by Authorize.Net
 
@@ -18,7 +20,7 @@ class SIMCompleteAuthorizeResponse extends AbstractResponse
 
     public function isSuccessful()
     {
-        return isset($this->data['x_response_code']) && static::RESPONSE_CODE_APPROVED === $this->data['x_response_code'];
+        return static::RESPONSE_CODE_APPROVED === $this->getCode();
     }
 
     public function getTransactionReference()
@@ -39,5 +41,67 @@ class SIMCompleteAuthorizeResponse extends AbstractResponse
     public function getCode()
     {
         return isset($this->data['x_response_code']) ? $this->data['x_response_code'] : null;
+    }
+
+    /**
+     * This message is handled in a notify, where a HTML redirect must be performed.
+     */
+    public function isRedirect()
+    {
+        return true;
+    }
+
+    /**
+     * The merchant site notify handler needs to set the returnUrl in the complete request.
+     */
+    public function getRedirectUrl()
+    {
+        return $this->request->getReturnUrl();
+    }
+
+    public function getRedirectMethod()
+    {
+        return 'GET';
+    }
+
+    /**
+     * There is no redirect data to send; the aim is just to get the user to a URL
+     * by delivering a HTML page.
+     */
+    public function getRedirectData()
+    {
+        return array();
+    }
+
+    /**
+     * Authorize.Net requires a redirect in a HTML page.
+     * The OmniPay redirect helper will only provide a HTML page for the POST method
+     * and then implements that through a self-sbmitting form. This will generate
+     * browser warnings if returning to a non-SSL page.
+     */
+    public function getRedirectResponse()
+    {
+        $output = <<<ENDHTML
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Redirecting...</title>
+        <meta http-equiv="refresh" content="0;url=%1\$s" />
+    </head>
+    <body>
+        <p>Redirecting to <a href="%1\$s">payment complete page</a>...</p>
+        <script type="text/javascript" charset="utf-8">
+            window.location="%1\$s";
+        </script>
+    </body>
+</html>
+ENDHTML;
+
+        $output = sprintf(
+            $output,
+            htmlentities($this->getRedirectUrl(), ENT_QUOTES, 'UTF-8', false)
+        );
+
+        return HttpResponse::create($output);
     }
 }
