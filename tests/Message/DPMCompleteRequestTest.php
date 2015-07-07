@@ -48,6 +48,7 @@ class DPMCompleteAuthorizeRequestTest extends TestCase
                 'x_trans_id' => '12345',
                 'x_amount' => '10.00',
                 'x_MD5_Hash' => strtolower(md5('shhh' . 'user' . '12345' . '10.00')),
+                'omnipay_transaction_id' => '99',
             )
         );
         $this->request->setApiLoginId('user');
@@ -55,10 +56,19 @@ class DPMCompleteAuthorizeRequestTest extends TestCase
 
         $this->request->setAmount('10.00');
 
+        $this->request->setReturnUrl('http://example.com/');
+
+        // Issue #22 Transaction ID in request is picked up from custom field.
+        $this->assertSame('99', $this->request->getTransactionId());
+
         $response = $this->request->send();
 
         $this->assertTrue($response->isSuccessful());
         $this->assertSame('12345', $response->getTransactionReference());
+        $this->assertSame(true, $response->isRedirect());
+        // CHECKME: does it matter what letter case the method is?
+        $this->assertSame('GET', $response->getRedirectMethod());
+        $this->assertSame('http://example.com/', $response->getRedirectUrl());
         $this->assertNull($response->getMessage());
     }
 
@@ -79,7 +89,7 @@ class DPMCompleteAuthorizeRequestTest extends TestCase
         $this->request->setApiLoginId('user');
         $this->request->setHashSecret('shhh');
 
-        // In the callback, the merchant application sets the amount that
+        // In the notify, the merchant application sets the amount that
         // was expected to be authorised. We expected 20.00 but are being
         // told it was 10.00.
 

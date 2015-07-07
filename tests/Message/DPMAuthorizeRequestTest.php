@@ -66,6 +66,7 @@ class DPMAuthorizeRequestTest extends TestCase
         $this->assertSame('https://www.example.com/return', $redirectData['x_relay_url']);
     }
 
+    // Issue #16 Support notifyUrl
     public function testSendNotifyUrl()
     {
         $this->request->setReturnUrl(null);

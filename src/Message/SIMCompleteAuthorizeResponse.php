@@ -23,6 +23,15 @@ class SIMCompleteAuthorizeResponse extends AbstractResponse implements RedirectR
         return static::RESPONSE_CODE_APPROVED === $this->getCode();
     }
 
+    /**
+     * If there is an error in the form, then the user should be able to go back
+     * to the form and give it another shot.
+     */
+    public function isError()
+    {
+        return static::RESPONSE_CODE_ERROR === $this->getCode();
+    }
+
     public function getTransactionReference()
     {
         return isset($this->data['x_trans_id']) ? $this->data['x_trans_id'] : null;
