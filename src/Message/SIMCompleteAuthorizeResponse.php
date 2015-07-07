@@ -85,8 +85,10 @@ class SIMCompleteAuthorizeResponse extends AbstractResponse implements RedirectR
     /**
      * Authorize.Net requires a redirect in a HTML page.
      * The OmniPay redirect helper will only provide a HTML page for the POST method
-     * and then implements that through a self-sbmitting form. This will generate
-     * browser warnings if returning to a non-SSL page.
+     * and then implements that through a self-submitting form, which will generate
+     * browser warnings if returning to a non-SSL page. This JavScript and meta refresh
+     * page avoids the security warning. No data is sent in this redirect, as that will
+     * have all been saved with the transaction in storage.
      */
     public function getRedirectResponse()
     {
