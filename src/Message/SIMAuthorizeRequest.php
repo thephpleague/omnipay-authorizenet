@@ -11,7 +11,13 @@ class SIMAuthorizeRequest extends AbstractRequest
 
     public function getData()
     {
-        $this->validate('amount', 'returnUrl');
+        $this->validate('amount');
+
+        // Either the nodifyUrl or the returnUrl can be provided.
+        // The returnUrl is deprecated, as strictly this is a notifyUrl.
+        if (!$this->getNotifyUrl()) {
+            $this->validate('returnUrl');
+        }
 
         $data = array();
         $data['x_login'] = $this->getApiLoginId();
@@ -28,9 +34,11 @@ class SIMAuthorizeRequest extends AbstractRequest
             $data['x_customer_ip'] = $this->getClientIp();
         }
 
-        // The returnUrl MUST be set in Authorize.net admin panel under
+        // The returnUrl MUST be whitelisted in Authorize.net admin panel under
         // "Response/Receipt URLs".
-        $data['x_relay_url'] = $this->getReturnUrl();
+        // Use the notifyUrl if available, as that is strictly what this is.
+        // Fall back to returnUrl for BC support.
+        $data['x_relay_url'] = $this->getNotifyUrl() ?: $this->getReturnUrl();
         $data['x_cancel_url'] = $this->getCancelUrl();
 
         if ($this->getCustomerId() !== null) {
