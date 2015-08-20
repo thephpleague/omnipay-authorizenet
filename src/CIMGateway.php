@@ -11,14 +11,10 @@ class CIMGateway extends AIMGateway
 {
     public function getDefaultParameters()
     {
-        return array(
-            'apiLoginId' => '',
-            'transactionKey' => '',
-            'testMode' => false,
-            'developerMode' => false,
-            'forceCardUpdate' => false,
-            'defaultBillTo' => array(array())
-        );
+        $params = parent::getDefaultParameters();
+        $params['forceCardUpdate'] = false;
+        $params['defaultBillTo'] = array(array());
+        return $params;
     }
 
     public function getName()

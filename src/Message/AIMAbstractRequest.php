@@ -11,9 +11,6 @@ use Omnipay\Common\Message\AbstractRequest;
  */
 abstract class AIMAbstractRequest extends AbstractRequest
 {
-    protected $liveEndpoint = 'https://api.authorize.net/xml/v1/request.api';
-    protected $developerEndpoint = 'https://apitest.authorize.net/xml/v1/request.api';
-
     protected $action = null;
 
     public function getApiLoginId()
@@ -146,8 +143,28 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->response = new AIMResponse($this, $httpResponse->getBody());
     }
 
+    public function getLiveEndpoint()
+    {
+        return $this->getParameter('liveEndpoint');
+    }
+
+    public function setLiveEndpoint($value)
+    {
+        return $this->setParameter('liveEndpoint', $value);
+    }
+
+    public function getDeveloperEndpoint()
+    {
+        return $this->getParameter('developerEndpoint');
+    }
+
+    public function setDeveloperEndpoint($value)
+    {
+        return $this->setParameter('developerEndpoint', $value);
+    }
+
     public function getEndpoint()
     {
-        return $this->getDeveloperMode() ? $this->developerEndpoint : $this->liveEndpoint;
+        return $this->getDeveloperMode() ? $this->getDeveloperEndpoint() : $this->getLiveEndpoint();
     }
 }

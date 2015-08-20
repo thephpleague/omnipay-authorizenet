@@ -4,11 +4,11 @@ namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Tests\TestCase;
 
-class SIMAuthorizeRequestTest extends TestCase
+class DPMAuthorizeRequestTest extends TestCase
 {
     public function setUp()
     {
-        $this->request = new SIMAuthorizeRequest($this->getHttpClient(), $this->getHttpRequest());
+        $this->request = new DPMAuthorizeRequest($this->getHttpClient(), $this->getHttpRequest());
         $this->request->initialize(
             array(
                 'clientIp' => '10.0.0.1',
@@ -25,7 +25,7 @@ class SIMAuthorizeRequestTest extends TestCase
         $data = $this->request->getData();
 
         $this->assertSame('AUTH_ONLY', $data['x_type']);
-        $this->assertSame('PAYMENT_FORM', $data['x_show_form']);
+        $this->assertArrayNotHasKey('x_show_form', $data);
         $this->assertArrayNotHasKey('x_test_request', $data);
     }
 
@@ -66,8 +66,8 @@ class SIMAuthorizeRequestTest extends TestCase
         $this->assertSame('https://www.example.com/return', $redirectData['x_relay_url']);
     }
 
-    // Issue #16 Support notifyUrl.
-    public function testSendNoifyUrl()
+    // Issue #16 Support notifyUrl
+    public function testSendNotifyUrl()
     {
         $this->request->setReturnUrl(null);
         $this->request->setNotifyUrl('https://www.example.com/return');
