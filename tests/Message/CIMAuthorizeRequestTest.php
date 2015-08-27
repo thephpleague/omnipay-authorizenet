@@ -31,4 +31,10 @@ class CIMAuthorizeRequestTest extends TestCase
         $this->assertEquals('27057151', $data->transaction->profileTransAuthOnly->customerShippingAddressId);
         $this->assertEquals('Test authorize transaction', $data->transaction->profileTransAuthOnly->order->description);
     }
+
+    public function testShouldReturnExtraOptionsToDisableDuplicateWindowPeriod()
+    {
+        $data = $this->request->getData();
+        $this->assertEquals('x_duplicate_window=0', strip_tags($data->extraOptions));
+    }
 }

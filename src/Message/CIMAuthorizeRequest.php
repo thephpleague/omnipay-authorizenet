@@ -14,10 +14,18 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
     public function getData()
     {
         $this->validate('cardReference', 'amount');
-
         $data = $this->getBaseData();
-
         $this->addTransactionData($data);
+        $this->addExtraOptions($data);
+        return $data;
+    }
+
+    private function addExtraOptions(\SimpleXMLElement $data)
+    {
+        $extraOptions = $data->addChild('extraOptions');
+        $node = dom_import_simplexml($extraOptions);
+        $nodeOwner = $node->ownerDocument;
+        $node->appendChild($nodeOwner->createCDATASection("x_duplicate_window=0"));
         return $data;
     }
 
@@ -45,7 +53,6 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
         if (!empty($desc)) {
             $action->order->description = $desc;
         }
-
         return $data;
     }
 
