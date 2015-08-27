@@ -59,6 +59,9 @@ class DPMResponse extends AbstractResponse implements RedirectResponseInterface
         'x_email_customer',
 
         'x_delim_data',
+
+        // Custom omnipay field.
+        'omnipay_transaction_id',
     );
 
     /**
