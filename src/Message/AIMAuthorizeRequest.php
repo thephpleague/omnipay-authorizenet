@@ -31,6 +31,7 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
 
         $this->addBillingData($data);
         $this->addTestModeSetting($data);
+        $this->addExtraOptions($data);
 
         return $data;
     }

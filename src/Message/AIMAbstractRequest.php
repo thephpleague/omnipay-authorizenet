@@ -53,6 +53,27 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->setParameter('customerId', $value);
     }
 
+    public function setDuplicateWindow($value)
+    {
+        $this->setParameter('duplicateWindow', $value);
+    }
+
+    private function getDuplicateWindow()
+    {
+        return $this->getParameter('duplicateWindow'); // Maps x_duplicate_window
+    }
+
+    protected function addExtraOptions(\SimpleXMLElement $data)
+    {
+        if (!is_null($this->getDuplicateWindow())) {
+            $extraOptions = $data->addChild('extraOptions');
+            $node = dom_import_simplexml($extraOptions);
+            $nodeOwner = $node->ownerDocument;
+            $node->appendChild($nodeOwner->createCDATASection("x_duplicate_window=0"));
+        }
+        return $data;
+    }
+
     /**
      * @return mixed|\SimpleXMLElement
      * @throws \Omnipay\Common\Exception\InvalidRequestException

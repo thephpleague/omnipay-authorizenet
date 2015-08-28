@@ -20,15 +20,6 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
         return $data;
     }
 
-    private function addExtraOptions(\SimpleXMLElement $data)
-    {
-        $extraOptions = $data->addChild('extraOptions');
-        $node = dom_import_simplexml($extraOptions);
-        $nodeOwner = $node->ownerDocument;
-        $node->appendChild($nodeOwner->createCDATASection("x_duplicate_window=0"));
-        return $data;
-    }
-
     /**
      * Adds transaction data
      *

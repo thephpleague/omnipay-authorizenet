@@ -18,6 +18,7 @@ class AIMAuthorizeRequestTest extends TestCase
                 'amount' => '12.00',
                 'customerId' => 'cust-id',
                 'card' => $this->getValidCard(),
+                'duplicateWindow' => 0
             )
         );
     }
@@ -44,5 +45,11 @@ class AIMAuthorizeRequestTest extends TestCase
         $setting = $data->transactionRequest->transactionSettings->setting[0];
         $this->assertEquals('testRequest', $setting->settingName);
         $this->assertEquals('true', $setting->settingValue);
+    }
+
+    public function testShouldReturnExtraOptionsToDisableDuplicateWindowPeriod()
+    {
+        $data = $this->request->getData();
+        $this->assertEquals('x_duplicate_window=0', strip_tags($data->extraOptions));
     }
 }

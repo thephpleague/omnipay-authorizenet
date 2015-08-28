@@ -16,7 +16,8 @@ class CIMAuthorizeRequestTest extends TestCase
             array(
                 'cardReference' => '{"customerProfileId":"28972085","customerPaymentProfileId":"26317841","customerShippingAddressId":"27057151"}',
                 'amount' => '12.00',
-                'description' => 'Test authorize transaction'
+                'description' => 'Test authorize transaction',
+                'duplicateWindow' => '0'
             )
         );
     }
