@@ -14,10 +14,9 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
     public function getData()
     {
         $this->validate('cardReference', 'amount');
-
         $data = $this->getBaseData();
-
         $this->addTransactionData($data);
+        $this->addExtraOptions($data);
         return $data;
     }
 
@@ -45,7 +44,6 @@ class CIMAuthorizeRequest extends CIMAbstractRequest
         if (!empty($desc)) {
             $action->order->description = $desc;
         }
-
         return $data;
     }
 
