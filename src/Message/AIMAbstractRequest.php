@@ -53,6 +53,15 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->setParameter('customerId', $value);
     }
 
+    public function getHashSecret()
+    {
+        return $this->getParameter('hashSecret');
+    }
+    public function setHashSecret($value)
+    {
+        return $this->setParameter('hashSecret', $value);
+    }
+
     public function setDuplicateWindow($value)
     {
         $this->setParameter('duplicateWindow', $value);
