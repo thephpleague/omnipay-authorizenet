@@ -69,7 +69,8 @@ abstract class AIMAbstractRequest extends AbstractRequest
             $extraOptions = $data->addChild('extraOptions');
             $node = dom_import_simplexml($extraOptions);
             $nodeOwner = $node->ownerDocument;
-            $node->appendChild($nodeOwner->createCDATASection(sprintf("x_duplicate_window=%s", $this->getDuplicateWindow())));
+            $duplicateWindowStr = sprintf("x_duplicate_window=%s", $this->getDuplicateWindow());
+            $node->appendChild($nodeOwner->createCDATASection($duplicateWindowStr));
         }
         return $data;
     }
