@@ -21,7 +21,9 @@ class SIMGateway extends AbstractGateway
             'transactionKey' => '',
             'testMode' => false,
             'developerMode' => false,
-            'hashSecret' => ''
+            'hashSecret' => '',
+            'liveEndpoint' => 'https://secure2.authorize.net/gateway/transact.dll',
+            'developerEndpoint' => 'https://test.authorize.net/gateway/transact.dll',
         );
     }
 
