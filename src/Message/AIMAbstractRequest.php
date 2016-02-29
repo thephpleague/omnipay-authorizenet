@@ -53,6 +53,15 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->setParameter('customerId', $value);
     }
 
+    public function getHashSecret()
+    {
+        return $this->getParameter('hashSecret');
+    }
+    public function setHashSecret($value)
+    {
+        return $this->setParameter('hashSecret', $value);
+    }
+
     public function setDuplicateWindow($value)
     {
         $this->setParameter('duplicateWindow', $value);
@@ -69,7 +78,8 @@ abstract class AIMAbstractRequest extends AbstractRequest
             $extraOptions = $data->addChild('extraOptions');
             $node = dom_import_simplexml($extraOptions);
             $nodeOwner = $node->ownerDocument;
-            $node->appendChild($nodeOwner->createCDATASection(sprintf("x_duplicate_window=%s", $this->getDuplicateWindow())));
+            $duplicateWindowStr = sprintf("x_duplicate_window=%s", $this->getDuplicateWindow());
+            $node->appendChild($nodeOwner->createCDATASection($duplicateWindowStr));
         }
         return $data;
     }
