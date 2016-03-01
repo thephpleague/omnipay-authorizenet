@@ -105,6 +105,8 @@ class CIMCreateCardRequest extends CIMAbstractCustomerProfileRequest
             $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
             if ($card->getCvv()) {
                 $req->creditCard->cardCode = $card->getCvv();
+            } else {
+                $this->setValidationMode(self::VALIDATION_MODE_NONE);
             }
         }
     }
