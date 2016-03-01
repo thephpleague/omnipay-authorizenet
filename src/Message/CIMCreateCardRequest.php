@@ -2,7 +2,6 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Message\CIMAbstractCustomerProfileRequest;
 use Omnipay\Common\CreditCard;
 
 /**

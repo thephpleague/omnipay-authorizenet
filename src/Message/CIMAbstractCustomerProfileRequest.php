@@ -1,8 +1,6 @@
 <?php
 
-namespace Message;
-
-use Omnipay\AuthorizeNet\Message\CIMAbstractRequest;
+namespace Omnipay\AuthorizeNet\Message;
 
 abstract class CIMAbstractCustomerProfileRequest extends CIMAbstractRequest
 {
@@ -18,7 +16,7 @@ abstract class CIMAbstractCustomerProfileRequest extends CIMAbstractRequest
     public function getValidationMode()
     {
         $validationMode = $this->getParameter('validationMode');
-        if($validationMode !== self::VALIDATION_MODE_NONE) {
+        if ($validationMode !== self::VALIDATION_MODE_NONE) {
             $validationMode = $this->getDeveloperMode() ? self::VALIDATION_MODE_TEST : self::VALIDATION_MODE_LIVE;
         }
         return $validationMode;
