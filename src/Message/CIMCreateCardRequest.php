@@ -202,11 +202,13 @@ class CIMCreateCardRequest extends CIMAbstractRequest
 
         $getProfileResponse = $this->makeGetProfileRequest($parameters);
 
+        // Check if there is a pre-existing profile for the given card numbers.
+        $otherErrorCodes = ['E00039', 'E00042']; // For these error codes we should check for duplicate payment profiles
         if (!$createPaymentProfileResponse->isSuccessful() &&
-            $createPaymentProfileResponse->getReasonCode() == 'E00039'
+            in_array($createPaymentProfileResponse->getReasonCode(), $otherErrorCodes)
         ) {
-            // Found a duplicate payment profile existing for the same card data. Force update is turned on,
-            // So find matching payment profile id from the customer profile and update it.
+            // There is a possibility of a duplicate payment profile, so find matching payment profile id
+            // from the customer profile and update it.
             $card = $this->getCard();
             $last4 = substr($card->getNumber(), -4);
 
