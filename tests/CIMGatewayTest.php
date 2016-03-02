@@ -23,7 +23,8 @@ class CIMGatewayTest extends GatewayTestCase
         $this->createCardOptions = array(
             'email' => "kaylee@serenity.com",
             'card' => $this->getValidCard(),
-            'testMode' => true
+            'testMode' => true,
+            'forceCardUpdate' => true
         );
 
         $this->authorizeOptions = array(
@@ -54,6 +55,53 @@ class CIMGatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
         $this->assertSame(
             '{"customerProfileId":"28972084","customerPaymentProfileId":"26485433"}',
+            $response->getCardReference()
+        );
+        $this->assertSame('Successful.', $response->getMessage());
+    }
+
+    public function testShouldCreateCardIfDuplicateCustomerProfileExists()
+    {
+        $this->setMockHttpResponse(array('CIMCreateCardFailureWithDuplicate.txt', 'CIMCreatePaymentProfileSuccess.txt',
+        'CIMGetProfileSuccess.txt', 'CIMGetPaymentProfileSuccess.txt'));
+
+        $response = $this->gateway->createCard($this->createCardOptions)->send();
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame(
+            '{"customerProfileId":"28775801","customerPaymentProfileId":"26485433"}',
+            $response->getCardReference()
+        );
+        $this->assertSame('Successful.', $response->getMessage());
+    }
+
+    public function testShouldUpdateExistingPaymentProfileIfDuplicateExistsAndForceCardUpdateIsSet()
+    {
+        // Duplicate **payment** profile
+        $this->setMockHttpResponse(array('CIMCreateCardFailureWithDuplicate.txt', 'CIMCreatePaymentProfileFailure.txt',
+            'CIMGetProfileSuccess.txt', 'CIMUpdatePaymentProfileSuccess.txt', 'CIMGetPaymentProfileSuccess.txt'));
+
+        $response = $this->gateway->createCard($this->createCardOptions)->send();
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame(
+            '{"customerProfileId":"28775801","customerPaymentProfileId":"26485433"}',
+            $response->getCardReference()
+        );
+        $this->assertSame('Successful.', $response->getMessage());
+    }
+
+    public function testShouldUpdateExistingPaymentProfileIfDuplicateExistsAndMaxPaymentProfileLimitIsMet()
+    {
+        $this->setMockHttpResponse(array('CIMCreateCardFailureWithDuplicate.txt',
+            'CIMCreatePaymentProfileFailureMaxProfileLimit.txt', 'CIMGetProfileSuccess.txt',
+            'CIMUpdatePaymentProfileSuccess.txt', 'CIMGetPaymentProfileSuccess.txt'));
+
+        $response = $this->gateway->createCard($this->createCardOptions)->send();
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame(
+            '{"customerProfileId":"28775801","customerPaymentProfileId":"26485433"}',
             $response->getCardReference()
         );
         $this->assertSame('Successful.', $response->getMessage());
