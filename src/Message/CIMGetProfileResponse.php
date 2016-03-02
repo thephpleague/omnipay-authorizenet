@@ -7,6 +7,9 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class CIMGetProfileResponse extends CIMCreatePaymentProfileResponse
 {
+    const ERROR_DUPLICATE_PROFILE = 'E00039';
+    const ERROR_MAX_PAYMENT_PROFILE_LIMIT_REACHED = 'E00042';
+
     protected $xmlRootElement = 'getCustomerProfileResponse';
 
     /**
