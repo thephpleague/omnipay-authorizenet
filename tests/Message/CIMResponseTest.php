@@ -29,4 +29,12 @@ class CIMResponseTest extends TestCase
             $response->getTransactionReference()
         );
     }
+
+    public function testShouldReturnResponseReasonCodeFromDirectResponse()
+    {
+        $httpResponse = $this->getMockHttpResponse('CIMRefundFailure.txt')->getBody();
+        $response = new CIMResponse($this->getMockRequest(), $httpResponse);
+
+        $this->assertEquals(54, $response->getResponseReasonCode());
+    }
 }

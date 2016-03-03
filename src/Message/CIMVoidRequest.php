@@ -7,6 +7,7 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class CIMVoidRequest extends CIMAbstractRequest
 {
+    protected $xmlRootElement = 'createCustomerProfileTransactionRequest';
     protected $action = 'voidTransaction';
 
     public function getData()
@@ -14,8 +15,7 @@ class CIMVoidRequest extends CIMAbstractRequest
         $this->validate('transactionReference');
 
         $data = $this->getBaseData();
-        $data->transactionRequest->refTransId = $this->getTransactionReference();
-        $this->addTestModeSetting($data);
+        $data->transaction->profileTransVoid->transId = $this->getTransactionReference();
 
         return $data;
     }

@@ -174,5 +174,6 @@ class CIMGatewayIntegrationTest extends TestCase
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Refund transaction should get created');
         $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
+        $this->assertEquals('Successful.', $response->getMessage());
     }
 }

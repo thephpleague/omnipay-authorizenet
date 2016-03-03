@@ -93,4 +93,13 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
 
         return $data;
     }
+
+    public function sendData($data)
+    {
+        $headers = array('Content-Type' => 'text/xml; charset=utf-8');
+        $data = $data->saveXml();
+        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
+
+        return $this->response = new CIMResponse($this, $httpResponse->getBody());
+    }
 }
