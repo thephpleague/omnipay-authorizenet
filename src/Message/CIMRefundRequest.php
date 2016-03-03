@@ -51,7 +51,7 @@ class CIMRefundRequest extends CIMCaptureRequest
         $parameters = $this->getParameters();
 
         if (!$response->isSuccessful() && $this->voidIfRefundFails &&
-            intval($response->getResponseReasonCode()) === CIMResponse::ERROR_RESPONSE_CODE_CANNOT_ISSUE_CREDIT) {
+            $response->getResponseReasonCode() === CIMResponse::ERROR_RESPONSE_CODE_CANNOT_ISSUE_CREDIT) {
             // An attempt to a refund a transaction that was not settled. We can just void the entire transaction
             $voidRequest = new CIMVoidRequest($this->httpClient, $this->httpRequest);
             $voidRequest->initialize($parameters);
