@@ -165,7 +165,7 @@ class CIMGatewayIntegrationTest extends TestCase
         $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
 
         // Make a refund on the purchase transaction
-        $request = $this->gateway->void(['transactionReference' => $response->getTransactionReference()]);
+        $request = $this->gateway->void(array('transactionReference' => $response->getTransactionReference()));
         $request->setDeveloperMode(true);
 
         $response = $request->send();
