@@ -227,7 +227,7 @@ class CIMGatewayTest extends GatewayTestCase
         );
     }
 
-    public function testShouldVoidIfRefundFailedWithResponseError54()
+    public function testShouldVoidTransactionIfTryingToRefundAnUnsettledTransaction()
     {
         $this->setMockHttpResponse(array('CIMRefundFailure.txt', 'CIMVoidResponse.txt'));
         $this->refundOptions['voidIfRefundFails'] = true;
