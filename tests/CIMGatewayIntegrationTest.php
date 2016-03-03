@@ -164,11 +164,8 @@ class CIMGatewayIntegrationTest extends TestCase
         $this->assertTrue($response->isSuccessful(), 'Purchase transaction should get created');
         $this->assertNotNull($response->getTransactionReference(), 'Transaction reference should exist');
 
-        $transactionRef = json_decode($response->getTransactionReference(), true);
-
         // Make a refund on the purchase transaction
-        $params = array('transactionReference' => $transactionRef['transId']);
-        $request = $this->gateway->void($params);
+        $request = $this->gateway->void(['transactionReference' => $response->getTransactionReference()]);
         $request->setDeveloperMode(true);
 
         $response = $request->send();

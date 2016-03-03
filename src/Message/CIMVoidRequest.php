@@ -15,7 +15,10 @@ class CIMVoidRequest extends CIMAbstractRequest
         $this->validate('transactionReference');
 
         $data = $this->getBaseData();
-        $data->transaction->profileTransVoid->transId = $this->getTransactionReference();
+        $transRef = json_decode($this->getTransactionReference(), true);
+        if (is_array($transRef) && isset($transRef['transId'])) {
+            $data->transaction->profileTransVoid->transId = $transRef["transId"];
+        }
 
         return $data;
     }
