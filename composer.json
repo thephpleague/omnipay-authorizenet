@@ -24,11 +24,17 @@
             "homepage": "https://github.com/thephpleague/omnipay-authorizenet/contributors"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/xola/omnipay-common"
+        }
+    ],
     "autoload": {
         "psr-4": { "Omnipay\\AuthorizeNet\\" : "src/" }
     },
     "require": {
-        "omnipay/common": "~2.0"
+        "omnipay/common": "~2.4.2"
     },
     "require-dev": {
         "omnipay/tests": "~2.0"

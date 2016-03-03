@@ -7,7 +7,7 @@ use Omnipay\Common\CreditCard;
 /**
  * Create Credit Card Request.
  */
-class CIMCreateCardRequest extends CIMAbstractRequest
+class CIMCreateCardRequest extends CIMAbstractCustomerProfileRequest
 {
     protected $xmlRootElement = 'createCustomerProfileRequest';
 
@@ -103,7 +103,11 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             $req = $data->addChild('payment');
             $req->creditCard->cardNumber = $card->getNumber();
             $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
-            $req->creditCard->cardCode = $card->getCvv();
+            if ($card->getCvv()) {
+                $req->creditCard->cardCode = $card->getCvv();
+            } else {
+                $this->setValidationMode(self::VALIDATION_MODE_NONE);
+            }
         }
     }
 
@@ -145,8 +149,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
 
     protected function addTestModeSetting(\SimpleXMLElement $data)
     {
-        // Test mode setting
-        $data->validationMode = $this->getDeveloperMode() ? 'testMode' : 'liveMode';
+        $data->validationMode = $this->getValidationMode();
     }
 
     public function sendData($data)
