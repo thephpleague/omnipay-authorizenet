@@ -220,12 +220,22 @@ class CIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->refund($this->refundOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull(
-            $response->getTransactionReference()
-        );
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame(
             'The referenced transaction does not meet the criteria for issuing a credit.',
             $response->getMessage()
         );
+    }
+
+    public function testShouldVoidTransactionIfTryingToRefundAnUnsettledTransaction()
+    {
+        $this->setMockHttpResponse(array('CIMRefundFailure.txt', 'CIMVoidResponse.txt'));
+        $this->refundOptions['voidIfRefundFails'] = true;
+
+        $response = $this->gateway->refund($this->refundOptions)->send();
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertNotNull($response->getTransactionReference());
+        $this->assertEquals('Successful.', $response->getMessage());
     }
 }

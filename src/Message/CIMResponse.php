@@ -7,6 +7,11 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class CIMResponse extends CIMAbstractResponse
 {
+    /**
+     * For Error codes: @see https://developer.authorize.net/api/reference/responseCodes.html
+     */
+    const ERROR_RESPONSE_CODE_CANNOT_ISSUE_CREDIT = '54';
+
     protected $xmlRootElement = 'createCustomerProfileTransactionResponse';
 
     public function getTransactionReference()

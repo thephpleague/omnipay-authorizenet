@@ -10,7 +10,7 @@ use Omnipay\Common\Message\RequestInterface;
 /**
  * Authorize.Net CIM Response
  */
-class CIMAbstractResponse extends AbstractResponse
+abstract class CIMAbstractResponse extends AbstractResponse
 {
     protected $xmlRootElement = null;
 
@@ -77,6 +77,21 @@ class CIMAbstractResponse extends AbstractResponse
         }
 
         return $code;
+    }
+
+    /**
+     * A reason code is the a part of the "directResponse" attribute returned by Authorize.net. This is the third
+     * element within the "directResponse" attribute which is a CSV string.
+     */
+    public function getResponseReasonCode()
+    {
+        $responseCode = null;
+        if (isset($this->data['directResponse'])) {
+            $directResponse = explode(',', (string)$this->data['directResponse']);
+            $responseCode = $directResponse[2];
+        }
+
+        return $responseCode;
     }
 
     /**
