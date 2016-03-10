@@ -17,7 +17,12 @@ class AIMRefundRequest extends AbstractRequest
 
         $data['x_trans_id'] = $this->getTransactionReference();
         $data['x_card_num'] = $this->getCard()->getNumber();
-        $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
+
+        $expiryMonth = $this->getCard()->getExpiryMonth();
+        if (!empty($expiryMonth)) {
+            $data['x_exp_date'] = $this->getCard()->getExpiryDate('my');
+        }
+
         $data['x_amount'] = $this->getAmount();
 
         return $data;
