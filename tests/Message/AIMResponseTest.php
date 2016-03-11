@@ -7,7 +7,7 @@ use Omnipay\Tests\TestCase;
 class AIMResponseTest extends TestCase
 {
     /**
-     * @expectedException Omnipay\Common\Exception\InvalidResponseException
+     * @expectedException \Omnipay\Common\Exception\InvalidResponseException
      */
     public function testConstructEmpty()
     {
@@ -23,9 +23,11 @@ class AIMResponseTest extends TestCase
         $this->assertSame('2184493132', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame('1', $response->getCode());
+        $this->assertSame('Approved', $response->getCodeMessage());
         $this->assertSame('1', $response->getReasonCode());
         $this->assertSame('GA4OQP', $response->getAuthorizationCode());
         $this->assertSame('Y', $response->getAVSCode());
+        $this->assertSame('Address (Street) and five digit ZIP match', $response->getAVSCodeMessage());
     }
 
     public function testAuthorizeFailure()
@@ -37,9 +39,11 @@ class AIMResponseTest extends TestCase
         $this->assertSame('0', $response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
         $this->assertSame('3', $response->getCode());
+        $this->assertSame('Error', $response->getCodeMessage());
         $this->assertSame('5', $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCodeMessage());
     }
 
     public function testCaptureSuccess()
@@ -51,9 +55,11 @@ class AIMResponseTest extends TestCase
         $this->assertSame('2184494531', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame('1', $response->getCode());
+        $this->assertSame('Approved', $response->getCodeMessage());
         $this->assertSame('1', $response->getReasonCode());
         $this->assertSame('F51OYG', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCodeMessage());
     }
 
     public function testCaptureFailure()
@@ -65,9 +71,11 @@ class AIMResponseTest extends TestCase
         $this->assertSame('0', $response->getTransactionReference());
         $this->assertSame('The transaction cannot be found.', $response->getMessage());
         $this->assertSame('3', $response->getCode());
+        $this->assertSame('Error', $response->getCodeMessage());
         $this->assertSame('16', $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCodeMessage());
     }
 
     public function testPurchaseSuccess()
@@ -79,9 +87,11 @@ class AIMResponseTest extends TestCase
         $this->assertSame('2184492509', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame('1', $response->getCode());
+        $this->assertSame('Approved', $response->getCodeMessage());
         $this->assertSame('1', $response->getReasonCode());
         $this->assertSame('JE6JM1', $response->getAuthorizationCode());
         $this->assertSame('Y', $response->getAVSCode());
+        $this->assertSame('Address (Street) and five digit ZIP match', $response->getAVSCodeMessage());
     }
 
     public function testPurchaseFailure()
@@ -93,9 +103,11 @@ class AIMResponseTest extends TestCase
         $this->assertSame('0', $response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
         $this->assertSame('3', $response->getCode());
+        $this->assertSame('Error', $response->getCodeMessage());
         $this->assertSame('5', $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCodeMessage());
     }
 
     public function testRefundSuccess()
@@ -108,8 +120,10 @@ class AIMResponseTest extends TestCase
         $this->assertSame('2184492509', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame('1', $response->getCode());
+        $this->assertSame('Approved', $response->getCodeMessage());
         $this->assertSame('1', $response->getReasonCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCodeMessage());
     }
 
     public function testRefundFailure()
@@ -121,8 +135,10 @@ class AIMResponseTest extends TestCase
         $this->assertSame('0', $response->getTransactionReference());
         $this->assertSame('The credit card number is invalid.', $response->getMessage());
         $this->assertSame('3', $response->getCode());
+        $this->assertSame('Error', $response->getCodeMessage());
         $this->assertSame('6', $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('AVS not applicable for this transaction', $response->getAVSCodeMessage());
     }
 }
