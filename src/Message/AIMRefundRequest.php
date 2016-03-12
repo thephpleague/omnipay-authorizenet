@@ -30,9 +30,9 @@ class AIMRefundRequest extends AIMAbstractRequest
         if ($card = $transactionRef->getCard()) {
             $data->transactionRequest->payment->creditCard->cardNumber = $card->number;
             $data->transactionRequest->payment->creditCard->expirationDate = $card->expiry;
-        } elseif ($cardReference = $transactionRef->getCardReference()) {
-            $data->transactionRequest->profile->customerProfileId = $cardReference->getCustomerProfileId();
-            $data->transactionRequest->profile->paymentProfile->paymentProfileId = $cardReference->getPaymentProfileId();
+        } elseif ($cardRef = $transactionRef->getCardReference()) {
+            $data->transactionRequest->profile->customerProfileId = $cardRef->getCustomerProfileId();
+            $data->transactionRequest->profile->paymentProfile->paymentProfileId = $cardRef->getPaymentProfileId();
         } else {
             // Transaction reference only contains the transaction ID, so a card is required
             $this->validate('card');

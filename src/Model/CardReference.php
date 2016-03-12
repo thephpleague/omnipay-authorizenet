@@ -75,6 +75,4 @@ class CardReference
     {
         $this->shippingProfileId = $shippingProfileId;
     }
-
-
 }
