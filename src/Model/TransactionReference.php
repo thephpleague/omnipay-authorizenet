@@ -119,6 +119,4 @@ class TransactionReference
     {
         $this->cardReference = $cardReference;
     }
-
-
 }
