@@ -9,7 +9,7 @@ use Omnipay\Common\CreditCard;
  */
 class CIMCreatePaymentProfileRequest extends CIMCreateCardRequest
 {
-    protected $xmlRootElement = 'createCustomerPaymentProfileRequest';
+    protected $requestType = 'createCustomerPaymentProfileRequest';
 
     public function getData()
     {

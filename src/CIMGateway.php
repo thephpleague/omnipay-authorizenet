@@ -9,14 +9,6 @@ use Omnipay\AuthorizeNet\Message\CIMCreateCardRequest;
  */
 class CIMGateway extends AIMGateway
 {
-    public function getDefaultParameters()
-    {
-        $params = parent::getDefaultParameters();
-        $params['forceCardUpdate'] = false;
-        $params['defaultBillTo'] = array(array());
-        return $params;
-    }
-
     public function getName()
     {
         return 'Authorize.Net CIM';

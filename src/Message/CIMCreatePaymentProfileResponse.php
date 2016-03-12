@@ -7,7 +7,7 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class CIMCreatePaymentProfileResponse extends CIMAbstractResponse
 {
-    protected $xmlRootElement = 'createCustomerPaymentProfileResponse';
+    protected $responseType = 'createCustomerPaymentProfileResponse';
 
     public function getCustomerProfileId()
     {

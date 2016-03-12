@@ -26,11 +26,11 @@ class CIMAuthorizeRequestTest extends TestCase
     {
         $data = $this->request->getData();
 
-        $this->assertEquals('12.00', $data->transaction->profileTransAuthOnly->amount);
-        $this->assertEquals('28972085', $data->transaction->profileTransAuthOnly->customerProfileId);
-        $this->assertEquals('26317841', $data->transaction->profileTransAuthOnly->customerPaymentProfileId);
-        $this->assertEquals('27057151', $data->transaction->profileTransAuthOnly->customerShippingAddressId);
-        $this->assertEquals('Test authorize transaction', $data->transaction->profileTransAuthOnly->order->description);
+        $this->assertEquals('12.00', $data->transactionRequest->amount);
+        $this->assertEquals('28972085', $data->transactionRequest->profile->customerProfileId);
+        $this->assertEquals('26317841', $data->transactionRequest->profile->paymentProfile->paymentProfileId);
+        $this->assertEquals('27057151', $data->transactionRequest->profile->shippingProfileId);
+        $this->assertEquals('Test authorize transaction', $data->transactionRequest->order->description);
     }
 
     public function testShouldReturnExtraOptionsToDisableDuplicateWindowPeriod()

@@ -120,86 +120,66 @@ class CIMGatewayTest extends GatewayTestCase
 
     public function testAuthorizeSuccess()
     {
-        $this->setMockHttpResponse('CIMAuthorizeSuccess.txt');
+        $this->setMockHttpResponse('AIMAuthorizeSuccess.txt');
 
         $response = $this->gateway->authorize($this->authorizeOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame(
-            '{"approvalCode":"DMK100","transId":"2220001902","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}',
-            $response->getTransactionReference()
-        );
-        $this->assertSame('Successful.', $response->getMessage());
+        $this->assertEquals('{"approvalCode":"GA4OQP","transId":"2184493132","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
     public function testAuthorizeFailure()
     {
-        $this->setMockHttpResponse('CIMAuthorizeFailure.txt');
-
-        try {
-            $response = $this->gateway->authorize($this->authorizeOptions)->send();
-        } catch(\Exception $e) {
-
-        }
-
+        $this->setMockHttpResponse('AIMAuthorizeFailure.txt');
+        $response = $this->gateway->authorize($this->authorizeOptions)->send();
         $this->assertFalse($response->isSuccessful());
         $this->assertNull($response->getTransactionReference());
-        $this->assertSame(
-            "The 'AnetApi/xml/v1/schema/AnetApiSchema.xsd:amount' element is invalid - The value '-100.00' is invalid according to its datatype 'Decimal' - The MinInclusive constraint failed.",
-            $response->getMessage()
-        );
+        $this->assertEquals("A valid amount is required.", $response->getMessage());
     }
 
     public function testCaptureSuccess()
     {
-        $this->setMockHttpResponse('CIMCaptureSuccess.txt');
+        $this->setMockHttpResponse('AIMCaptureSuccess.txt');
 
         $response = $this->gateway->capture($this->captureOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame(
-            '{"approvalCode":"DMK100","transId":"2220001903","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}',
-            $response->getTransactionReference()
-        );
-        $this->assertSame('Successful.', $response->getMessage());
+        $this->assertSame('{"approvalCode":"F51OYG","transId":"2184494531"}', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
     public function testCaptureFailure()
     {
-        $this->setMockHttpResponse('CIMCaptureFailure.txt');
+        $this->setMockHttpResponse('AIMCaptureFailure.txt');
 
         $response = $this->gateway->capture($this->captureOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
-        $this->assertSame('Approval Code is required.', $response->getMessage());
+        $this->assertEquals(0, $response->getTransactionReference());
+        $this->assertSame('The transaction cannot be found.', $response->getMessage());
     }
 
     public function testPurchaseSuccess()
     {
-        $this->setMockHttpResponse('CIMPurchaseSuccess.txt');
+        $this->setMockHttpResponse('AIMPurchaseSuccess.txt');
 
         $response = $this->gateway->purchase($this->authorizeOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame(
-            '{"approvalCode":"MNLXJQ","transId":"2220001904","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}',
-            $response->getTransactionReference()
-        );
-        $this->assertSame('Successful.', $response->getMessage());
+        $this->assertSame('{"approvalCode":"JE6JM1","transId":"2184492509","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
     public function testPurchaseFailure()
     {
-        $this->setMockHttpResponse('CIMPurchaseFailure.txt');
+        $this->setMockHttpResponse('AIMPurchaseFailure.txt');
 
         $response = $this->gateway->purchase($this->authorizeOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull(
-            $response->getTransactionReference()
-        );
-        $this->assertSame('This transaction has been declined.', $response->getMessage());
+        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('A valid amount is required.', $response->getMessage());
     }
 
     public function testRefundSuccess()
@@ -215,12 +195,12 @@ class CIMGatewayTest extends GatewayTestCase
 
     public function testRefundFailure()
     {
-        $this->setMockHttpResponse('CIMRefundFailure.txt');
+        $this->setMockHttpResponse('AIMRefundFailure.txt');
 
         $response = $this->gateway->refund($this->refundOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
+        $this->assertEquals(0, $response->getTransactionReference());
         $this->assertSame(
             'The referenced transaction does not meet the criteria for issuing a credit.',
             $response->getMessage()
@@ -229,13 +209,13 @@ class CIMGatewayTest extends GatewayTestCase
 
     public function testShouldVoidTransactionIfTryingToRefundAnUnsettledTransaction()
     {
-        $this->setMockHttpResponse(array('CIMRefundFailure.txt', 'CIMVoidResponse.txt'));
+        $this->setMockHttpResponse(array('AIMRefundFailure.txt', 'AIMVoidSuccess.txt'));
         $this->refundOptions['voidIfRefundFails'] = true;
 
         $response = $this->gateway->refund($this->refundOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
         $this->assertNotNull($response->getTransactionReference());
-        $this->assertEquals('Successful.', $response->getMessage());
+        $this->assertEquals('This transaction has been approved.', $response->getMessage());
     }
 }

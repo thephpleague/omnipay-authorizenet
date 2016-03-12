@@ -7,5 +7,5 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class CIMPurchaseRequest extends CIMAuthorizeRequest
 {
-    protected $action = "profileTransAuthCapture";
+    protected $action = "authCaptureTransaction";
 }

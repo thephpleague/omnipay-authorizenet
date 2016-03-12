@@ -13,24 +13,6 @@ class AIMRefundRequestTest extends TestCase
     public function setUp()
     {
         $this->request = new AIMRefundRequest($this->getHttpClient(), $this->getHttpRequest());
-        $this->request->initialize(
-            array(
-                'transactionReference' => '123',
-                'amount' => '12.00'
-            )
-        );
-
-        try {
-            $this->request->getData();
-        } catch (InvalidRequestException $irex) {
-            $this->assertEquals($irex->getMessage(), "The card parameter is required");
-            return;
-        } catch (\Exception $e) {
-            $this->fail("Invalid exception was thrown: " . $e->getMessage());
-            return;
-        }
-
-        $this->fail("InvalidRequestException should get thrown because card is missing");
     }
 
     public function testGetData()
@@ -56,5 +38,27 @@ class AIMRefundRequestTest extends TestCase
         $setting = $data->transactionRequest->transactionSettings->setting[0];
         $this->assertEquals('testRequest', $setting->settingName);
         $this->assertEquals('false', $setting->settingValue);
+    }
+
+    public function testGetDataShouldFail()
+    {
+        $this->request->initialize(
+            array(
+                'transactionReference' => '123',
+                'amount' => '12.00'
+            )
+        );
+
+        try {
+            $this->request->getData();
+        } catch (InvalidRequestException $irex) {
+            $this->assertEquals($irex->getMessage(), "The card parameter is required");
+            return;
+        } catch (\Exception $e) {
+            $this->fail("Invalid exception was thrown: " . $e->getMessage());
+            return;
+        }
+
+        $this->fail("InvalidRequestException should get thrown because card is missing");
     }
 }

@@ -12,16 +12,14 @@ use Omnipay\Common\Message\RequestInterface;
  */
 abstract class CIMAbstractResponse extends AbstractResponse
 {
-    protected $xmlRootElement = null;
+    protected $responseType = null;
 
     public function __construct(RequestInterface $request, $data)
     {
-        $this->request = $request;
-
         // Check if this is an error response
         $isError = strpos((string)$data, '<ErrorResponse');
 
-        $xmlRootElement = $isError !== false ? 'ErrorResponse' : $this->xmlRootElement;
+        $xmlRootElement = $isError !== false ? 'ErrorResponse' : $this->responseType;
         // Strip out the xmlns junk so that PHP can parse the XML
         $xml = preg_replace('/<' . $xmlRootElement . '[^>]+>/', '<' . $xmlRootElement . '>', (string)$data);
 
@@ -35,7 +33,9 @@ abstract class CIMAbstractResponse extends AbstractResponse
             throw new InvalidResponseException();
         }
 
-        $this->data = $this->xml2array($xml);
+        $data = $this->xml2array($xml);
+
+        parent::__construct($request, $data);
     }
 
     public function isSuccessful()

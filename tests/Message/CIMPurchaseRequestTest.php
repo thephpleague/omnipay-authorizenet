@@ -24,7 +24,10 @@ class CIMPurchaseRequestTest extends TestCase
     public function testGetData()
     {
         $data = $this->request->getData();
-
-        $this->assertObjectHasAttribute('profileTransAuthCapture',$data->transaction);
+        $this->assertEquals('12.00', $data->transactionRequest->amount);
+        $this->assertEquals('28972085', $data->transactionRequest->profile->customerProfileId);
+        $this->assertEquals('26317841', $data->transactionRequest->profile->paymentProfile->paymentProfileId);
+        $this->assertEquals('27057151', $data->transactionRequest->profile->shippingProfileId);
+        $this->assertEquals('Test purchase transaction', $data->transactionRequest->order->description);
     }
 }

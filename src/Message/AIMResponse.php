@@ -2,19 +2,24 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\AuthorizeNet\Model\CardReference;
+use Omnipay\AuthorizeNet\Model\TransactionReference;
 use Omnipay\Common\Exception\InvalidResponseException;
+use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Common\Message\AbstractResponse;
-use Omnipay\Common\Message\RequestInterface;
 
 /**
  * Authorize.Net AIM Response
  */
 class AIMResponse extends AbstractResponse
 {
-    public function __construct(RequestInterface $request, $data)
-    {
-        $this->request = $request;
+    /**
+     * For Error codes: @see https://developer.authorize.net/api/reference/responseCodes.html
+     */
+    const ERROR_RESPONSE_CODE_CANNOT_ISSUE_CREDIT = 54;
 
+    public function __construct(AbstractRequest $request, $data)
+    {
         // Strip out the xmlns junk so that PHP can parse the XML
         $xml = preg_replace('/<createTransactionResponse[^>]+>/', '<createTransactionResponse>', (string)$data);
 
@@ -28,7 +33,7 @@ class AIMResponse extends AbstractResponse
             throw new InvalidResponseException();
         }
 
-        $this->data = $xml;
+        parent::__construct($request, $xml);
     }
 
     public function isSuccessful()
@@ -104,12 +109,36 @@ class AIMResponse extends AbstractResponse
     }
 
     /**
-     * The payment gateway assigned identification number for transaction.
+     * A composite key containing the gateway provided transaction reference as well as other data points that may be
+     * required for subsequent transactions that may need to modify this one.
      *
-     * @return string
+     * @param bool $serialize Determines whether a string or object is returned
+     * @return TransactionReference|string
      */
-    public function getTransactionReference()
+    public function getTransactionReference($serialize = true)
     {
-        return (string)$this->data->transactionResponse[0]->transId;
+        if ($this->isSuccessful()) {
+            $body = $this->data->transactionResponse[0];
+            $transactionRef = new TransactionReference();
+            $transactionRef->setApprovalCode((string)$body->authCode);
+            $transactionRef->setTransId((string)$body->transId);
+
+            try {
+                // Need to store card details in the transaction reference since it is required when doing a refund
+                if ($card = $this->request->getCard()) {
+                    $transactionRef->setCard(array(
+                        'number' => $card->getNumberLastFour(),
+                        'expiry' => $card->getExpiryDate('mY')
+                    ));
+                } elseif ($cardReference = $this->request->getCardReference()) {
+                    $transactionRef->setCardReference(new CardReference($cardReference));
+                }
+            } catch (\Exception $e) {
+            }
+
+            return $serialize ? (string)$transactionRef : $transactionRef;
+        }
+
+        return null;
     }
 }

@@ -2,57 +2,38 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\AuthorizeNet\Model\CardReference;
+
 /**
- * Creates a Authorize only transaction request for the specified card
+ * Creates a Authorize only transaction request for the specified customer profile
  */
-class CIMAuthorizeRequest extends CIMAbstractRequest
+class CIMAuthorizeRequest extends AIMAuthorizeRequest
 {
-    protected $xmlRootElement = 'createCustomerProfileTransactionRequest';
-
-    protected $action = "profileTransAuthOnly";
-
-    public function getData()
+    protected function addPayment(\SimpleXMLElement $data)
     {
-        $this->validate('cardReference', 'amount');
-        $data = $this->getBaseData();
-        $this->addTransactionData($data);
-        $this->addExtraOptions($data);
-        return $data;
-    }
+        $this->validate('cardReference');
 
-    /**
-     * Adds transaction data
-     *
-     * @param \SimpleXMLElement $data
-     *
-     * @return \SimpleXMLElement
-     */
-    protected function addTransactionData(\SimpleXMLElement $data)
-    {
-        $transaction = $data->addChild('transaction');
-        $action = $transaction->addChild($this->action);
-        $action->amount = $this->getAmount();
-
-        $cardRef = json_decode($this->getCardReference(), true);
-        $action->customerProfileId = $cardRef['customerProfileId'];
-        $action->customerPaymentProfileId = $cardRef['customerPaymentProfileId'];
-        if (!empty($cardRef['customerShippingAddressId'])) {
-            $action->customerShippingAddressId = $cardRef['customerShippingAddressId'];
+        /** @var mixed $req */
+        $req = $data->transactionRequest;
+        /** @var CardReference $cardRef */
+        $cardRef = $this->getCardReference(false);
+        $req->profile->customerProfileId = $cardRef->getCustomerProfileId();
+        $req->profile->paymentProfile->paymentProfileId = $cardRef->getPaymentProfileId();
+        if ($shippingProfileId = $cardRef->getShippingProfileId()) {
+            $req->profile->shippingProfileId = $shippingProfileId;
         }
 
         $desc = $this->getDescription();
         if (!empty($desc)) {
-            $action->order->description = $desc;
+            $req->order->description = $desc;
         }
+
         return $data;
     }
 
-    public function sendData($data)
+    protected function addBillingData(\SimpleXMLElement $data)
     {
-        $headers = array('Content-Type' => 'text/xml; charset=utf-8');
-        $data = $data->saveXml();
-        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
-
-        return $this->response = new CIMResponse($this, $httpResponse->getBody());
+        // Do nothing since billing information is already part of the customer profile
+        return $data;
     }
 }

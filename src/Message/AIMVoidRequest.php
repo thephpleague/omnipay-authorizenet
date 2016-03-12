@@ -14,7 +14,7 @@ class AIMVoidRequest extends AIMAbstractRequest
         $this->validate('transactionReference');
 
         $data = $this->getBaseData();
-        $data->transactionRequest->refTransId = $this->getTransactionReference();
+        $data->transactionRequest->refTransId = $this->getTransactionReference()->getTransId();
         $this->addTestModeSetting($data);
 
         return $data;

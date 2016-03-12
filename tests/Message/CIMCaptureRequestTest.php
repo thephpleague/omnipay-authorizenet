@@ -24,15 +24,7 @@ class CIMCaptureRequestTest extends TestCase
     public function testGetData()
     {
         $data = $this->request->getData();
-
-        $this->assertEquals('12.00', $data->transaction->profileTransCaptureOnly->amount);
-        $this->assertEquals('28972085', $data->transaction->profileTransCaptureOnly->customerProfileId);
-        $this->assertEquals('26317841', $data->transaction->profileTransCaptureOnly->customerPaymentProfileId);
-        $this->assertEquals('27057151', $data->transaction->profileTransCaptureOnly->customerShippingAddressId);
-        $this->assertEquals(
-            'Test capture only transaction',
-            $data->transaction->profileTransCaptureOnly->order->description
-        );
-        $this->assertEquals('V7DO8Q', $data->transaction->profileTransCaptureOnly->approvalCode);
+        $this->assertEquals('12.00', $data->transactionRequest->amount);
+        $this->assertEquals('2220001612', $data->transactionRequest->refTransId);
     }
 }

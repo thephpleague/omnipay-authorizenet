@@ -24,15 +24,9 @@ class CIMRefundRequestTest extends TestCase
     public function testGetData()
     {
         $data = $this->request->getData();
-
-        $this->assertEquals('12.00', $data->transaction->profileTransRefund->amount);
-        $this->assertEquals('28972085', $data->transaction->profileTransRefund->customerProfileId);
-        $this->assertEquals('26317841', $data->transaction->profileTransRefund->customerPaymentProfileId);
-        $this->assertEquals('27057151', $data->transaction->profileTransRefund->customerShippingAddressId);
-        $this->assertEquals(
-            'Test refund transaction',
-            $data->transaction->profileTransRefund->order->description
-        );
-        $this->assertEquals('2220001612', $data->transaction->profileTransRefund->transId);
+        $this->assertEquals('12.00', $data->transactionRequest->amount);
+        $this->assertEquals('28972085', $data->transactionRequest->profile->customerProfileId);
+        $this->assertEquals('26317841', $data->transactionRequest->profile->paymentProfile->paymentProfileId);
+        $this->assertEquals('2220001612', $data->transactionRequest->refTransId);
     }
 }

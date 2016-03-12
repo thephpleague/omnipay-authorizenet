@@ -15,7 +15,7 @@ class AIMCaptureRequest extends AIMAbstractRequest
 
         $data = $this->getBaseData();
         $data->transactionRequest->amount = $this->getAmount();
-        $data->transactionRequest->refTransId = $this->getTransactionReference();
+        $data->transactionRequest->refTransId = $this->getTransactionReference()->getTransId();
         $this->addTestModeSetting($data);
 
         return $data;

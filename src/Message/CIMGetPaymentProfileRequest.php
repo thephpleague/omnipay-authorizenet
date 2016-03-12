@@ -7,7 +7,7 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 class CIMGetPaymentProfileRequest extends CIMAbstractRequest
 {
-    protected $xmlRootElement = 'getCustomerPaymentProfileRequest';
+    protected $requestType = 'getCustomerPaymentProfileRequest';
 
     public function getData()
     {

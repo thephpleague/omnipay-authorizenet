@@ -38,25 +38,9 @@ class AIMGatewayIntegrationTest extends TestCase
         }
     }
 
-    public function testPurchaseAndVoid()
+    public function testAuthCaptureVoid()
     {
-        $request = $this->gateway->purchase(array(
-            'amount' => '10.01',
-            'card' => $this->getValidCard()
-        ));
-        $response = $request->send();
-        $this->assertTrue($response->isSuccessful(), 'Purchase should succeed');
-        $transactionRef = $response->getTransactionReference();
-
-        $request = $this->gateway->void(array(
-            'transactionReference' => $transactionRef
-        ));
-        $response = $request->send();
-        $this->assertTrue($response->isSuccessful(), 'Void should succeed');
-    }
-
-    public function testHoldAndCapture()
-    {
+        // Authorize
         $request = $this->gateway->authorize(array(
             'amount' => '42.42',
             'card' => $this->getValidCard()
@@ -65,11 +49,48 @@ class AIMGatewayIntegrationTest extends TestCase
         $this->assertTrue($response->isSuccessful(), 'Authorization should succeed');
         $transactionRef = $response->getTransactionReference();
 
+        // Capture
         $request = $this->gateway->capture(array(
             'amount' => '42.42',
             'transactionReference' => $transactionRef
         ));
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Capture should succeed');
+
+        // Void
+        $request = $this->gateway->void(array(
+            'transactionReference' => $transactionRef
+        ));
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Void should succeed');
+    }
+
+    public function testPurchaseRefundAutoVoid()
+    {
+        // Purchase
+        $request = $this->gateway->purchase(array(
+            'amount' => 10.01,
+            'card' => $this->getValidCard()
+        ));
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Purchase should succeed');
+        $transactionRef = $response->getTransactionReference();
+
+        // Refund (should fail)
+        $request = $this->gateway->refund(array(
+            'transactionReference' => $transactionRef,
+            'amount' => 10.01
+        ));
+        $response = $request->send();
+        $this->assertFalse($response->isSuccessful(), 'Refund should fail since the transaction has not been settled');
+
+        // Refund with auto-void
+        $request = $this->gateway->refund(array(
+            'transactionReference' => $transactionRef,
+            'amount' => 10.01,
+            'voidIfRefundFails' => true
+        ));
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Automatic void should succeed');
     }
 }

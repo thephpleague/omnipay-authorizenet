@@ -10,7 +10,7 @@ class CIMGetProfileResponse extends CIMCreatePaymentProfileResponse
     const ERROR_DUPLICATE_PROFILE = 'E00039';
     const ERROR_MAX_PAYMENT_PROFILE_LIMIT_REACHED = 'E00042';
 
-    protected $xmlRootElement = 'getCustomerProfileResponse';
+    protected $responseType = 'getCustomerProfileResponse';
 
     /**
      * Get the payment profile id corresponding to the specified last4 by looking into the payment profiles

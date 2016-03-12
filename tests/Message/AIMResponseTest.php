@@ -6,11 +6,19 @@ use Omnipay\Tests\TestCase;
 
 class AIMResponseTest extends TestCase
 {
-    /**
-     * @expectedException Omnipay\Common\Exception\InvalidResponseException
-     */
+    private $mockRequest;
+
+    public function getMockRequest($className = '\Omnipay\AuthorizeNet\Message\AIMAbstractRequest')
+    {
+        if (null === $this->mockRequest) {
+            $this->mockRequest = \Mockery::mock($className);
+        }
+        return $this->mockRequest;
+    }
+
     public function testConstructEmpty()
     {
+        $this->setExpectedException('\Omnipay\Common\Exception\InvalidResponseException');
         new AIMResponse($this->getMockRequest(), '');
     }
 
@@ -20,7 +28,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2184493132', $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"GA4OQP","transId":"2184493132"}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame(1, $response->getResultCode());
         $this->assertSame(1, $response->getReasonCode());
@@ -34,7 +42,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(5, $response->getReasonCode());
@@ -48,7 +56,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2184494531', $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"F51OYG","transId":"2184494531"}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame(1, $response->getResultCode());
         $this->assertSame(1, $response->getReasonCode());
@@ -62,7 +70,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('The transaction cannot be found.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(16, $response->getReasonCode());
@@ -76,7 +84,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2184492509', $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"JE6JM1","transId":"2184492509"}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame(1, $response->getResultCode());
         $this->assertSame(1, $response->getReasonCode());
@@ -90,7 +98,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(5, $response->getReasonCode());
@@ -105,7 +113,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2217770693', $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"2217770693"}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
         $this->assertSame(1, $response->getResultCode());
         $this->assertSame(1, $response->getReasonCode());
@@ -118,7 +126,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('The referenced transaction does not meet the criteria for issuing a credit.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(54, $response->getReasonCode());

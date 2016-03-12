@@ -7,9 +7,29 @@ namespace Omnipay\AuthorizeNet\Message;
  */
 abstract class CIMAbstractRequest extends AIMAbstractRequest
 {
-    protected $xmlRootElement = null;
+    const VALIDATION_MODE_TEST = 'testMode';
+    const VALIDATION_MODE_LIVE = 'liveMode';
+    const VALIDATION_MODE_NONE = 'none';
 
-    // Need the below setters and getters for accessing this data within createCardRequest.send
+    protected function addTransactionType(\SimpleXMLElement $data)
+    {
+        // Do nothing since customer profile requests have no transaction type
+    }
+
+    public function setValidationMode($value)
+    {
+        return $this->setParameter('validationMode', $value);
+    }
+
+    public function getValidationMode()
+    {
+        $validationMode = $this->getParameter('validationMode');
+        if ($validationMode !== self::VALIDATION_MODE_NONE) {
+            $validationMode = $this->getDeveloperMode() ? self::VALIDATION_MODE_TEST : self::VALIDATION_MODE_LIVE;
+        }
+        return $validationMode;
+    }
+
     public function setEmail($value)
     {
         return $this->setParameter('email', $value);
@@ -75,23 +95,6 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
     public function getDefaultBillTo()
     {
         return $this->getParameter('defaultBillTo');
-    }
-
-    /**
-     * Create and return the base XML data required to create a new request
-     *
-     * @return mixed|\SimpleXMLElement
-     */
-    public function getBaseData()
-    {
-        $data = new \SimpleXMLElement("<" . $this->xmlRootElement . "/>");
-        $data->addAttribute('xmlns', 'AnetApi/xml/v1/schema/AnetApiSchema.xsd');
-
-        // Credentials
-        $data->merchantAuthentication->name = $this->getApiLoginId();
-        $data->merchantAuthentication->transactionKey = $this->getTransactionKey();
-
-        return $data;
     }
 
     public function sendData($data)

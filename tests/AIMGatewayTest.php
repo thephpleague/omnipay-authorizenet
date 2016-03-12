@@ -40,6 +40,11 @@ class AIMGatewayTest extends GatewayTestCase
         );
     }
 
+    private function getExpiry($card)
+    {
+        return str_pad($card['expiryMonth'] . $card['expiryYear'], 6, '0', STR_PAD_LEFT);
+    }
+
     public function testAuthorizeSuccess()
     {
         $this->setMockHttpResponse('AIMAuthorizeSuccess.txt');
@@ -47,7 +52,11 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->authorize($this->purchaseOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2184493132', $response->getTransactionReference());
+        $expiry = $this->getExpiry($this->purchaseOptions['card']);
+        $this->assertSame(
+            '{"approvalCode":"GA4OQP","transId":"2184493132","card":{"number":"1111","expiry":"' . $expiry . '"}}',
+            $response->getTransactionReference(),
+            'should return complex key as transaction reference');
         $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
@@ -58,7 +67,7 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->authorize($this->purchaseOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
     }
 
@@ -69,7 +78,7 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->capture($this->captureOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2184494531', $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"F51OYG","transId":"2184494531"}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
@@ -80,7 +89,7 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->capture($this->captureOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('The transaction cannot be found.', $response->getMessage());
     }
 
@@ -91,7 +100,8 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->purchase($this->purchaseOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2184492509', $response->getTransactionReference());
+        $expiry = $this->getExpiry($this->purchaseOptions['card']);
+        $this->assertSame('{"approvalCode":"JE6JM1","transId":"2184492509","card":{"number":"1111","expiry":"' . $expiry . '"}}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
@@ -102,7 +112,7 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->purchase($this->purchaseOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
     }
 
@@ -113,8 +123,8 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->void($this->voidOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
-        $this->assertSame('This transaction has already been voided.', $response->getMessage());
+        $this->assertSame('{"approvalCode":"ZJ5XAB","transId":"2252805912"}', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
     public function testVoidFailure()
@@ -124,8 +134,8 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->void($this->voidOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
-        $this->assertSame('A valid referenced transaction ID is required.', $response->getMessage());
+        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('The transaction cannot be found.', $response->getMessage());
     }
 
     public function testRefundSuccess()
@@ -135,7 +145,8 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->refund($this->refundOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('2217770693', $response->getTransactionReference());
+        $expiry = $this->getExpiry($this->refundOptions['card']);
+        $this->assertSame('{"approvalCode":"","transId":"2217770693","card":{"number":"1111","expiry":"' . $expiry . '"}}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
@@ -146,7 +157,7 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->refund($this->refundOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('0', $response->getTransactionReference());
+        $this->assertNull($response->getTransactionReference());
         $this->assertSame('The referenced transaction does not meet the criteria for issuing a credit.', $response->getMessage());
     }
 }
