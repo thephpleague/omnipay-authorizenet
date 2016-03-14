@@ -21,7 +21,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
 
         $data = $this->getBaseData();
         $this->addProfileData($data);
-        $this->addTestModeSetting($data);
+        $this->addTransactionSettings($data);
 
         return $data;
     }
@@ -143,7 +143,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         }
     }
 
-    protected function addTestModeSetting(\SimpleXMLElement $data)
+    protected function addTransactionSettings(\SimpleXMLElement $data)
     {
         $data->validationMode = $this->getValidationMode();
     }

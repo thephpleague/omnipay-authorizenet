@@ -16,8 +16,7 @@ class CIMAuthorizeRequestTest extends TestCase
             array(
                 'cardReference' => '{"customerProfileId":"28972085","customerPaymentProfileId":"26317841","customerShippingAddressId":"27057151"}',
                 'amount' => '12.00',
-                'description' => 'Test authorize transaction',
-                'duplicateWindow' => '0'
+                'description' => 'Test authorize transaction'
             )
         );
     }
@@ -31,11 +30,5 @@ class CIMAuthorizeRequestTest extends TestCase
         $this->assertEquals('26317841', $data->transactionRequest->profile->paymentProfile->paymentProfileId);
         $this->assertEquals('27057151', $data->transactionRequest->profile->shippingProfileId);
         $this->assertEquals('Test authorize transaction', $data->transactionRequest->order->description);
-    }
-
-    public function testShouldReturnExtraOptionsToDisableDuplicateWindowPeriod()
-    {
-        $data = $this->request->getData();
-        $this->assertEquals('x_duplicate_window=0', strip_tags($data->extraOptions));
     }
 }

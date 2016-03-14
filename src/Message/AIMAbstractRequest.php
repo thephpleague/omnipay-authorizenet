@@ -72,7 +72,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
 
     private function getDuplicateWindow()
     {
-        return $this->getParameter('duplicateWindow'); // Maps x_duplicate_window
+        return $this->getParameter('duplicateWindow');
     }
 
     public function getLiveEndpoint()
@@ -235,24 +235,21 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $data;
     }
 
-    protected function addTestModeSetting(\SimpleXMLElement $data)
+    protected function addTransactionSettings(\SimpleXMLElement $data)
     {
-        // Test mode setting
-        $data->transactionRequest->transactionSettings->setting->settingName = 'testRequest';
-        $data->transactionRequest->transactionSettings->setting->settingValue = $this->getTestMode() ? 'true' : 'false';
+        $i = 0;
 
-        return $data;
-    }
+        // The test mode setting indicates whether or not this is a live request or a test request
+        $data->transactionRequest->transactionSettings->setting[$i]->settingName = 'testRequest';
+        $data->transactionRequest->transactionSettings->setting[$i]->settingValue = $this->getTestMode() ? 'true' : 'false';
 
-    protected function addExtraOptions(\SimpleXMLElement $data)
-    {
+        // The duplicate window setting specifies the threshold for AuthorizeNet's duplicate transaction detection logic
         if (!is_null($this->getDuplicateWindow())) {
-            $extraOptions = $data->addChild('extraOptions');
-            $node = dom_import_simplexml($extraOptions);
-            $nodeOwner = $node->ownerDocument;
-            $duplicateWindowStr = sprintf("x_duplicate_window=%s", $this->getDuplicateWindow());
-            $node->appendChild($nodeOwner->createCDATASection($duplicateWindowStr));
+            $i++;
+            $data->transactionRequest->transactionSettings->setting[$i]->settingName = 'duplicateWindow';
+            $data->transactionRequest->transactionSettings->setting[$i]->settingValue = $this->getDuplicateWindow();
         }
+
         return $data;
     }
 }

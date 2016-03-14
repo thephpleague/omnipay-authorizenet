@@ -87,6 +87,16 @@ class AIMGateway extends AbstractGateway
         return $this->setParameter('developerEndpoint', $value);
     }
 
+    public function getDuplicateWindow()
+    {
+        return $this->getParameter('duplicateWindow');
+    }
+
+    public function setDuplicateWindow($value)
+    {
+        return $this->setParameter('duplicateWindow', $value);
+    }
+
     /**
      * @param array $parameters
      * @return AIMAuthorizeRequest

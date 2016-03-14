@@ -19,8 +19,7 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $this->addPayment($data);
         $this->addCustomerIP($data);
         $this->addBillingData($data);
-        $this->addTestModeSetting($data);
-        $this->addExtraOptions($data);
+        $this->addTransactionSettings($data);
 
         return $data;
     }

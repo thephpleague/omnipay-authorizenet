@@ -44,7 +44,7 @@ class AIMRefundRequest extends AIMAbstractRequest
         }
         $data->transactionRequest->refTransId = $transactionRef->getTransId();
 
-        $this->addTestModeSetting($data);
+        $this->addTransactionSettings($data);
 
         return $data;
     }

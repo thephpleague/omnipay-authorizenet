@@ -47,9 +47,11 @@ class AIMAuthorizeRequestTest extends TestCase
         $this->assertEquals('true', $setting->settingValue);
     }
 
-    public function testShouldReturnExtraOptionsToDisableDuplicateWindowPeriod()
+    public function testShouldIncludeDuplicateWindowSetting()
     {
         $data = $this->request->getData();
-        $this->assertEquals('x_duplicate_window=0', strip_tags($data->extraOptions));
+        $setting = $data->transactionRequest->transactionSettings->setting[1];
+        $this->assertEquals('duplicateWindow', $setting->settingName);
+        $this->assertEquals('0', $setting->settingValue);
     }
 }
