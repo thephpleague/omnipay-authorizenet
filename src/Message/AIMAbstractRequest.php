@@ -241,7 +241,9 @@ abstract class AIMAbstractRequest extends AbstractRequest
 
         // The test mode setting indicates whether or not this is a live request or a test request
         $data->transactionRequest->transactionSettings->setting[$i]->settingName = 'testRequest';
-        $data->transactionRequest->transactionSettings->setting[$i]->settingValue = $this->getTestMode() ? 'true' : 'false';
+        $data->transactionRequest->transactionSettings->setting[$i]->settingValue = $this->getTestMode()
+            ? 'true'
+            : 'false';
 
         // The duplicate window setting specifies the threshold for AuthorizeNet's duplicate transaction detection logic
         if (!is_null($this->getDuplicateWindow())) {
