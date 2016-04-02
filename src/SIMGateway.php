@@ -15,7 +15,11 @@ class SIMGateway extends AIMGateway
     public function getDefaultParameters()
     {
         $parameters = parent::getDefaultParameters();
-        $parameters['hashSecret'] = '';
+        $parameters = array_merge($parameters, array(
+            'hashSecret' => '',
+            'liveEndpoint' => 'https://secure2.authorize.net/gateway/transact.dll',
+            'developerEndpoint' => 'https://test.authorize.net/gateway/transact.dll'
+        ));
         return $parameters;
     }
 

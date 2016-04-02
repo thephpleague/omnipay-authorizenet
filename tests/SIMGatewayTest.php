@@ -24,6 +24,22 @@ class SIMGatewayTest extends GatewayTestCase
         );
     }
 
+    public function testLiveEndpoint()
+    {
+        $this->assertEquals(
+            'https://secure2.authorize.net/gateway/transact.dll',
+            $this->gateway->getLiveEndpoint()
+        );
+    }
+
+    public function testDeveloperEndpoint()
+    {
+        $this->assertEquals(
+            'https://test.authorize.net/gateway/transact.dll',
+            $this->gateway->getDeveloperEndpoint()
+        );
+    }
+
     public function testAuthorize()
     {
         $response = $this->gateway->authorize($this->options)->send();

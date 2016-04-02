@@ -40,6 +40,22 @@ class AIMGatewayTest extends GatewayTestCase
         );
     }
 
+    public function testLiveEndpoint()
+    {
+        $this->assertEquals(
+            'https://api.authorize.net/xml/v1/request.api',
+            $this->gateway->getLiveEndpoint()
+        );
+    }
+
+    public function testDeveloperEndpoint()
+    {
+        $this->assertEquals(
+            'https://apitest.authorize.net/xml/v1/request.api',
+            $this->gateway->getDeveloperEndpoint()
+        );
+    }
+
     private function getExpiry($card)
     {
         return str_pad($card['expiryMonth'] . $card['expiryYear'], 6, '0', STR_PAD_LEFT);

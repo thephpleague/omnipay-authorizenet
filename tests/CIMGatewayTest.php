@@ -46,6 +46,22 @@ class CIMGatewayTest extends GatewayTestCase
         );
     }
 
+    public function testLiveEndpoint()
+    {
+        $this->assertEquals(
+            'https://api.authorize.net/xml/v1/request.api',
+            $this->gateway->getLiveEndpoint()
+        );
+    }
+
+    public function testDeveloperEndpoint()
+    {
+        $this->assertEquals(
+            'https://apitest.authorize.net/xml/v1/request.api',
+            $this->gateway->getDeveloperEndpoint()
+        );
+    }
+
     public function testCreateCardSuccess()
     {
         $this->setMockHttpResponse(array('CIMCreateCardSuccess.txt','CIMGetPaymentProfileSuccess.txt'));
