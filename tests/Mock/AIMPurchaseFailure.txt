@@ -1,11 +1,13 @@
 HTTP/1.1 200 OK
-Connection: close
-Date: Sat, 16 Feb 2013 04:00:47 GMT
+Date: Sat, 02 Aug 2014 04:53:02 GMT
 Server: Microsoft-IIS/6.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Headers: x-requested-with, cache-control, content-type, origin, method
 X-Powered-By: ASP.NET
-Content-Type: text/html
-Content-Length: 323
-Cache-Control: private, must-revalidate, max-age=0
-Expires: Tue, 01 Jan 1980 00:00:00 GMT
+X-AspNet-Version: 2.0.50727
+Cache-Control: private
+Content-Type: text/xml; charset=utf-8
+Content-Length: 842
 
-|3|,|1|,|5|,|A valid amount is required.|,||,|P|,|0|,|12345|,|first purchase|,|-0.01|,|CC|,|auth_capture|,||,|fds|,|fds|,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,|3EB992D927587B9FC7A3D83F651CD7EF|,||,||,||,||,||,||,||,||,||,||,||,||,|XXXX1111|,|Visa|,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||,||
+<?xml version="1.0" encoding="utf-8"?><createTransactionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><refId>1234</refId><messages><resultCode>Error</resultCode><message><code>E00027</code><text>The transaction was unsuccessful.</text></message></messages><transactionResponse><responseCode>3</responseCode><authCode /><avsResultCode>P</avsResultCode><cvvResultCode /><cavvResultCode /><transId>0</transId><refTransID /><transHash>A6E047D5E58293477044C2F7EC8DF728</transHash><testRequest>0</testRequest><accountNumber>XXXX1111</accountNumber><accountType>Visa</accountType><errors><error><errorCode>5</errorCode><errorText>A valid amount is required.</errorText></error></errors></transactionResponse></createTransactionResponse>

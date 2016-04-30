@@ -5,7 +5,7 @@ namespace Omnipay\AuthorizeNet\Message;
 /**
  * Authorize.Net Capture Request
  */
-class CaptureRequest extends AbstractRequest
+class SIMCaptureRequest extends SIMAbstractRequest
 {
     protected $action = 'PRIOR_AUTH_CAPTURE';
 

@@ -2,6 +2,11 @@
 
 namespace Omnipay\AuthorizeNet;
 
+use Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest;
+use Omnipay\AuthorizeNet\Message\AIMCaptureRequest;
+use Omnipay\AuthorizeNet\Message\AIMPurchaseRequest;
+use Omnipay\AuthorizeNet\Message\AIMRefundRequest;
+use Omnipay\AuthorizeNet\Message\AIMVoidRequest;
 use Omnipay\Common\AbstractGateway;
 
 /**
@@ -21,8 +26,8 @@ class AIMGateway extends AbstractGateway
             'transactionKey'    => '',
             'testMode'          => false,
             'developerMode'     => false,
-            'liveEndpoint'      => 'https://secure2.authorize.net/gateway/transact.dll',
-            'developerEndpoint' => 'https://test.authorize.net/gateway/transact.dll',
+            'liveEndpoint'      => 'https://api.authorize.net/xml/v1/request.api',
+            'developerEndpoint' => 'https://apitest.authorize.net/xml/v1/request.api',
         );
     }
 
@@ -82,26 +87,56 @@ class AIMGateway extends AbstractGateway
         return $this->setParameter('developerEndpoint', $value);
     }
 
+    public function getDuplicateWindow()
+    {
+        return $this->getParameter('duplicateWindow');
+    }
+
+    public function setDuplicateWindow($value)
+    {
+        return $this->setParameter('duplicateWindow', $value);
+    }
+
+    /**
+     * @param array $parameters
+     * @return AIMAuthorizeRequest
+     */
     public function authorize(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return AIMCaptureRequest
+     */
     public function capture(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\CaptureRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMCaptureRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return AIMPurchaseRequest
+     */
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMPurchaseRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return AIMVoidRequest
+     */
     public function void(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMVoidRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return AIMRefundRequest
+     */
     public function refund(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMRefundRequest', $parameters);

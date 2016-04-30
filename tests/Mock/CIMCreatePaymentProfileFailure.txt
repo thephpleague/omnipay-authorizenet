@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Cache-Control: private
+Content-Length: 746
+Content-Type: text/xml;
+charset=utf-8
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 2.0.50727
+X-Powered-By: ASP.NET
+Access-Control-Allow-Headers: x-requested-with,cache-control,content-type,origin,method
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Date: Thu, 18 Sep 2014 03:59:27 GMT
+
+<?xml version="1.0" encoding="utf-8"?><createCustomerPaymentProfileResponse><messages><resultCode>Error</resultCode><message><code>E00039</code><text>A duplicate customer payment profile already exists.</text></message></messages><validationDirectResponse>1,1,1,(TESTMODE) This transaction has been approved.,000000,P,0,none,Test transaction for ValidateCustomerPaymentProfile.,1.00,CC,auth_only,none,,,,,,,12345,,,,email@example.com,,,,,,,,,0.00,0.00,0.00,FALSE,none,9ACE39F249AB996589D58E6FCCCFFFA3,,,,,,,,,,,,,XXXX8888,Visa,,,,,,,,,,,,,,,,</validationDirectResponse></createCustomerPaymentProfileResponse>

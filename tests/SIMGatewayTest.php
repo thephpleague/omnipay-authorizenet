@@ -6,6 +6,9 @@ use Omnipay\Tests\GatewayTestCase;
 
 class SIMGatewayTest extends GatewayTestCase
 {
+    /** @var SIMGateway */
+    protected $gateway;
+
     public function setUp()
     {
         parent::setUp();
@@ -18,6 +21,22 @@ class SIMGatewayTest extends GatewayTestCase
             'amount' => '10.00',
             'transactionId' => '99',
             'returnUrl' => 'https://www.example.com/return',
+        );
+    }
+
+    public function testLiveEndpoint()
+    {
+        $this->assertEquals(
+            'https://secure2.authorize.net/gateway/transact.dll',
+            $this->gateway->getLiveEndpoint()
+        );
+    }
+
+    public function testDeveloperEndpoint()
+    {
+        $this->assertEquals(
+            'https://test.authorize.net/gateway/transact.dll',
+            $this->gateway->getDeveloperEndpoint()
         );
     }
 

@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Cache-Control: private
+Content-Length: 746
+Content-Type: text/xml;
+charset=utf-8
+Server: Microsoft-IIS/7.5
+X-AspNet-Version: 2.0.50727
+X-Powered-By: ASP.NET
+Access-Control-Allow-Headers: x-requested-with,cache-control,content-type,origin,method
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Date: Thu, 18 Sep 2014 03:59:27 GMT
+
+<?xml version="1.0" encoding="utf-8"?><getCustomerProfileResponse><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><profile><email>kaylee@serenity.com</email><customerProfileId>28775801</customerProfileId><paymentProfiles><billTo><firstName /><lastName /><company /><address /><city /><state /><zip>12345</zip><country /></billTo><customerPaymentProfileId>26455656</customerPaymentProfileId><payment><creditCard><cardNumber>XXXX1111</cardNumber><expirationDate>XXXX</expirationDate></creditCard></payment></paymentProfiles><paymentProfiles><billTo><firstName /><lastName /><company /><address /><city /><state /><zip>12345</zip><country /></billTo><customerPaymentProfileId>26455709</customerPaymentProfileId><payment><creditCard><cardNumber>XXXX8888</cardNumber><expirationDate>XXXX</expirationDate></creditCard></payment></paymentProfiles></profile></getCustomerProfileResponse>

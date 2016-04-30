@@ -2,166 +2,143 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Omnipay\Common\Message\AbstractResponse;
-use Omnipay\Common\Message\RequestInterface;
+use Omnipay\AuthorizeNet\Model\CardReference;
+use Omnipay\AuthorizeNet\Model\TransactionReference;
 use Omnipay\Common\Exception\InvalidResponseException;
+use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\Common\Message\AbstractResponse;
 
 /**
  * Authorize.Net AIM Response
  */
 class AIMResponse extends AbstractResponse
 {
-    public function __construct(RequestInterface $request, $data)
+    /**
+     * For Error codes: @see https://developer.authorize.net/api/reference/responseCodes.html
+     */
+    const ERROR_RESPONSE_CODE_CANNOT_ISSUE_CREDIT = 54;
+
+    public function __construct(AbstractRequest $request, $data)
     {
-        $this->request = $request;
-        $rawFields = substr($data, 1, - 1);
-        if ($rawFields !== false) {
-            $temp = explode('|,|', $rawFields);
-        } else {
-            $temp = array();
-        }
+        // Strip out the xmlns junk so that PHP can parse the XML
+        $xml = preg_replace('/<createTransactionResponse[^>]+>/', '<createTransactionResponse>', (string)$data);
 
-        $response_fields = array(
-            'Response Code',
-            'Response Subcode',
-            'Response Reason Code',
-            'Response Reason Text',
-            'Authorization Code',
-            'AVS Response',
-            'Transaction ID',
-            'Invoice Number',
-            'Description',
-            'Amount',
-            'Method',
-            'Transaction Type',
-            'Customer ID',
-            'First Name',
-            'Last Name',
-            'Company',
-            'Address',
-            'City',
-            'State',
-            'ZIP Code',
-            'Country',
-            'Phone',
-            'Fax',
-            'Email Address',
-            'Ship To First Name',
-            'Ship To Last Name',
-            'Ship To Company',
-            'Ship To Address',
-            'Ship To City',
-            'Ship To State',
-            'Ship To ZIP Code',
-            'Ship To Country',
-            'Tax',
-            'Duty',
-            'Freight',
-            'Tax Exempt',
-            'Purchase Order Number',
-            'MD5 Hash',
-            'Card Code Response',
-            'Cardholder Authentication Verification Response',
-            'Account Number',
-            'Card Type',
-            'Split Tender ID',
-            'Requested Amount',
-            'Balance On Card'
-        );
-
-        $response = array();
-
-        foreach ($response_fields as $field) {
-            $responseField = array_shift($temp);
-            if (!is_null($responseField)) {
-                $response[$field] = $responseField;
-            }
-        }
-
-        $response_codes = array(
-            1 => 'Approved',
-            2 => 'Declined',
-            3 => 'Error',
-            4 => 'Held for Review'
-        );
-
-        $avs_response_codes = array(
-            'A' => 'Address (Street) matches, ZIP does not',
-            'B' => 'Address information not provided for AVS check',
-            'E' => 'AVS error',
-            'G' => 'Non-U.S. Card Issuing Bank',
-            'N' => 'No Match on Address (Street) or ZIP',
-            'P' => 'AVS not applicable for this transaction',
-            'R' => 'Retry?System unavailable or timed out',
-            'S' => 'Service not supported by issuer',
-            'U' => 'Address information is unavailable',
-            'W' => 'Nine digit ZIP matches, Address (Street) does not',
-            'X' => 'Address (Street) and nine digit ZIP match',
-            'Y' => 'Address (Street) and five digit ZIP match',
-            'Z' => 'Five digit ZIP matches, Address (Street) does not'
-        );
-
-        if (isset($response['Response Code']) && isset($response_codes[$response['Response Code']])) {
-            $response['Response Code Message'] = $response_codes[$response['Response Code']];
-        } else {
-            $response['Response Code Message'] = null;
-        }
-
-        if (isset($response['AVS Response']) && isset($avs_response_codes[$response['AVS Response']])) {
-            $response['AVS Response Message'] = $avs_response_codes[$response['AVS Response']];
-        } else {
-            $response['AVS Response Message'] = null;
-        }
-
-        $this->data = $response;
-
-        if (count($this->data) < 10) {
+        try {
+            $xml = simplexml_load_string($xml);
+        } catch (\Exception $e) {
             throw new InvalidResponseException();
         }
+
+        if (!$xml) {
+            throw new InvalidResponseException();
+        }
+
+        parent::__construct($request, $xml);
     }
 
     public function isSuccessful()
     {
-        return $this->getCodeMessage() == 'Approved';
+        return 1 === $this->getResultCode();
     }
 
-    public function getCode()
+    /**
+     * Overall status of the transaction. This field is also known as "Response Code" in Authorize.NET terminology.
+     *
+     * @return int 1 = Approved, 2 = Declined, 3 = Error, 4 = Held for Review
+     */
+    public function getResultCode()
     {
-        return $this->data['Response Code'];
+        return intval((string)$this->data->transactionResponse[0]->responseCode);
     }
 
-    public function getCodeMessage()
-    {
-        return $this->data['Response Code Message'];
-    }
-
+    /**
+     * A more detailed version of the Result/Response code.
+     *
+     * @return int|null
+     */
     public function getReasonCode()
     {
-        return $this->data['Response Reason Code'];
+        $code = null;
+
+        if (isset($this->data->transactionResponse[0]->messages)) {
+            // In case of a successful transaction, a "messages" element is present
+            $code = intval((string)$this->data->transactionResponse[0]->messages[0]->message[0]->code);
+
+        } elseif (isset($this->data->transactionResponse[0]->errors)) {
+            // In case of an unsuccessful transaction, an "errors" element is present
+            $code = intval((string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorCode);
+        }
+
+        return $code;
     }
 
+    /**
+     * Text description of the status.
+     *
+     * @return string|null
+     */
     public function getMessage()
     {
-        return $this->data['Response Reason Text'];
+        $message = null;
+
+        if (isset($this->data->transactionResponse[0]->messages)) {
+            // In case of a successful transaction, a "messages" element is present
+            $message = (string)$this->data->transactionResponse[0]->messages[0]->message[0]->description;
+
+        } elseif (isset($this->data->transactionResponse[0]->errors)) {
+            // In case of an unsuccessful transaction, an "errors" element is present
+            $message = (string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorText;
+        }
+
+        return $message;
     }
 
     public function getAuthorizationCode()
     {
-        return $this->data['Authorization Code'];
+        return (string)$this->data->transactionResponse[0]->authCode;
     }
 
+    /**
+     * Returns the Address Verification Service return code.
+     *
+     * @return string A single character. Can be A, B, E, G, N, P, R, S, U, X, Y, or Z.
+     */
     public function getAVSCode()
     {
-        return $this->data['AVS Response'];
+        return (string)$this->data->transactionResponse[0]->avsResultCode;
     }
 
-    public function getAVSCodeMessage()
+    /**
+     * A composite key containing the gateway provided transaction reference as well as other data points that may be
+     * required for subsequent transactions that may need to modify this one.
+     *
+     * @param bool $serialize Determines whether a string or object is returned
+     * @return TransactionReference|string
+     */
+    public function getTransactionReference($serialize = true)
     {
-        return $this->data['AVS Response Message'];
-    }
+        if ($this->isSuccessful()) {
+            $body = $this->data->transactionResponse[0];
+            $transactionRef = new TransactionReference();
+            $transactionRef->setApprovalCode((string)$body->authCode);
+            $transactionRef->setTransId((string)$body->transId);
 
-    public function getTransactionReference()
-    {
-        return $this->data['Transaction ID'];
+            try {
+                // Need to store card details in the transaction reference since it is required when doing a refund
+                if ($card = $this->request->getCard()) {
+                    $transactionRef->setCard(array(
+                        'number' => $card->getNumberLastFour(),
+                        'expiry' => $card->getExpiryDate('mY')
+                    ));
+                } elseif ($cardReference = $this->request->getCardReference()) {
+                    $transactionRef->setCardReference(new CardReference($cardReference));
+                }
+            } catch (\Exception $e) {
+            }
+
+            return $serialize ? (string)$transactionRef : $transactionRef;
+        }
+
+        return null;
     }
 }
