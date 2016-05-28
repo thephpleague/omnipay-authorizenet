@@ -17,8 +17,10 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $data = $this->getBaseData();
         $data->transactionRequest->amount = $this->getAmount();
         $this->addPayment($data);
-        $this->addCustomerIP($data);
         $this->addBillingData($data);
+        // CHECKME: is shipping data useful here?
+        //$this->addShippingData($data);
+        $this->addCustomerIP($data);
         $this->addTransactionSettings($data);
 
         return $data;
