@@ -31,6 +31,23 @@ class AIMAuthorizeRequestTest extends TestCase
         $this->assertEquals('10.0.0.1', $data->transactionRequest->customerIP);
         $this->assertEquals('cust-id', $data->transactionRequest->customer->id);
 
+        // Issue #38 Make sure the transactionRequest properties are correctly ordered.
+        // This feels messy, but works.
+        $transactionRequestProperties = array_keys(get_object_vars($data->transactionRequest));
+        // The names of the properies of the $data->transactionRequest object, in the order in
+        // which they must be defined for Authorize.Net to accept the transaction.
+        $keys = array(
+            "transactionType",
+            "amount",
+            "payment",
+            "customer",
+            "billTo",
+            "shipTo",
+            "customerIP",
+            "transactionSettings"
+        );
+        $this->assertEquals($keys, $transactionRequestProperties);
+
         $setting = $data->transactionRequest->transactionSettings->setting[0];
         $this->assertEquals('testRequest', $setting->settingName);
         $this->assertEquals('false', $setting->settingValue);
