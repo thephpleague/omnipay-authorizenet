@@ -53,6 +53,7 @@ class AIMResponse extends AbstractResponse
 
     /**
      * A more detailed version of the Result/Response code.
+     * CHECKME: the message and error codes are NOT numeric, so the intval() provably needs to be removed.
      *
      * @return int|null
      */
@@ -67,6 +68,10 @@ class AIMResponse extends AbstractResponse
         } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
             $code = intval((string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorCode);
+
+        } elseif (isset($this->data->messages[0]->message)) {
+            // In case of an unsuccessful authentication, the error will be in a different structure.
+            $code = (string)$this->data->messages[0]->message->code;
         }
 
         return $code;
@@ -88,6 +93,10 @@ class AIMResponse extends AbstractResponse
         } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
             $message = (string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorText;
+
+        } elseif (isset($this->data->messages[0]->message)) {
+            // In case of invalid authentication or incorrectly structured request message.
+            $message = (string)$this->data->messages[0]->message->text;
         }
 
         return $message;
