@@ -209,7 +209,9 @@ abstract class AIMAbstractRequest extends AbstractRequest
         if (!empty($customer)) {
             $req->customer->id = $customer;
         }
-
+        
+        $req->order->description = $this->getDescription();
+        
         /** @var CreditCard $card */
         if ($card = $this->getCard()) {
             // A card is present, so include billing and shipping details
