@@ -5,7 +5,7 @@ namespace Omnipay\AuthorizeNet\Message;
 /**
  * Request to delete a customer payment profile for an existing customer and existing payment profile.
  */
-class CIMDeletePaymentProfileRequest extends CIMCreatePaymentProfileRequest
+class CIMDeletePaymentProfileRequest extends CIMAbstractRequest
 {
     protected $requestType = 'deleteCustomerPaymentProfileRequest';
 
