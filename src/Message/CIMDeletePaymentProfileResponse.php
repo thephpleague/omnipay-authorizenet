@@ -8,5 +8,4 @@ namespace Omnipay\AuthorizeNet\Message;
 class CIMDeletePaymentProfileResponse extends CIMAbstractResponse
 {
     protected $responseType = 'deleteCustomerPaymentProfileResponse';
-
 }
