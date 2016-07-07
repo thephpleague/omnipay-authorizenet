@@ -39,6 +39,7 @@ class AIMAuthorizeRequestTest extends TestCase
         $keys = array(
             "transactionType",
             "amount",
+            "description",
             "payment",
             "customer",
             "billTo",
