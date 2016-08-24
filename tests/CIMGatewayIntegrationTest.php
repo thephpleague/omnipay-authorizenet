@@ -112,6 +112,41 @@ class CIMGatewayIntegrationTest extends TestCase
         );
     }
 
+    public function testPaymentProfileDelete()
+    {
+
+        // Create a customer profile with the specified email (email is the identifier) (to have a deletable payment profile)
+        $email = uniqid('', true) . '@example.com';
+        $cardRef = $this->createCard(array('email' => $email));
+        $cardRef = json_decode($cardRef,true);
+
+        //Delete the recently created payment profile (deletes the payment profile only, not the customer profile)
+        $params = array(
+            'customerProfileId' => $cardRef['customerProfileId'],
+            'customerPaymentProfileId' => $cardRef['customerPaymentProfileId']
+        );
+        $defaults = array(  );
+        $params = array_merge($defaults, $params);
+        $request = $this->gateway->deleteCard($params);
+        $request->setDeveloperMode(true);
+        /* @var $response CIMResponse */
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Should be successful as we have deleted a payment profile');
+
+        /* retrieve the recently deleted payment profile for the customer profile from authorize.net (returns NULL) */
+        $params = array(
+            'customerProfileId' => $cardRef['customerProfileId'],
+            'customerPaymentProfileId' => $cardRef['customerPaymentProfileId']
+        );
+        $defaults = array(  );
+        $params = array_merge($defaults, $params);
+        $request = $this->gateway->getPaymentProfile($params);
+        $request->setDeveloperMode(true);
+        /* @var $response CIMResponse */
+        $response = $request->send();
+        $this->assertNull($response->getCustomerPaymentProfileId(), 'Should be null as we have deleted that payment profile');
+    }
+
     public function testAuthorizeCapture()
     {
         $cardRef = $this->createCard();
