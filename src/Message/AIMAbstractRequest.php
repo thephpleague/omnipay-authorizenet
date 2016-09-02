@@ -221,6 +221,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
             $req->billTo->state = $card->getBillingState();
             $req->billTo->zip = $card->getBillingPostcode();
             $req->billTo->country = $card->getBillingCountry();
+            $req->billTo->phoneNumber = $card->getBillingPhone();
 
             $req->shipTo->firstName = $card->getShippingFirstName();
             $req->shipTo->lastName = $card->getShippingLastName();
