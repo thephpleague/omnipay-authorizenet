@@ -43,7 +43,7 @@ class AIMGatewayTest extends GatewayTestCase
     public function testLiveEndpoint()
     {
         $this->assertEquals(
-            'https://api.authorize.net/xml/v1/request.api',
+            'https://api2.authorize.net/xml/v1/request.api',
             $this->gateway->getLiveEndpoint()
         );
     }
