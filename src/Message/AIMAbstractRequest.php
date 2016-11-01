@@ -213,6 +213,8 @@ abstract class AIMAbstractRequest extends AbstractRequest
         /** @var CreditCard $card */
         if ($card = $this->getCard()) {
             // A card is present, so include billing and shipping details
+            $req->customer->email = $card->getEmail();
+            
             $req->billTo->firstName = $card->getBillingFirstName();
             $req->billTo->lastName = $card->getBillingLastName();
             $req->billTo->company = $card->getBillingCompany();
