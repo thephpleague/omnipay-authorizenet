@@ -24,9 +24,11 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
     public function getValidationMode()
     {
         $validationMode = $this->getParameter('validationMode');
+
         if ($validationMode !== self::VALIDATION_MODE_NONE) {
             $validationMode = $this->getDeveloperMode() ? self::VALIDATION_MODE_TEST : self::VALIDATION_MODE_LIVE;
         }
+
         return $validationMode;
     }
 
@@ -100,6 +102,7 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
     public function sendData($data)
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');
+
         $data = $data->saveXml();
         $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
 

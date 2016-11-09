@@ -15,10 +15,14 @@ class CIMAuthorizeRequest extends AIMAuthorizeRequest
 
         /** @var mixed $req */
         $req = $data->transactionRequest;
+
         /** @var CardReference $cardRef */
         $cardRef = $this->getCardReference(false);
+
         $req->profile->customerProfileId = $cardRef->getCustomerProfileId();
+
         $req->profile->paymentProfile->paymentProfileId = $cardRef->getPaymentProfileId();
+
         if ($shippingProfileId = $cardRef->getShippingProfileId()) {
             $req->profile->shippingProfileId = $shippingProfileId;
         }
