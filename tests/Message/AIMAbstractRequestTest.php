@@ -16,8 +16,8 @@ class AIMAbstractRequestTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->getMockForAbstractClass(
             '\Omnipay\AuthorizeNet\Message\AIMAbstractRequest',
             array(
-                $this->getMock('\Guzzle\Http\ClientInterface'),
-                $this->getMock('\Symfony\Component\HttpFoundation\Request')
+                $this->createMock('\Guzzle\Http\ClientInterface'),
+                $this->createMock('\Symfony\Component\HttpFoundation\Request')
             )
         );
     }
