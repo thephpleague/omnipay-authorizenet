@@ -12,12 +12,14 @@ class AIMAuthorizeRequestTest extends TestCase
     public function setUp()
     {
         $this->request = new AIMAuthorizeRequest($this->getHttpClient(), $this->getHttpRequest());
+        $card = $this->getValidCard();
+        $card['email'] = 'example@example.net';
         $this->request->initialize(
             array(
                 'clientIp' => '10.0.0.1',
                 'amount' => '12.00',
                 'customerId' => 'cust-id',
-                'card' => $this->getValidCard(),
+                'card' => $card,
                 'duplicateWindow' => 0
             )
         );
@@ -30,6 +32,7 @@ class AIMAuthorizeRequestTest extends TestCase
         $this->assertEquals('authOnlyTransaction', $data->transactionRequest->transactionType);
         $this->assertEquals('10.0.0.1', $data->transactionRequest->customerIP);
         $this->assertEquals('cust-id', $data->transactionRequest->customer->id);
+        $this->assertEquals('example@example.net', $data->transactionRequest->customer->email);
 
         // Issue #38 Make sure the transactionRequest properties are correctly ordered.
         // This feels messy, but works.
