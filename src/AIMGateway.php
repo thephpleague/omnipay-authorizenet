@@ -26,7 +26,7 @@ class AIMGateway extends AbstractGateway
             'transactionKey'    => '',
             'testMode'          => false,
             'developerMode'     => false,
-            'liveEndpoint'      => 'https://api.authorize.net/xml/v1/request.api',
+            'liveEndpoint'      => 'https://api2.authorize.net/xml/v1/request.api',
             'developerEndpoint' => 'https://apitest.authorize.net/xml/v1/request.api',
         );
     }
