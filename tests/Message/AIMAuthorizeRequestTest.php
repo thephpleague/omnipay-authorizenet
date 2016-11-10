@@ -43,6 +43,7 @@ class AIMAuthorizeRequestTest extends TestCase
             "transactionType",
             "amount",
             "payment",
+            "order",
             "customer",
             "billTo",
             "shipTo",

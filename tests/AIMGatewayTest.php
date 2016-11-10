@@ -22,21 +22,25 @@ class AIMGatewayTest extends GatewayTestCase
         $this->purchaseOptions = array(
             'amount' => '10.00',
             'card' => $this->getValidCard(),
+            'description' => 'purchase',
         );
 
         $this->captureOptions = array(
             'amount' => '10.00',
             'transactionReference' => '12345',
+            'description' => 'capture',
         );
 
         $this->voidOptions = array(
             'transactionReference' => '12345',
+            'description' => 'void',
         );
 
         $this->refundOptions = array(
             'amount' => '10.00',
             'transactionReference' => '12345',
-            'card' => $this->getValidCard()
+            'card' => $this->getValidCard(),
+            'description' => 'refund',
         );
     }
 
