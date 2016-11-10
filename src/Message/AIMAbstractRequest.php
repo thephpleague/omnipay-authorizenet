@@ -150,6 +150,16 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $value;
     }
 
+    public function getInvoiceNumber()
+    {
+        return $this->getParameter('invoiceNumber');
+    }
+
+    public function setInvoiceNumber($value)
+    {
+        return $this->setParameter('invoiceNumber', $value);
+    }
+
     public function sendData($data)
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');
@@ -213,13 +223,17 @@ abstract class AIMAbstractRequest extends AbstractRequest
         /** @var mixed $req */
         $req = $data->transactionRequest;
 
+        // The order must come before the customer ID.
+        $req->order->invoiceNumber = $this->getInvoiceNumber();
+        $req->order->description = $this->getDescription();
+
         // Merchant assigned customer ID
         $customer = $this->getCustomerId();
         if (!empty($customer)) {
             $req->customer->id = $customer;
         }
 
-        $req->order->description = $this->getDescription();
+        //$req->order->description = $this->getDescription();
 
         /** @var CreditCard $card */
         if ($card = $this->getCard()) {
