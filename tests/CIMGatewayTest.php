@@ -150,7 +150,8 @@ class CIMGatewayTest extends GatewayTestCase
         $this->setMockHttpResponse('AIMAuthorizeFailure.txt');
         $response = $this->gateway->authorize($this->authorizeOptions)->send();
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
+
+        $this->assertSame('{"approvalCode":"","transId":"0","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}', $response->getTransactionReference());
         $this->assertEquals("A valid amount is required.", $response->getMessage());
     }
 
@@ -172,7 +173,7 @@ class CIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->capture($this->captureOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertEquals(0, $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
         $this->assertSame('The transaction cannot be found.', $response->getMessage());
     }
 
@@ -194,7 +195,7 @@ class CIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->purchase($this->authorizeOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"0","cardReference":"{\"customerProfileId\":\"28972084\",\"customerPaymentProfileId\":\"26317840\",\"customerShippingAddressId\":\"27057149\"}"}', $response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
     }
 
@@ -216,7 +217,7 @@ class CIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->refund($this->refundOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertEquals(0, $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
         $this->assertSame(
             'The referenced transaction does not meet the criteria for issuing a credit.',
             $response->getMessage()

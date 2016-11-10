@@ -42,7 +42,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(5, $response->getReasonCode());
@@ -70,7 +70,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
         $this->assertSame('The transaction cannot be found.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(16, $response->getReasonCode());
@@ -98,7 +98,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
         $this->assertSame('A valid amount is required.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(5, $response->getReasonCode());
@@ -126,7 +126,7 @@ class AIMResponseTest extends TestCase
         $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertNull($response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
         $this->assertSame('The referenced transaction does not meet the criteria for issuing a credit.', $response->getMessage());
         $this->assertSame(3, $response->getResultCode());
         $this->assertSame(54, $response->getReasonCode());
