@@ -27,9 +27,14 @@ class CIMAuthorizeRequest extends AIMAuthorizeRequest
             $req->profile->shippingProfileId = $shippingProfileId;
         }
 
-        $desc = $this->getDescription();
-        if (!empty($desc)) {
-            $req->order->description = $desc;
+        $invoiceNumber = $this->getInvoiceNumber();
+        if (!empty($invoiceNumber)) {
+            $req->order->invoiceNumber = $invoiceNumber;
+        }
+
+        $description = $this->getDescription();
+        if (!empty($description)) {
+            $req->order->description = $description;
         }
 
         return $data;
