@@ -42,13 +42,22 @@ class AIMResponse extends AbstractResponse
     }
 
     /**
-     * Overall status of the transaction. This field is also known as "Response Code" in Authorize.NET terminology.
+     * Status of the transaction. This field is also known as "Response Code" in Authorize.NET terminology.
+     * A result of 0 is returned if there is no transaction response returned, e.g. a validation error in
+     * some data, or invalid login credentials.
      *
-     * @return int 1 = Approved, 2 = Declined, 3 = Error, 4 = Held for Review
+     * @return int 1 = Approved, 2 = Declined, 3 = Error, 4 = Held for Review, 0 = Validation Error
      */
     public function getResultCode()
     {
-        return intval((string)$this->data->transactionResponse[0]->responseCode);
+        // If there is a transaction response, then we get the code from that.
+        if (isset($this->data->transactionResponse[0])) {
+            return intval((string)$this->data->transactionResponse[0]->responseCode);
+        }
+
+        // No transaction response, so no transaction was attempted, hence no
+        // transaction response code that we can return.
+        return 0;
     }
 
     /**
@@ -62,11 +71,15 @@ class AIMResponse extends AbstractResponse
 
         if (isset($this->data->transactionResponse[0]->messages)) {
             // In case of a successful transaction, a "messages" element is present
-            $code = intval((string)$this->data->transactionResponse[0]->messages[0]->message[0]->code);
+            $code = intval((string)$this->data->transactionResponse[0]->messages[0]->message->code);
 
         } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
-            $code = intval((string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorCode);
+            $code = intval((string)$this->data->transactionResponse[0]->errors[0]->error->errorCode);
+
+        } elseif (isset($this->data->messages[0]->message)) {
+            // In case of invalid request, the top-level message provides details.
+            $code = (string)$this->data->messages[0]->message->code;
         }
 
         return $code;
@@ -83,11 +96,15 @@ class AIMResponse extends AbstractResponse
 
         if (isset($this->data->transactionResponse[0]->messages)) {
             // In case of a successful transaction, a "messages" element is present
-            $message = (string)$this->data->transactionResponse[0]->messages[0]->message[0]->description;
+            $message = (string)$this->data->transactionResponse[0]->messages[0]->message->description;
 
         } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
-            $message = (string)$this->data->transactionResponse[0]->errors[0]->error[0]->errorText;
+            $message = (string)$this->data->transactionResponse[0]->errors[0]->error->errorText;
+
+        } elseif (isset($this->data->messages[0]->message)) {
+            // In case of invalid request, the top-level message provides details.
+            $message = (string)$this->data->messages[0]->message->text;
         }
 
         return $message;
