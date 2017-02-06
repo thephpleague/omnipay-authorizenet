@@ -46,7 +46,7 @@ class AIMResponse extends AbstractResponse
      * A result of 0 is returned if there is no transaction response returned, e.g. a validation error in
      * some data, or invalid login credentials.
      *
-     * @return int 1 = Approved, 2 = Declined, 3 = Error, 4 = Held for Review, 0 = Validation Error
+     * @return int 1 = Approved, 2 = Declined, 3 = Error, 4 = Held for Review
      */
     public function getResultCode()
     {
@@ -55,9 +55,8 @@ class AIMResponse extends AbstractResponse
             return intval((string)$this->data->transactionResponse[0]->responseCode);
         }
 
-        // No transaction response, so no transaction was attempted, hence no
-        // transaction response code that we can return.
-        return 0;
+        // No transaction response, so return 3 aka "error".
+        return 3;
     }
 
     /**
