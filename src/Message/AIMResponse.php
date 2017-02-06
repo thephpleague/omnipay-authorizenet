@@ -18,6 +18,14 @@ class AIMResponse extends AbstractResponse
      */
     const ERROR_RESPONSE_CODE_CANNOT_ISSUE_CREDIT = 54;
 
+    /**
+     * The overall transaction result code.
+     */
+    const TRANSACTION_RESULT_CODE_APPROVED = 1;
+    const TRANSACTION_RESULT_CODE_DECLINED = 2;
+    const TRANSACTION_RESULT_CODE_ERROR    = 3;
+    const TRANSACTION_RESULT_CODE_REVIEW   = 4;
+
     public function __construct(AbstractRequest $request, $data)
     {
         // Strip out the xmlns junk so that PHP can parse the XML
@@ -38,7 +46,7 @@ class AIMResponse extends AbstractResponse
 
     public function isSuccessful()
     {
-        return 1 === $this->getResultCode();
+        return static::TRANSACTION_RESULT_CODE_APPROVED === $this->getResultCode();
     }
 
     /**
@@ -56,7 +64,7 @@ class AIMResponse extends AbstractResponse
         }
 
         // No transaction response, so return 3 aka "error".
-        return 3;
+        return static::TRANSACTION_RESULT_CODE_ERROR;
     }
 
     /**
@@ -111,7 +119,11 @@ class AIMResponse extends AbstractResponse
 
     public function getAuthorizationCode()
     {
-        return (string)$this->data->transactionResponse[0]->authCode;
+        if (isset($this->data->transactionResponse[0])) {
+            return (string)$this->data->transactionResponse[0]->authCode;
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -121,36 +133,48 @@ class AIMResponse extends AbstractResponse
      */
     public function getAVSCode()
     {
-        return (string)$this->data->transactionResponse[0]->avsResultCode;
+        if (isset($this->data->transactionResponse[0])) {
+            return (string)$this->data->transactionResponse[0]->avsResultCode;
+        } else {
+            return '';
+        }
     }
 
     /**
-     * A composite key containing the gateway provided transaction reference as well as other data points that may be
-     * required for subsequent transactions that may need to modify this one.
+     * A composite key containing the gateway provided transaction reference as
+     * well as other data points that may be required for subsequent transactions
+     * that may need to modify this one.
      *
      * @param bool $serialize Determines whether a string or object is returned
      * @return TransactionReference|string
      */
     public function getTransactionReference($serialize = true)
     {
-        $body = $this->data->transactionResponse[0];
-        $transactionRef = new TransactionReference();
-        $transactionRef->setApprovalCode((string)$body->authCode);
-        $transactionRef->setTransId((string)$body->transId);
+        // The transactionResponse is only returned if succesful or declined
+        // for some reason, so don't assume it will always be there.
 
-        try {
-            // Need to store card details in the transaction reference since it is required when doing a refund
-            if ($card = $this->request->getCard()) {
-                $transactionRef->setCard(array(
-                    'number' => $card->getNumberLastFour(),
-                    'expiry' => $card->getExpiryDate('mY')
-                ));
-            } elseif ($cardReference = $this->request->getCardReference()) {
-                $transactionRef->setCardReference(new CardReference($cardReference));
+        if (isset($this->data->transactionResponse[0])) {
+            $body = $this->data->transactionResponse[0];
+            $transactionRef = new TransactionReference();
+            $transactionRef->setApprovalCode((string)$body->authCode);
+            $transactionRef->setTransId((string)$body->transId);
+
+            try {
+                // Need to store card details in the transaction reference since it is required when doing a refund
+                if ($card = $this->request->getCard()) {
+                    $transactionRef->setCard(array(
+                        'number' => $card->getNumberLastFour(),
+                        'expiry' => $card->getExpiryDate('mY')
+                    ));
+                } elseif ($cardReference = $this->request->getCardReference()) {
+                    $transactionRef->setCardReference(new CardReference($cardReference));
+                }
+            } catch (\Exception $e) {
             }
-        } catch (\Exception $e) {
+
+            return $serialize ? (string)$transactionRef : $transactionRef;
         }
 
-        return $serialize ? (string)$transactionRef : $transactionRef;
+        return '';
     }
 }
