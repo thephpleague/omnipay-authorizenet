@@ -160,6 +160,10 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->setParameter('invoiceNumber', $value);
     }
 
+    /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @return string
+     */
     public function getOpaqueDataDescriptor()
     {
         return $this->getParameter('opaqueDataDescriptor')
@@ -167,6 +171,10 @@ abstract class AIMAbstractRequest extends AbstractRequest
             : $this->httpRequest->request->get('opaqueDataDescriptor');
     }
 
+    /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @return string
+     */
     public function getOpaqueDataValue()
     {
         return $this->getParameter('opaqueDataValue')
@@ -174,11 +182,21 @@ abstract class AIMAbstractRequest extends AbstractRequest
             : $this->httpRequest->request->get('opaqueDataValue');
     }
 
+    /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @param string
+     * @return string
+     */
     public function setOpaqueDataDescriptor($value)
     {
         return $this->setParameter('opaqueDataDescriptor', $value);
     }
 
+    /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @param string
+     * @return string
+     */
     public function setOpaqueDataValue($value)
     {
         return $this->setParameter('opaqueDataValue', $value);
