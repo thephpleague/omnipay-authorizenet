@@ -64,6 +64,16 @@ class AIMResponseTest extends TestCase
         $this->assertSame('', $response->getAVSCode());
     }
 
+    public function testAuthorizeInvalidOTSToken()
+    {
+        $httpResponse = $this->getMockHttpResponse('AIMAuthorizeInvalidOTSToken.txt');
+        $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertFalse($response->isSuccessful());
+        $this->assertSame('E00114', $response->getReasonCode());
+        $this->assertSame('Invalid OTS Token.', $response->getMessage());
+    }
+
     public function testCaptureSuccess()
     {
         $httpResponse = $this->getMockHttpResponse('AIMCaptureSuccess.txt');
