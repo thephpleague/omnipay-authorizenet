@@ -160,6 +160,30 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->setParameter('invoiceNumber', $value);
     }
 
+    public function getOpaqueDataDescriptor()
+    {
+        return $this->getParameter('opaqueDataDescriptor')
+            ? $this->getParameter('opaqueDataDescriptor')
+            : $this->httpRequest->request->get('opaqueDataDescriptor');
+    }
+
+    public function getOpaqueDataValue()
+    {
+        return $this->getParameter('opaqueDataValue')
+            ? $this->getParameter('opaqueDataValue')
+            : $this->httpRequest->request->get('opaqueDataValue');
+    }
+
+    public function setOpaqueDataDescriptor($value)
+    {
+        return $this->setParameter('opaqueDataDescriptor', $value);
+    }
+
+    public function setOpaqueDataValue($value)
+    {
+        return $this->setParameter('opaqueDataValue', $value);
+    }
+
     public function sendData($data)
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');

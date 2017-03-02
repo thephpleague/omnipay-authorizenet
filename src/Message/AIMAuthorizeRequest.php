@@ -26,6 +26,12 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
 
     protected function addPayment(\SimpleXMLElement $data)
     {
+        if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
+            $data->transactionRequest->payment->opaqueData->dataDescriptor = $this->getOpaqueDataDescriptor();
+            $data->transactionRequest->payment->opaqueData->dataValue = $this->getOpaqueDataValue();
+            return;
+        }
+
         $this->validate('card');
         /** @var CreditCard $card */
         $card = $this->getCard();
