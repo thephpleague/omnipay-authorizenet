@@ -68,6 +68,17 @@ class AIMAuthorizeRequestTest extends TestCase
         $this->assertEquals('true', $setting->settingValue);
     }
 
+    public function testGetDataOpaqueData()
+    {
+        $this->request->setOpaqueDataDescriptor('COMMON.ACCEPT.INAPP.PAYMENT');
+        $this->request->setOpaqueDataValue('jb2RlIjoiNTB');
+
+        $data = $this->request->getData();
+
+        $this->assertEquals('COMMON.ACCEPT.INAPP.PAYMENT', $data->transactionRequest->payment->opaqueData->dataDescriptor);
+        $this->assertEquals('jb2RlIjoiNTB', $data->transactionRequest->payment->opaqueData->dataValue);
+    }
+
     public function testShouldIncludeDuplicateWindowSetting()
     {
         $data = $this->request->getData();
