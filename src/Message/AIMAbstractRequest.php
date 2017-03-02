@@ -166,9 +166,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
      */
     public function getOpaqueDataDescriptor()
     {
-        return $this->getParameter('opaqueDataDescriptor')
-            ? $this->getParameter('opaqueDataDescriptor')
-            : $this->httpRequest->request->get('opaqueDataDescriptor');
+        return $this->getParameter('opaqueDataDescriptor');
     }
 
     /**
@@ -177,9 +175,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
      */
     public function getOpaqueDataValue()
     {
-        return $this->getParameter('opaqueDataValue')
-            ? $this->getParameter('opaqueDataValue')
-            : $this->httpRequest->request->get('opaqueDataValue');
+        return $this->getParameter('opaqueDataValue');
     }
 
     /**
