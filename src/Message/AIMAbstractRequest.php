@@ -60,6 +60,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
     {
         return $this->getParameter('hashSecret');
     }
+
     public function setHashSecret($value)
     {
         return $this->setParameter('hashSecret', $value);
