@@ -43,7 +43,7 @@ repository.
 
 ## Accept.JS
 
-This gateway uses a JacaScript script to tokenize credit card details at the front end,
+This gateway uses a JavaScript script to tokenize credit card details at the front end,
 i.e. in the payment form.
 Just the tokenized version of the credit card is then sent back to the merchant site,
 where it is used as a proxy for the credit card.
