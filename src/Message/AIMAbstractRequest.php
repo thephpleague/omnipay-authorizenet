@@ -107,7 +107,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
 
     public function setSolutionId($value)
     {
-        return $this->getSolutionId('solutionId', $value);
+        return $this->setParameter('solutionId', $value);
     }
 
     /**
