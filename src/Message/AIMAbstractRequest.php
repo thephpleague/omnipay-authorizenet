@@ -264,7 +264,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
         $solutionId = $this->getSolutionId();
 
         if (!empty($solutionId)) {
-            $data->solution->id = $solutionId;
+            $data->transactionRequest->solution->id = $solutionId;
         }
     }
 
