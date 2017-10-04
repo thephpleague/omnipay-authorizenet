@@ -230,7 +230,6 @@ abstract class AIMAbstractRequest extends AbstractRequest
         $this->addAuthentication($data);
         $this->addReferenceId($data);
         $this->addTransactionType($data);
-        $this->addSolutiuonId($data);
 
         return $data;
     }
@@ -260,7 +259,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
         $data->transactionRequest->transactionType = $this->action;
     }
 
-    protected function addSolutiuonId(\SimpleXMLElement $data)
+    protected function addSolutionId(\SimpleXMLElement $data)
     {
         $solutionId = $this->getSolutionId();
 
