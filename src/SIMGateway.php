@@ -53,16 +53,6 @@ class SIMGateway extends AIMGateway
         return $this->setParameter('developerMode', $value);
     }
 
-    public function getHashSecret()
-    {
-        return $this->getParameter('hashSecret');
-    }
-
-    public function setHashSecret($value)
-    {
-        return $this->setParameter('hashSecret', $value);
-    }
-
     public function authorize(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\AuthorizeNet\Message\SIMAuthorizeRequest', $parameters);

@@ -26,6 +26,7 @@ class AIMGateway extends AbstractGateway
             'transactionKey'    => '',
             'testMode'          => false,
             'developerMode'     => false,
+            'hashSecret'        => '',
             'liveEndpoint'      => 'https://api2.authorize.net/xml/v1/request.api',
             'developerEndpoint' => 'https://apitest.authorize.net/xml/v1/request.api',
         );
@@ -59,6 +60,16 @@ class AIMGateway extends AbstractGateway
     public function setDeveloperMode($value)
     {
         return $this->setParameter('developerMode', $value);
+    }
+
+    public function setHashSecret($value)
+    {
+        return $this->setParameter('hashSecret', $value);
+    }
+
+    public function getHashSecret()
+    {
+        return $this->getParameter('hashSecret');
     }
 
     public function setEndpoints($endpoints)
