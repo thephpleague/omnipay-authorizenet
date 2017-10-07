@@ -17,6 +17,7 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $data = $this->getBaseData();
         $data->transactionRequest->amount = $this->getAmount();
         $this->addPayment($data);
+        $this->addSolutionId($data);
         $this->addBillingData($data);
         $this->addCustomerIP($data);
         $this->addTransactionSettings($data);
