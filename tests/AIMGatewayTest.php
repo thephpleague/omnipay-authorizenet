@@ -19,6 +19,10 @@ class AIMGatewayTest extends GatewayTestCase
 
         $this->gateway = new AIMGateway($this->getHttpClient(), $this->getHttpRequest());
 
+        $this->gateway->initialize([
+            'hashSecret' => 'HASHYsecretyThang',
+        ]);
+
         $this->purchaseOptions = array(
             'amount' => '10.00',
             'card' => $this->getValidCard(),
@@ -57,6 +61,15 @@ class AIMGatewayTest extends GatewayTestCase
         $this->assertEquals(
             'https://apitest.authorize.net/xml/v1/request.api',
             $this->gateway->getDeveloperEndpoint()
+        );
+    }
+
+    // Added for PR #78
+    public function testHashSecret()
+    {
+        $this->assertEquals(
+            'HASHYsecretyThang',
+            $this->gateway->getHashSecret()
         );
     }
 
