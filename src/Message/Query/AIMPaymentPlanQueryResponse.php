@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNet\Message;
+namespace Omnipay\AuthorizeNet\Message\Query;
 
 use Omnipay\AuthorizeNet\Model\CardReference;
 use Omnipay\AuthorizeNet\Model\TransactionReference;
@@ -12,7 +12,7 @@ use Omnipay\Omnipay;
 /**
  * Authorize.Net AIM Response
  */
-class AIMPaymentPlanQueryResponse extends AbstractResponse
+class AIMPaymentPlanQueryResponse extends AbstractQueryResponse
 {
     protected $subscription;
     protected $profile;
@@ -68,8 +68,7 @@ class AIMPaymentPlanQueryResponse extends AbstractResponse
 
     public function getRecurReference()
     {
-        echo "he";
-        print_r($this->subscription);
+        return $this->subscription;
     }
 
     public function getContactReference()

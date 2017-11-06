@@ -161,7 +161,7 @@ class AIMGateway extends AbstractGateway
      */
     public function paymentPlansQuery(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMPaymentPlansQueryRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\Query\AIMPaymentPlansQueryRequest', $parameters);
     }
 
     /**
@@ -170,7 +170,7 @@ class AIMGateway extends AbstractGateway
      */
     public function paymentPlanQuery(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMPaymentPlanQueryRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\Query\AIMPaymentPlanQueryRequest', $parameters);
     }
 
     /**

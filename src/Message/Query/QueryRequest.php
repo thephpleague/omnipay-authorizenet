@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNet\Message;
+namespace Omnipay\AuthorizeNet\Message\Query;
 
 use Omnipay\Common\CreditCard;
 use Omnipay\Omnipay;

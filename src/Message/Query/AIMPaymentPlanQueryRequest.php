@@ -1,13 +1,13 @@
 <?php
 
-namespace Omnipay\AuthorizeNet\Message;
+namespace Omnipay\AuthorizeNet\Message\Query;
 
 use Omnipay\Common\CreditCard;
 
 /**
  * Authorize.Net AIM Authorize Request
  */
-class AIMPaymentPlanQueryRequest extends AIMAbstractRequest
+class AIMPaymentPlanQueryRequest extends AIMAbstractQueryRequest
 {
     protected $action = '';
     protected $requestType = 'ARBGetSubscriptionRequest';
@@ -27,46 +27,6 @@ class AIMPaymentPlanQueryRequest extends AIMAbstractRequest
     public function setRecurringReference($recurringReference)
     {
         $this->recurringReference = $recurringReference;
-    }
-
-    /**
-     * Get Limit.
-     *
-     * @return int
-     */
-    public function getLimit()
-    {
-        return $this->limit;
-    }
-
-    /**
-     * Set Limit.
-     *
-     * @param int $limit
-     */
-    public function setLimit($limit)
-    {
-        $this->limit = $limit;
-    }
-
-    /**
-     * Get offset.
-     *
-     * @return int
-     */
-    public function getOffset()
-    {
-        return $this->offset;
-    }
-
-    /**
-     * Set offset.
-     *
-     * @param int $offset
-     */
-    public function setOffset($offset)
-    {
-        $this->offset = $offset;
     }
 
     /**

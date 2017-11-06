@@ -1,16 +1,16 @@
 <?php
 
-namespace Omnipay\AuthorizeNet\Message;
+namespace Omnipay\AuthorizeNet\Message\Query;
 
 use Omnipay\Common\CreditCard;
 
 /**
  * Authorize.Net AIM Authorize Request
  */
-class QueryBatchRequest extends AIMAbstractRequest
+class AIMPaymentPlansQueryRequest extends AIMAbstractRequest
 {
     protected $action = '';
-    protected $requestType = 'getSettledBatchListRequest';
+    protected $requestType = 'ARBGetSubscriptionListRequest';
     protected $limit = 1000;
     protected $offset = 1;
 
@@ -25,41 +25,16 @@ class QueryBatchRequest extends AIMAbstractRequest
     }
 
     /**
-     * Set Limit.
-     *
-     * @param int $limit
-     */
-    public function setLimit($limit)
-    {
-        $this->limit = $limit;
-    }
-
-    /**
-     * Get offset.
-     *
-     * @return int
-     */
-    public function getOffset()
-    {
-        return $this->offset;
-    }
-
-    /**
-     * Set offset.
-     *
-     * @param int $offset
-     */
-    public function setOffset($offset)
-    {
-        $this->offset = $offset;
-    }
-
-    /**
      * Get data to send.
      */
     public function getData()
     {
         $data = $this->getBaseData();
+        $data->searchType = 'subscriptionActive';
+        $data->sorting->orderBy = 'id';
+        $data->sorting->orderDescending = true;
+        $data->paging->limit = $this->getLimit();
+        $data->paging->offset = $this->getOffset();
         return $data;
     }
 
@@ -73,6 +48,6 @@ class QueryBatchRequest extends AIMAbstractRequest
         $data = $data->saveXml();
         $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
 
-        return $this->response = new QueryBatchResponse($this, $httpResponse->getBody());
+        return $this->response = new AIMPaymentPlansQueryResponse($this, $httpResponse->getBody());
     }
 }

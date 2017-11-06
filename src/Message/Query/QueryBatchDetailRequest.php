@@ -1,6 +1,6 @@
 <?php
 
-namespace Omnipay\AuthorizeNet\Message;
+namespace Omnipay\AuthorizeNet\Message\Query;
 
 use Omnipay\Common\CreditCard;
 
@@ -14,46 +14,6 @@ class QueryBatchDetailRequest extends QueryBatchRequest
     protected $limit = 1000;
     protected $offset = 1;
     protected $batchID;
-
-    /**
-     * Get Limit.
-     *
-     * @return int
-     */
-    public function getLimit()
-    {
-        return $this->limit;
-    }
-
-    /**
-     * Set Limit.
-     *
-     * @param int $limit
-     */
-    public function setLimit($limit)
-    {
-        $this->limit = $limit;
-    }
-
-    /**
-     * Get offset.
-     *
-     * @return int
-     */
-    public function getOffset()
-    {
-        return $this->offset;
-    }
-
-    /**
-     * Set offset.
-     *
-     * @param int $offset
-     */
-    public function setOffset($offset)
-    {
-        $this->offset = $offset;
-    }
 
     /**
      * Get data to send.
