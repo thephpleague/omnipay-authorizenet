@@ -2,6 +2,8 @@
 
 namespace Omnipay\AuthorizeNet\Message\Query;
 
+use Omnipay\AuthorizeNet\Message\AIMAbstractRequest;
+
 /**
  * Authorize.Net AIM Abstract Request
  */
