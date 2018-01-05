@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Date: Sat, 02 Aug 2014 05:27:33 GMT
+Server: Microsoft-IIS/6.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Headers: x-requested-with, cache-control, content-type, origin, method
+X-Powered-By: ASP.NET
+X-AspNet-Version: 2.0.50727
+Cache-Control: private
+Content-Type: text/xml; charset=utf-8
+Content-Length: 868
+
+<?xml version="1.0" encoding="utf-8"?><createTransactionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><refId>123456</refId><messages><resultCode>Error</resultCode><message><code>E00027</code><text>The transaction was unsuccessful.</text></message></messages><transactionResponse><responseCode>2</responseCode><authCode></authCode><avsResultCode>P</avsResultCode><cvvResultCode /><cavvResultCode /><transId>0</transId><refTransID>2214480791</refTransID><transHash>492E8E689EBD28D07749848B7C1E49D3</transHash><accountNumber>XXXX0015</accountNumber><accountType>Mastercard</accountType><messages><message><code>2</code><description>This transaction has been declined.</description></message></messages></transactionResponse></createTransactionResponse>
