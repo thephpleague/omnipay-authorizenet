@@ -130,6 +130,15 @@ class AIMGateway extends AbstractGateway
 
     /**
      * @param array $parameters
+     * @return AIMCaptureOnlyRequest
+     */
+    public function captureOnly(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\AIMCaptureOnlyRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
      * @return AIMPurchaseRequest
      */
     public function purchase(array $parameters = array())
