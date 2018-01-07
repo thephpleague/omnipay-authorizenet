@@ -24,5 +24,5 @@ class AIMCaptureOnlyRequest extends AIMAuthorizeRequest
         $this->addTransactionSettings($data);
         
         return $data;
-           }
+    }
 }
