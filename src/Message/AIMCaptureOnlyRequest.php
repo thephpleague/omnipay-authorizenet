@@ -7,18 +7,15 @@ use Omnipay\Common\CreditCard;
 /**
  * Authorize.Net AIM Capture Only Request
  */
-class AIMCaptureOnlyRequest extends AIMAbstractRequest
+class AIMCaptureOnlyRequest extends AIMAuthorizeRequest
 {
     protected $action = 'captureOnlyTransaction';
 
     public function getData()
     {
-        $this->validate('amount');
+        $data = parent::getData();
 
-        $data = $this->getBaseData();
-        $data->transactionRequest->amount = $this->getAmount();
         $data->transactionRequest->authCode = $this->getAuthCode();
-        $this->addTransactionSettings($data);
 
         return $data;
     }
