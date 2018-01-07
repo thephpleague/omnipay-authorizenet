@@ -1,6 +1,6 @@
 <?php
 
-namespace OmnipayAuthorizeNet\Message;
+namespace Omnipay\AuthorizeNet\Message;
 
 use Omnipay\Common\CreditCard;
 
@@ -13,10 +13,16 @@ class AIMCaptureOnlyRequest extends AIMAuthorizeRequest
 
     public function getData()
     {
-        $data = parent::getData();
-
+        $this->validate('amount');
+        $data = $this->getBaseData();
+        $data->transactionRequest->amount = $this->getAmount();
+        $this->addPayment($data);
         $data->transactionRequest->authCode = $this->getAuthCode();
-
+        $this->addSolutionId($data);
+        $this->addBillingData($data);
+        $this->addCustomerIP($data);
+        $this->addTransactionSettings($data);
+        
         return $data;
-    }
+           }
 }
