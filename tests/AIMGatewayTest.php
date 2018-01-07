@@ -134,7 +134,7 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->capture($this->captureOptions)->send();
 
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"2214480791"}', $response->getTransactionReference());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"40009379672"}', $response->getTransactionReference());
         $this->assertSame('This transaction has been approved.', $response->getMessage());
     }
 
@@ -145,8 +145,8 @@ class AIMGatewayTest extends GatewayTestCase
         $response = $this->gateway->capture($this->captureOptions)->send();
 
         $this->assertFalse($response->isSuccessful());
-        $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
-        $this->assertSame('This transaction has been declined.', $response->getMessage());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"0"}', $response->getTransactionReference());
+        $this->assertSame('A valid amount is required.', $response->getMessage());
     }
     public function testPurchaseSuccess()
     {
