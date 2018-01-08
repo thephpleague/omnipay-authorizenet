@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Date: Sat, 02 Aug 2014 04:53:02 GMT
+Server: Microsoft-IIS/6.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Headers: x-requested-with, cache-control, content-type, origin, method
+X-Powered-By: ASP.NET
+X-AspNet-Version: 2.0.50727
+Cache-Control: private
+Content-Type: text/xml; charset=utf-8
+Content-Length: 882
+
+<?xml version="1.0" encoding="utf-8"?><createTransactionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><refId>123456</refId><messages><resultCode>Error</resultCode><message><code>E00027</code><text>The transaction was unsuccessful.</text></message></messages><transactionResponse><responseCode>3</responseCode><authCode>ROHNFQ</authCode><avsResultCode>P</avsResultCode><cvvResultCode /><cavvResultCode /><transId>0</transId><refTransID /><transHash>680A8419B9B0C29DAA432BDFA73C3E83</transHash><testRequest>0</testRequest><accountNumber>XXXX0015</accountNumber><accountType>MasterCard</accountType><errors><error><errorCode>5</errorCode><errorText>A valid amount is required.</errorText></error></errors><transHashSha2 /></transactionResponse></createTransactionResponse>

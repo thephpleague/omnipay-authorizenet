@@ -101,6 +101,34 @@ class AIMResponseTest extends TestCase
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
     }
+    
+    public function testCaptureOnlySuccess()
+    {
+        $httpResponse = $this->getMockHttpResponse('AIMCaptureOnlySuccess.txt');
+        $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"40009379672"}', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
+        $this->assertSame(1, $response->getResultCode());
+        $this->assertSame(1, $response->getReasonCode());
+        $this->assertSame('ROHNFQ', $response->getAuthorizationCode());
+        $this->assertSame('P', $response->getAVSCode());
+    }
+
+    public function testCaptureOnlyFailure()
+    {
+        $httpResponse = $this->getMockHttpResponse('AIMCaptureOnlyFailure.txt');
+        $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertFalse($response->isSuccessful());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"0"}', $response->getTransactionReference());
+        $this->assertSame('A valid amount is required.', $response->getMessage());
+        $this->assertSame(3, $response->getResultCode());
+        $this->assertSame(5, $response->getReasonCode());
+        $this->assertSame('ROHNFQ', $response->getAuthorizationCode());
+        $this->assertSame('P', $response->getAVSCode());
+    }
 
     public function testPurchaseSuccess()
     {

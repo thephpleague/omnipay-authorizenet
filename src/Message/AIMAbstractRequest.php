@@ -111,6 +111,16 @@ abstract class AIMAbstractRequest extends AbstractRequest
         return $this->setParameter('solutionId', $value);
     }
 
+    public function getAuthCode()
+    {
+        return $this->getParameter('authCode');
+    }
+
+    public function setAuthCode($value)
+    {
+        return $this->setParameter('authCode', $value);
+    }
+
     /**
      * @return TransactionReference
      */
