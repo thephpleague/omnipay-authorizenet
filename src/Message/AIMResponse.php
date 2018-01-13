@@ -177,4 +177,19 @@ class AIMResponse extends AbstractResponse
 
         return '';
     }
+
+    /**
+     * Returns the account type used for the transaction.
+     *
+     * @return string A multicharacter string.
+     *  Can be Visa, MasterCard, Discover, AmericanExpress, DinersClub, JCB, or eCheck.
+     */
+    public function getAccountType()
+    {
+        if (isset($this->data->transactionResponse[0]->accountType)) {
+            return (string)$this->data->transactionResponse[0]->accountType;
+        } else {
+            return '';
+        }
+    }
 }
