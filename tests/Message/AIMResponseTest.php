@@ -34,6 +34,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('GA4OQP', $response->getAuthorizationCode());
         $this->assertSame('Y', $response->getAVSCode());
+        $this->assertSame('P', $response->getCVVCode());
         $this->assertSame('Visa', $response->getAccountType());
     }
 
@@ -49,6 +50,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(5, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('Visa', $response->getAccountType());
     }
 
@@ -64,6 +66,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame('E00007', $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
     }
 
     public function testAuthorizeInvalidOTSToken()
@@ -88,6 +91,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('F51OYG', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('Visa', $response->getAccountType());
     }
 
@@ -103,6 +107,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(16, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('', $response->getAccountType());
     }
     
@@ -118,6 +123,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('ROHNFQ', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('MasterCard', $response->getAccountType());
     }
 
@@ -133,6 +139,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(5, $response->getReasonCode());
         $this->assertSame('ROHNFQ', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('MasterCard', $response->getAccountType());
     }
 
@@ -148,6 +155,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('JE6JM1', $response->getAuthorizationCode());
         $this->assertSame('Y', $response->getAVSCode());
+        $this->assertSame('P', $response->getCVVCode());
         $this->assertSame('Visa', $response->getAccountType());
     }
 
@@ -163,6 +171,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(5, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('Visa', $response->getAccountType());
     }
 
@@ -178,6 +187,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getResultCode());
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('Visa', $response->getAccountType());
     }
 
@@ -193,6 +203,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(54, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
         $this->assertSame('Visa', $response->getAccountType());
     }
 }
