@@ -20,6 +20,7 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $this->addSolutionId($data);
         $this->addBillingData($data);
         $this->addCustomerIP($data);
+        $this->addRetail($data);
         $this->addTransactionSettings($data);
 
         return $data;
@@ -51,5 +52,34 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         if (!empty($ip)) {
             $data->transactionRequest->customerIP = $ip;
         }
+    }
+
+    protected function addRetail(\SimpleXMLElement $data)
+    {
+        $retail = $this->getParameter('retail');
+        if (isset($retail)) {
+            $data->transactionRequest->retail = $this->getParameter('retail');
+        }
+    }
+
+    /**
+     * Gets the retail data of the request from the gateway.
+     *
+     * @return array
+     */
+    public function getRetail()
+    {
+        return $this-getRetail();
+    }
+
+    /**
+     * Sets the retail data in this request
+     *
+     * @param array $value An associative arrray with keys marketType and/or deviceType
+     * @return AIMAuthorizeRequest Provides a fluent interface
+     */
+    public function setRetail($value)
+    {
+        return $this->setParameter('retail', $value);
     }
 }
