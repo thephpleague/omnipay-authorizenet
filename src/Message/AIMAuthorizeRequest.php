@@ -65,7 +65,7 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         }
 
         if (!isset($deviceType) && isset($marketType)) {
-            throw new InvalidRequestException();
+            throw new InvalidRequestException("deviceType is required if marketType is set");
         }
 
         if (isset($deviceType) && !isset($marketType)) {
@@ -73,11 +73,11 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         }
 
         if (!in_array($deviceType, [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" ])) {
-            throw new InvalidRequestException();
+            throw new InvalidRequestException("deviceType `{$deviceType}` is invalid");
         }
 
         if (!in_array($marketType, [ "0", "1", "2" ])) {
-            throw new InvalidRequestException();
+            throw new InvalidRequestException("marketType `{$marketType}` is invalid");
         }
 
         $data->transactionRequest->retail->marketType = $marketType;
