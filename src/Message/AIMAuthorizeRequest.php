@@ -80,10 +80,8 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
             throw new InvalidRequestException();
         }
 
-        $data->transactionRequest->retail = [
-            'marketType' => $marketType,
-            'deviceType' => $deviceType,
-        ];
+        $data->transactionRequest->retail->marketType = $marketType;
+        $data->transactionRequest->retail->deviceType = $deviceType;
     }
 
     public function getDeviceType()
