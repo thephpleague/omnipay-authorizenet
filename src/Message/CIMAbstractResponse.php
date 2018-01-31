@@ -30,7 +30,7 @@ abstract class CIMAbstractResponse extends AbstractResponse
         $xmlRootElement = ($isError !== false ? 'ErrorResponse' : $this->responseType);
         // Strip out the xmlns junk so that PHP can parse the XML
         $xml = preg_replace('/<' . $xmlRootElement . '[^>]+>/', '<' . $xmlRootElement . '>', (string)$data);
-//var_dump($xml);
+
         try {
             $xml = simplexml_load_string($xml);
         } catch (\Exception $e) {
