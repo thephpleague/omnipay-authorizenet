@@ -27,10 +27,10 @@ abstract class CIMAbstractResponse extends AbstractResponse
         // Check if this is an error response
         $isError = strpos((string)$data, '<ErrorResponse');
 
-        $xmlRootElement = $isError !== false ? 'ErrorResponse' : $this->responseType;
+        $xmlRootElement = ($isError !== false ? 'ErrorResponse' : $this->responseType);
         // Strip out the xmlns junk so that PHP can parse the XML
         $xml = preg_replace('/<' . $xmlRootElement . '[^>]+>/', '<' . $xmlRootElement . '>', (string)$data);
-
+//var_dump($xml);
         try {
             $xml = simplexml_load_string($xml);
         } catch (\Exception $e) {
@@ -58,7 +58,7 @@ abstract class CIMAbstractResponse extends AbstractResponse
      */
     public function getResultCode()
     {
-        $result = (string)$this->data['messages'][0]['resultCode'];
+        $result = (string)$this->data['messages']['resultCode'];
 
         switch ($result) {
             case 'Ok':
@@ -82,7 +82,7 @@ abstract class CIMAbstractResponse extends AbstractResponse
 
         if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
-            $code = (string)$this->data['messages'][0]['message'][0]['code'];
+            $code = (string)$this->data['messages']['message']['code'];
         }
 
         return $code;
@@ -114,7 +114,7 @@ abstract class CIMAbstractResponse extends AbstractResponse
 
         if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
-            $message = (string)$this->data['messages'][0]['message'][0]['text'];
+            $message = (string)$this->data['messages']['message']['text'];
 
         }
 
@@ -155,13 +155,15 @@ abstract class CIMAbstractResponse extends AbstractResponse
      */
     public function xml2array(\SimpleXMLElement $xml)
     {
+        return json_decode(json_encode($xml), true);
+
         $arr = array();
 
         foreach ($xml as $element) {
             $tag = $element->getName();
             $e = get_object_vars($element);
 
-            if (!empty($e)) {
+            if (! empty($e)) {
                 $arr[$tag][] = $element instanceof \SimpleXMLElement ? $this->xml2array($element) : $e;
             } else {
                 $arr[$tag] = trim($element);
