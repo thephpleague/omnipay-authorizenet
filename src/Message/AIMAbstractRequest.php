@@ -60,6 +60,7 @@ abstract class AIMAbstractRequest extends AbstractRequest
     {
         return $this->getParameter('hashSecret');
     }
+
     public function setHashSecret($value)
     {
         return $this->setParameter('hashSecret', $value);
@@ -108,6 +109,16 @@ abstract class AIMAbstractRequest extends AbstractRequest
     public function setSolutionId($value)
     {
         return $this->setParameter('solutionId', $value);
+    }
+
+    public function getAuthCode()
+    {
+        return $this->getParameter('authCode');
+    }
+
+    public function setAuthCode($value)
+    {
+        return $this->setParameter('authCode', $value);
     }
 
     /**

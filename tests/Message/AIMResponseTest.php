@@ -34,6 +34,8 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('GA4OQP', $response->getAuthorizationCode());
         $this->assertSame('Y', $response->getAVSCode());
+        $this->assertSame('P', $response->getCVVCode());
+        $this->assertSame('Visa', $response->getAccountType());
     }
 
     public function testAuthorizeFailure()
@@ -48,6 +50,8 @@ class AIMResponseTest extends TestCase
         $this->assertSame(5, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('Visa', $response->getAccountType());
     }
 
     public function testAuthorizeInvalid()
@@ -62,6 +66,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame('E00007', $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
     }
 
     public function testAuthorizeInvalidOTSToken()
@@ -86,6 +91,8 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('F51OYG', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('Visa', $response->getAccountType());
     }
 
     public function testCaptureFailure()
@@ -100,6 +107,40 @@ class AIMResponseTest extends TestCase
         $this->assertSame(16, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('', $response->getAccountType());
+    }
+    
+    public function testCaptureOnlySuccess()
+    {
+        $httpResponse = $this->getMockHttpResponse('AIMCaptureOnlySuccess.txt');
+        $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"40009379672"}', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
+        $this->assertSame(1, $response->getResultCode());
+        $this->assertSame(1, $response->getReasonCode());
+        $this->assertSame('ROHNFQ', $response->getAuthorizationCode());
+        $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('MasterCard', $response->getAccountType());
+    }
+
+    public function testCaptureOnlyFailure()
+    {
+        $httpResponse = $this->getMockHttpResponse('AIMCaptureOnlyFailure.txt');
+        $response = new AIMResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertFalse($response->isSuccessful());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"0"}', $response->getTransactionReference());
+        $this->assertSame('A valid amount is required.', $response->getMessage());
+        $this->assertSame(3, $response->getResultCode());
+        $this->assertSame(5, $response->getReasonCode());
+        $this->assertSame('ROHNFQ', $response->getAuthorizationCode());
+        $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('MasterCard', $response->getAccountType());
     }
 
     public function testPurchaseSuccess()
@@ -114,6 +155,8 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('JE6JM1', $response->getAuthorizationCode());
         $this->assertSame('Y', $response->getAVSCode());
+        $this->assertSame('P', $response->getCVVCode());
+        $this->assertSame('Visa', $response->getAccountType());
     }
 
     public function testPurchaseFailure()
@@ -128,6 +171,8 @@ class AIMResponseTest extends TestCase
         $this->assertSame(5, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('Visa', $response->getAccountType());
     }
 
     public function testRefundSuccess()
@@ -142,6 +187,8 @@ class AIMResponseTest extends TestCase
         $this->assertSame(1, $response->getResultCode());
         $this->assertSame(1, $response->getReasonCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('Visa', $response->getAccountType());
     }
 
     public function testRefundFailure()
@@ -156,5 +203,7 @@ class AIMResponseTest extends TestCase
         $this->assertSame(54, $response->getReasonCode());
         $this->assertSame('', $response->getAuthorizationCode());
         $this->assertSame('P', $response->getAVSCode());
+        $this->assertSame('', $response->getCVVCode());
+        $this->assertSame('Visa', $response->getAccountType());
     }
 }

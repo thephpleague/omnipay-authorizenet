@@ -139,7 +139,20 @@ class AIMResponse extends AbstractResponse
             return '';
         }
     }
-
+    
+    /**
+     * Returns the Card Code Verfication return code.
+     *
+     * @return string A single character. Can be M, N, P, S, or U.
+     */
+    public function getCVVCode()
+    {
+        if (isset($this->data->transactionResponse[0]->cvvResultCode)) {
+            return (string)$this->data->transactionResponse[0]->cvvResultCode;
+        } else {
+            return '';
+        }
+    }
     /**
      * A composite key containing the gateway provided transaction reference as
      * well as other data points that may be required for subsequent transactions
@@ -176,5 +189,20 @@ class AIMResponse extends AbstractResponse
         }
 
         return '';
+    }
+
+    /**
+     * Returns the account type used for the transaction.
+     *
+     * @return string A multicharacter string.
+     *  Can be Visa, MasterCard, Discover, AmericanExpress, DinersClub, JCB, or eCheck.
+     */
+    public function getAccountType()
+    {
+        if (isset($this->data->transactionResponse[0]->accountType)) {
+            return (string)$this->data->transactionResponse[0]->accountType;
+        } else {
+            return '';
+        }
     }
 }

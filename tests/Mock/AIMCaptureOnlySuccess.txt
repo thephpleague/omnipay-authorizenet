@@ -1,0 +1,13 @@
+HTTP/1.1 200 OK
+Date: Sat, 02 Aug 2014 05:24:31 GMT
+Server: Microsoft-IIS/6.0
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Access-Control-Allow-Headers: x-requested-with, cache-control, content-type, origin, method
+X-Powered-By: ASP.NET
+X-AspNet-Version: 2.0.50727
+Cache-Control: private
+Content-Type: text/xml; charset=utf-8
+Content-Length: 877
+
+<?xml version="1.0" encoding="utf-8"?><createTransactionResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><refId>123456</refId><messages><resultCode>Ok</resultCode><message><code>I00001</code><text>Successful.</text></message></messages><transactionResponse><responseCode>1</responseCode><authCode>ROHNFQ</authCode><avsResultCode>P</avsResultCode><cvvResultCode /><cavvResultCode /><transId>40009379672</transId><refTransID /><transHash>13BA777FBC314C49558C9BE4250CEA24</transHash><testRequest>0</testRequest><accountNumber>XXXX0015</accountNumber><accountType>MasterCard</accountType><messages><message><code>1</code><description>This transaction has been approved.</description></message></messages><transHashSha2 /></transactionResponse></createTransactionResponse>
