@@ -12,7 +12,7 @@ class CIMGetPaymentProfileResponse extends CIMCreatePaymentProfileResponse
     public function getCustomerPaymentProfileId()
     {
         if ($this->isSuccessful()) {
-            return $this->data['paymentProfile'][0]['customerPaymentProfileId'];
+            return $this->data['paymentProfile']['customerPaymentProfileId'];
         }
         return null;
     }

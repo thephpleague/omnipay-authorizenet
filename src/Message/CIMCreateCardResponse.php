@@ -20,7 +20,7 @@ class CIMCreateCardResponse extends CIMAbstractResponse
     public function getCustomerPaymentProfileId()
     {
         if ($this->isSuccessful()) {
-            return $this->data['customerPaymentProfileIdList'][0]['numericString'];
+            return $this->data['customerPaymentProfileIdList']['numericString'];
         }
         return null;
     }
