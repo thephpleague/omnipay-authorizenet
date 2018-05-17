@@ -79,11 +79,9 @@ class AIMResponse extends AbstractResponse
         if (isset($this->data->transactionResponse[0]->messages)) {
             // In case of a successful transaction, a "messages" element is present
             $code = intval((string)$this->data->transactionResponse[0]->messages[0]->message->code);
-
         } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
             $code = intval((string)$this->data->transactionResponse[0]->errors[0]->error->errorCode);
-
         } elseif (isset($this->data->messages[0]->message)) {
             // In case of invalid request, the top-level message provides details.
             $code = (string)$this->data->messages[0]->message->code;
@@ -104,11 +102,9 @@ class AIMResponse extends AbstractResponse
         if (isset($this->data->transactionResponse[0]->messages)) {
             // In case of a successful transaction, a "messages" element is present
             $message = (string)$this->data->transactionResponse[0]->messages[0]->message->description;
-
         } elseif (isset($this->data->transactionResponse[0]->errors)) {
             // In case of an unsuccessful transaction, an "errors" element is present
             $message = (string)$this->data->transactionResponse[0]->errors[0]->error->errorText;
-
         } elseif (isset($this->data->messages[0]->message)) {
             // In case of invalid request, the top-level message provides details.
             $message = (string)$this->data->messages[0]->message->text;

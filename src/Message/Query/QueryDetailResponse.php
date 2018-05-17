@@ -147,8 +147,6 @@ class QueryDetailResponse extends AbstractQueryResponse
             $this->planResponse = $gateway->paymentPlanQuery($data)->send();
         }
         return $this->planResponse->getContactReference();
-
-
     }
 
     /**

@@ -67,7 +67,6 @@ abstract class CIMAbstractResponse extends AbstractResponse
                 return static::TRANSACTION_RESULT_CODE_ERROR;
             default:
                 return null;
-
         }
     }
 
@@ -115,7 +114,6 @@ abstract class CIMAbstractResponse extends AbstractResponse
         if (isset($this->data['messages'])) {
             // In case of a successful transaction, a "messages" element is present
             $message = (string)$this->data['messages'][0]['message'][0]['text'];
-
         }
 
         return $message;
