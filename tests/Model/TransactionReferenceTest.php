@@ -2,7 +2,9 @@
 
 namespace Omnipay\AuthorizeNet\Model;
 
-class TransactionReferenceTest extends \PHPUnit_Framework_TestCase
+use Omnipay\Tests\TestCase;
+
+class TransactionReferenceTest extends TestCase
 {
     private $data;
     /** @var TransactionReference */

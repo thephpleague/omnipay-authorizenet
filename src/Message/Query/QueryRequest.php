@@ -65,9 +65,9 @@ class QueryRequest extends QueryBatchRequest
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');
         $data = $data->saveXml();
-        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
+        $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
 
-        $this->response = new QueryResponse($this, $httpResponse->getBody());
+        $this->response = new QueryResponse($this, $httpResponse->getBody()->getContents());
         return $this->response;
     }
 }

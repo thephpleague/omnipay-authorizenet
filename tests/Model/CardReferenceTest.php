@@ -2,7 +2,9 @@
 
 namespace Omnipay\AuthorizeNet\Model;
 
-class CardReferenceTest extends \PHPUnit_Framework_TestCase
+use Omnipay\Tests\TestCase;
+
+class CardReferenceTest extends TestCase
 {
     private $data;
     /** @var CardReference */

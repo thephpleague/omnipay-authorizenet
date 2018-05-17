@@ -27,9 +27,9 @@ class QueryDetailRequest extends QueryBatchRequest
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');
         $data = $data->saveXml();
-        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
+        $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
 
-        return $this->response = new QueryDetailResponse($this, $httpResponse->getBody());
+        return $this->response = new QueryDetailResponse($this, $httpResponse->getBody()->getContents());
     }
 
     public function setTransactionReference($transactionReference)
