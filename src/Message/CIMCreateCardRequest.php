@@ -152,9 +152,9 @@ class CIMCreateCardRequest extends CIMAbstractRequest
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');
         $data = $data->saveXml();
-        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
+        $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
 
-        $response = new CIMCreateCardResponse($this, $httpResponse->getBody());
+        $response = new CIMCreateCardResponse($this, $httpResponse->getBody()->getContents());
 
         if (!$response->isSuccessful() && $response->getReasonCode() == 'E00039') {
             // Duplicate profile. Try adding a new payment profile for the same profile and get the response

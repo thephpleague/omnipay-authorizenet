@@ -214,6 +214,7 @@ class CIMGatewayTest extends GatewayTestCase
 
     public function testRefundSuccess()
     {
+        $this->markTestSkipped();
 //        $this->setMockHttpResponse('CIMRefundSuccess.txt');
 //
 //        $response = $this->gateway->refund($this->refundOptions)->send();
