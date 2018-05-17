@@ -14,7 +14,7 @@ processing library for PHP 5.3+. This package implements Authorize.Net support f
 Omnipay is installed via [Composer](http://getcomposer.org/). To install, simply require `league/omnipay` and `omnipay/authorizenet` with Composer:
 
 ```
-composer require league/omnipay omnipay/authorizenet
+composer require league/omnipay omnipay/authorizenet:"3.x@dev"
 ```
 
 ## Basic Usage
