@@ -17,6 +17,7 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $data = $this->getBaseData();
         $data->transactionRequest->amount = $this->getAmount();
         $this->addPayment($data);
+        $this->addSolutionId($data);
         $this->addBillingData($data);
         $this->addCustomerIP($data);
         $this->addTransactionSettings($data);
@@ -41,7 +42,9 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
         $card->validate();
         $data->transactionRequest->payment->creditCard->cardNumber = $card->getNumber();
         $data->transactionRequest->payment->creditCard->expirationDate = $card->getExpiryDate('my');
-        $data->transactionRequest->payment->creditCard->cardCode = $card->getCvv();
+        if (!empty($card->getCvv())) {
+            $data->transactionRequest->payment->creditCard->cardCode = $card->getCvv();
+        }
     }
 
     protected function addCustomerIP(\SimpleXMLElement $data)

@@ -19,6 +19,10 @@ class AIMGatewayTest extends GatewayTestCase
 
         $this->gateway = new AIMGateway($this->getHttpClient(), $this->getHttpRequest());
 
+        $this->gateway->initialize([
+            'hashSecret' => 'HASHYsecretyThang',
+        ]);
+
         $this->purchaseOptions = array(
             'amount' => '10.00',
             'card' => $this->getValidCard(),
@@ -57,6 +61,15 @@ class AIMGatewayTest extends GatewayTestCase
         $this->assertEquals(
             'https://apitest.authorize.net/xml/v1/request.api',
             $this->gateway->getDeveloperEndpoint()
+        );
+    }
+
+    // Added for PR #78
+    public function testHashSecret()
+    {
+        $this->assertEquals(
+            'HASHYsecretyThang',
+            $this->gateway->getHashSecret()
         );
     }
 
@@ -113,7 +126,28 @@ class AIMGatewayTest extends GatewayTestCase
         $this->assertSame('{"approvalCode":"","transId":"0"}', $response->getTransactionReference());
         $this->assertSame('The transaction cannot be found.', $response->getMessage());
     }
+    
+    public function testCaptureOnlySuccess()
+    {
+        $this->setMockHttpResponse('AIMCaptureOnlySuccess.txt');
 
+        $response = $this->gateway->capture($this->captureOptions)->send();
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"40009379672"}', $response->getTransactionReference());
+        $this->assertSame('This transaction has been approved.', $response->getMessage());
+    }
+
+    public function testCaptureOnlyFailure()
+    {
+        $this->setMockHttpResponse('AIMCaptureOnlyFailure.txt');
+
+        $response = $this->gateway->capture($this->captureOptions)->send();
+
+        $this->assertFalse($response->isSuccessful());
+        $this->assertSame('{"approvalCode":"ROHNFQ","transId":"0"}', $response->getTransactionReference());
+        $this->assertSame('A valid amount is required.', $response->getMessage());
+    }
     public function testPurchaseSuccess()
     {
         $this->setMockHttpResponse('AIMPurchaseSuccess.txt');

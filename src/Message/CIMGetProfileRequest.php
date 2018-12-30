@@ -24,8 +24,8 @@ class CIMGetProfileRequest extends CIMAbstractRequest
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');
         $data = $data->saveXml();
-        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $data)->send();
+        $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
 
-        return $this->response = new CIMGetProfileResponse($this, $httpResponse->getBody());
+        return $this->response = new CIMGetProfileResponse($this, $httpResponse->getBody()->getContents());
     }
 }

@@ -20,6 +20,10 @@ class CIMGatewayTest extends GatewayTestCase
 
         $this->gateway = new CIMGateway($this->getHttpClient(), $this->getHttpRequest());
 
+        $this->gateway->initialize([
+            'hashSecret' => 'HASHYsecretyThang',
+        ]);
+
         $this->createCardOptions = array(
             'email' => "kaylee@serenity.com",
             'card' => $this->getValidCard(),
@@ -59,6 +63,15 @@ class CIMGatewayTest extends GatewayTestCase
         $this->assertEquals(
             'https://apitest.authorize.net/xml/v1/request.api',
             $this->gateway->getDeveloperEndpoint()
+        );
+    }
+
+    // Added for PR #78
+    public function testHashSecret()
+    {
+        $this->assertEquals(
+            'HASHYsecretyThang',
+            $this->gateway->getHashSecret()
         );
     }
 
@@ -201,6 +214,7 @@ class CIMGatewayTest extends GatewayTestCase
 
     public function testRefundSuccess()
     {
+        $this->markTestSkipped();
 //        $this->setMockHttpResponse('CIMRefundSuccess.txt');
 //
 //        $response = $this->gateway->refund($this->refundOptions)->send();
