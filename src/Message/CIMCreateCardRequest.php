@@ -13,17 +13,32 @@ class CIMCreateCardRequest extends CIMAbstractRequest
 
     public function getData()
     {
+
+        $data = $this->getBaseData();
+        $this->validateCard($data);
+        $this->addProfileData($data);
+        $this->addTransactionSettings($data);
+
+        return $data;
+    }
+
+    /**
+     * Validate card or skip if opaque data is available
+     *
+     * @param \SimpleXMLElement $data
+     */
+    protected function validateCard(\SimpleXMLElement $data){
+
+        if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
+            return;
+        }
+
         $this->validate('card');
 
         /** @var CreditCard $card */
         $card = $this->getCard();
         $card->validate();
 
-        $data = $this->getBaseData();
-        $this->addProfileData($data);
-        $this->addTransactionSettings($data);
-
-        return $data;
     }
 
     /**
@@ -97,12 +112,18 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             }
 
             $req = $data->addChild('payment');
-            $req->creditCard->cardNumber = $card->getNumber();
-            $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
-            if ($card->getCvv()) {
-                $req->creditCard->cardCode = $card->getCvv();
-            } else {
-                $this->setValidationMode(self::VALIDATION_MODE_NONE);
+            if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
+                //Use opaqueData if available instead of card data
+                $req->opaqueData->dataDescriptor = $this->getOpaqueDataDescriptor();
+                $req->opaqueData->dataValue = $this->getOpaqueDataValue();
+            }else{
+                $req->creditCard->cardNumber = $card->getNumber();
+                $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
+                if ($card->getCvv()) {
+                    $req->creditCard->cardCode = $card->getCvv();
+                } else {
+                    $this->setValidationMode(self::VALIDATION_MODE_NONE);
+                }
             }
         }
     }

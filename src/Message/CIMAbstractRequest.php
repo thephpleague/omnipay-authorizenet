@@ -73,6 +73,44 @@ abstract class CIMAbstractRequest extends AIMAbstractRequest
     }
 
     /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @return string
+     */
+    public function getOpaqueDataDescriptor()
+    {
+        return $this->getParameter('opaqueDataDescriptor');
+    }
+
+    /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @return string
+     */
+    public function getOpaqueDataValue()
+    {
+        return $this->getParameter('opaqueDataValue');
+    }
+
+    /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @param string
+     * @return string
+     */
+    public function setOpaqueDataDescriptor($value)
+    {
+        return $this->setParameter('opaqueDataDescriptor', $value);
+    }
+
+    /**
+     * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
+     * @param string
+     * @return string
+     */
+    public function setOpaqueDataValue($value)
+    {
+        return $this->setParameter('opaqueDataValue', $value);
+    }
+
+    /**
      * Flag to force update consumer payment profile if duplicate is found
      *
      * @param $value
