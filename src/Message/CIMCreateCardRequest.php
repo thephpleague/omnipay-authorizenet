@@ -14,8 +14,8 @@ class CIMCreateCardRequest extends CIMAbstractRequest
     public function getData()
     {
 
-        $data = $this->getBaseData();
         $this->validateCard($data);
+        $data = $this->getBaseData();
         $this->addProfileData($data);
         $this->addTransactionSettings($data);
 
