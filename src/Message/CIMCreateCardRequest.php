@@ -14,7 +14,8 @@ class CIMCreateCardRequest extends CIMAbstractRequest
     public function getData()
     {
 
-        $this->validateCard();
+        $this->validate('card');
+        $this->cardValidate();
         $data = $this->getBaseData();
         $this->addProfileData($data);
         $this->addTransactionSettings($data);
@@ -27,14 +28,12 @@ class CIMCreateCardRequest extends CIMAbstractRequest
      *
      * @param \SimpleXMLElement $data
      */
-    protected function validateCard()
+    protected function cardValidate()
     {
 
         if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
             return;
         }
-
-        $this->validate('card');
 
         /** @var CreditCard $card */
         $card = $this->getCard();
