@@ -27,7 +27,8 @@ class CIMCreateCardRequest extends CIMAbstractRequest
      *
      * @param \SimpleXMLElement $data
      */
-    protected function validateCard(\SimpleXMLElement $data){
+    protected function validateCard(\SimpleXMLElement $data)
+    {
 
         if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
             return;
@@ -38,7 +39,6 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         /** @var CreditCard $card */
         $card = $this->getCard();
         $card->validate();
-
     }
 
     /**
@@ -116,7 +116,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
                 //Use opaqueData if available instead of card data
                 $req->opaqueData->dataDescriptor = $this->getOpaqueDataDescriptor();
                 $req->opaqueData->dataValue = $this->getOpaqueDataValue();
-            }else{
+            } else {
                 $req->creditCard->cardNumber = $card->getNumber();
                 $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
                 if ($card->getCvv()) {
