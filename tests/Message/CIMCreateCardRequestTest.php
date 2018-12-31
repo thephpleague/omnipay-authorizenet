@@ -59,4 +59,25 @@ class CIMCreateCardRequestTest extends TestCase
         $this->assertFalse(isset($data->profile->paymentProfiles->payment->creditCard->cardCode));
         $this->assertEquals(CIMCreatePaymentProfileRequest::VALIDATION_MODE_NONE, $this->request->getValidationMode());
     }
+
+    public function testGetDataOpaqueData()
+    {
+
+        $validCard = $this->getValidCard();
+        unset($validCard['number'],$validCard['expiryMonth'],$validCard['expiryYear'],$validCard['cvv']);
+        //remove the actual card data since we are setting opaque values
+        $this->params = array(
+            'email' => "kaylee@serenity.com",
+            'card' => $validCard,
+            'opaqueDataDescriptor' => 'COMMON.ACCEPT.INAPP.PAYMENT',
+            'opaqueDataValue' => 'jb2RlIjoiNTB',
+            'developerMode' => true
+        );
+        $this->request->initialize($this->params);
+
+        $data = $this->request->getData();
+
+        $this->assertEquals('COMMON.ACCEPT.INAPP.PAYMENT', $data->profile->paymentProfiles->payment->opaqueData->dataDescriptor);
+        $this->assertEquals('jb2RlIjoiNTB', $data->profile->paymentProfiles->payment->opaqueData->dataValue);
+    }
 }
