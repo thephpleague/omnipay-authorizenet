@@ -43,4 +43,18 @@ class CIMCreateCardResponseTest extends TestCase
 
         $this->assertNull($response->getCardReference());
     }
+
+    public function testCreateCardSuccessFromOpaqueData()
+    {
+        $httpResponse = $this->getMockHttpResponse('CIMCreateCardSuccess.txt');
+        $response = new CIMCreateCardResponse($this->getMockRequest(), $httpResponse->getBody());
+
+        $this->assertTrue($response->isSuccessful());
+        $this->assertEquals('I00001', $response->getReasonCode());
+        $this->assertEquals("1", $response->getResultCode());
+        $this->assertEquals("Successful.", $response->getMessage());
+
+        $this->assertEquals('28972084', $response->getCustomerProfileId());
+        $this->assertEquals('26317840', $response->getCustomerPaymentProfileId());
+    }
 }
