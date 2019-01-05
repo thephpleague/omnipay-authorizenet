@@ -214,8 +214,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         $createPaymentProfileResponse = $this->makeCreatePaymentProfileRequest($parameters);
         if ($createPaymentProfileResponse->isSuccessful()) {
             $parameters['customerPaymentProfileId'] = $createPaymentProfileResponse->getCustomerPaymentProfileId();
-        } elseif (
-            $this->getForceCardUpdate() !== true ||
+        } elseif ($this->getForceCardUpdate() !== true ||
             ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue())
         ) {
             // force card update flag turned off. No need to further process.
