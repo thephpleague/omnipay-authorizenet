@@ -14,11 +14,7 @@ class CIMCreatePaymentProfileRequest extends CIMCreateCardRequest
     public function getData()
     {
         $this->validate('card', 'customerProfileId');
-
-        /** @var CreditCard $card */
-        $card = $this->getCard();
-        $card->validate();
-
+        $this->cardValidate();
         $data = $this->getBaseData();
         $data->customerProfileId = $this->getCustomerProfileId();
         $this->addPaymentProfileData($data);
