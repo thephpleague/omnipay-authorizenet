@@ -2,7 +2,7 @@
 
 namespace Omnipay\AuthorizeNet;
 
-use Guzzle\Http\Client;
+use Omnipay\Common\Http\Client;
 use Omnipay\AuthorizeNet\Message\CIMResponse;
 use Omnipay\Tests\TestCase;
 
@@ -67,7 +67,13 @@ class CIMGatewayIntegrationTest extends TestCase
     {
         // Create a customer profile with the specified email (email is the identifier)
         $email = uniqid('', true) . '@example.com';
-        $cardRef = $this->createCard(array('email' => $email));
+        $valid_card = $this->getValidCard();
+        $cardRef = $this->createCard(
+            array(
+                'email' => $email,
+                'card' => $valid_card
+            )
+        );
 
         // Create a new card in an existing customer profile
         $params = array(
@@ -84,7 +90,7 @@ class CIMGatewayIntegrationTest extends TestCase
 
         // Create a card with same number in an existing customer profile (should fail)
         $params = array(
-            'card' => $this->getValidCard(),
+            'card' => $valid_card,
             'name' => 'Kaywinnet Lee Frye',
             'email' => $email,
         );
@@ -96,7 +102,7 @@ class CIMGatewayIntegrationTest extends TestCase
 
         // Create a card with the same number in an existing customer profile with auto-update enabled
         $params = array(
-            'card' => $this->getValidCard(),
+            'card' => $valid_card,
             'name' => 'Kaywinnet Lee Frye',
             'email' => $email,
             'forceCardUpdate' => true
