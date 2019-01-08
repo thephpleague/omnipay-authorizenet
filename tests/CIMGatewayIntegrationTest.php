@@ -74,6 +74,7 @@ class CIMGatewayIntegrationTest extends TestCase
                 'card' => $valid_card
             )
         );
+        $decodedCardRef = json_decode($cardRef,true);
 
         // Create a new card in an existing customer profile
         $params = array(
@@ -83,6 +84,18 @@ class CIMGatewayIntegrationTest extends TestCase
         );
         $params['card']['number'] = '4007000000027';
         $request = $this->gateway->createCard($params);
+        $request->setDeveloperMode(true);
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Should be successful as we have created a payment profile');
+        $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
+
+        // Create a new card in an existing customer profile using its customer profile ID
+        $params = array(
+            'card' => $this->getValidCard(),
+            'customerProfileId' => $decodedCardRef['customerProfileId']
+        );
+        $params['card']['number'] = '4012888818888';
+        $request = $this->gateway->createAdditionalCard($params);
         $request->setDeveloperMode(true);
         $response = $request->send();
         $this->assertTrue($response->isSuccessful(), 'Should be successful as we have created a payment profile');
