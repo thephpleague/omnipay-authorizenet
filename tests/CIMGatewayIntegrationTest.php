@@ -118,6 +118,29 @@ class CIMGatewayIntegrationTest extends TestCase
         );
     }
 
+    public function testGetCustomerProfile()
+    {
+        // Create a customer profile with the specified email (email is the identifier)
+        $email = uniqid('', true) . '@example.com';
+        $cardRef = $this->createCard(array('email' => $email));
+        $cardRef = json_decode($cardRef,true);
+        // Grab the customer Profile ID from the createCard response.
+        $params = array(
+            'customerProfileId' => $cardRef['customerProfileId']
+        );
+        // Return just the customer profile without billing data
+        $request = $this->gateway->getCustomerProfile($params);
+        $request->setDeveloperMode(true);
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Should be successful.');
+        $data = $response->getData();
+        $this->assertEquals(
+            $email,
+            $data['profile']['email'],
+            'Should be the same email'
+        );
+    }
+
     public function testPaymentProfileDelete()
     {
 
