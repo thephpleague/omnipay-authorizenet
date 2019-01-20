@@ -13,17 +13,31 @@ class CIMCreateCardRequest extends CIMAbstractRequest
 
     public function getData()
     {
+
         $this->validate('card');
-
-        /** @var CreditCard $card */
-        $card = $this->getCard();
-        $card->validate();
-
+        $this->cardValidate();
         $data = $this->getBaseData();
         $this->addProfileData($data);
         $this->addTransactionSettings($data);
 
         return $data;
+    }
+
+    /**
+     * Validate card or skip if opaque data is available
+     *
+     * @param \SimpleXMLElement $data
+     */
+    protected function cardValidate()
+    {
+
+        if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
+            return;
+        }
+
+        /** @var CreditCard $card */
+        $card = $this->getCard();
+        $card->validate();
     }
 
     /**
@@ -97,12 +111,18 @@ class CIMCreateCardRequest extends CIMAbstractRequest
             }
 
             $req = $data->addChild('payment');
-            $req->creditCard->cardNumber = $card->getNumber();
-            $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
-            if ($card->getCvv()) {
-                $req->creditCard->cardCode = $card->getCvv();
+            if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
+                //Use opaqueData if available instead of card data
+                $req->opaqueData->dataDescriptor = $this->getOpaqueDataDescriptor();
+                $req->opaqueData->dataValue = $this->getOpaqueDataValue();
             } else {
-                $this->setValidationMode(self::VALIDATION_MODE_NONE);
+                $req->creditCard->cardNumber = $card->getNumber();
+                $req->creditCard->expirationDate = $card->getExpiryDate('Y-m');
+                if ($card->getCvv()) {
+                    $req->creditCard->cardCode = $card->getCvv();
+                } else {
+                    $this->setValidationMode(self::VALIDATION_MODE_NONE);
+                }
             }
         }
     }
@@ -194,8 +214,11 @@ class CIMCreateCardRequest extends CIMAbstractRequest
         $createPaymentProfileResponse = $this->makeCreatePaymentProfileRequest($parameters);
         if ($createPaymentProfileResponse->isSuccessful()) {
             $parameters['customerPaymentProfileId'] = $createPaymentProfileResponse->getCustomerPaymentProfileId();
-        } elseif ($this->getForceCardUpdate() !== true) {
+        } elseif ($this->getForceCardUpdate() !== true ||
+            ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue())
+        ) {
             // force card update flag turned off. No need to further process.
+            // also if opaque data is being used we are not able to update existing payment profiles
             return $createCardResponse;
         }
 
