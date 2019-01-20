@@ -29,6 +29,37 @@ class DPMAuthorizeRequestTest extends TestCase
         $this->assertArrayNotHasKey('x_test_request', $data);
     }
 
+    /**
+     * Issue #123 test the signature key.
+     */
+    public function testSha512hash()
+    {
+        $signatureKey = 
+            '48D2C629E4A6D3E19AC47767C8B7EFEA4AE2004F8FA9C190F19D0238D871978B'
+            . 'E35925A6AD9256FE623934C1099DFEFD6449D54744E5734CE7CA3C4E6CD7223D';
+
+        $this->request->setSignatureKey($signatureKey);
+
+        $data = $this->request->getData();
+        $hash = $data['x_fp_hash'];
+
+        // Now check the hash.
+
+        $fingerprint = implode(
+            '^',
+            array(
+                $this->request->getApiLoginId(),
+                $data['x_fp_sequence'],
+                $data['x_fp_timestamp'],
+                $data['x_amount']
+            )
+        ).'^';
+
+        $this->assertTrue(
+            hash_equals(hash_hmac('sha512', $fingerprint, hex2bin($signatureKey)), $hash)
+        );
+    }
+
     public function testGetDataTestMode()
     {
         $this->request->setTestMode(true);
