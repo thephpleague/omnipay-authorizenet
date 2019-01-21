@@ -115,6 +115,20 @@ $data['paymentProfile']['customerPaymentProfileId'];
 //the rest of the CIM driver features as usual.
 ```
 
+## DPM and SIM Signatures
+
+DPM and SIM used to sign their requests with the `transactionKey` using the mdh HMAC algorithm.
+From early 2019, this algorithm is being removed completely.
+Instead, the SHA-512 HMAC algorithm is used to sign the DPM and SIM requsts,
+and to validate the received  notifications.
+
+To start using the SHA-512 signing, set your `signatureKey` in the gateway:
+
+```php
+$gateway->setSignatureKey('48D2C629E4A...{100}...E7CA3C4E6CD7223D');
+```
+
+The `signatureKey` can be generated in the *API Credentials & Keys* section of your account setings.
 
 ## Support
 

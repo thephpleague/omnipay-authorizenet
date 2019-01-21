@@ -24,11 +24,11 @@ class AIMGateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'apiLoginId'        => '',
-            'transactionKey'    => '',
+            'apiLoginId'        => null,
+            'transactionKey'    => null,
             'testMode'          => false,
             'developerMode'     => false,
-            'hashSecret'        => '',
+            'hashSecret'        => null,
             'liveEndpoint'      => 'https://api2.authorize.net/xml/v1/request.api',
             'developerEndpoint' => 'https://apitest.authorize.net/xml/v1/request.api',
         );
@@ -52,6 +52,16 @@ class AIMGateway extends AbstractGateway
     public function setTransactionKey($value)
     {
         return $this->setParameter('transactionKey', $value);
+    }
+
+    public function getSignatureKey()
+    {
+        return $this->getParameter('signatureKey');
+    }
+
+    public function setSignatureKey($value)
+    {
+        return $this->setParameter('signatureKey', $value);
     }
 
     public function getDeveloperMode()

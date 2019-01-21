@@ -34,6 +34,16 @@ abstract class SIMAbstractRequest extends AbstractRequest
         return $this->setParameter('transactionKey', $value);
     }
 
+    public function getSignatureKey()
+    {
+        return $this->getParameter('signatureKey');
+    }
+
+    public function setSignatureKey($value)
+    {
+        return $this->setParameter('signatureKey', $value);
+    }
+
     public function getDeveloperMode()
     {
         return $this->getParameter('developerMode');
