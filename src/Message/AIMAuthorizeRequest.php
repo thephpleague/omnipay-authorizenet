@@ -66,12 +66,20 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
 
         $creditCard = $this->getCard();
 
-        if ($track1 = $creditCard->getTrack1()) {
+        if (($track1 = $creditCard->getTrack1())
+            && ($track2 = $creditCard->getTrack2())
+        ) {
             $data
                 ->transactionRequest
                 ->payment
                 ->trackData
                 ->track1 = $track1;
+
+            $data
+                ->transactionRequest
+                ->payment
+                ->trackData
+                ->track2 = $track2;
         } else {
             // Validate the standard credit card number.
             $this->validate('card');

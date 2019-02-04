@@ -90,8 +90,9 @@ class AIMAuthorizeRequestTest extends TestCase
     public function testGetDataTrack1()
     {
         $track1 = '%B5581123456781323^SMITH/JOHN^16071021473810559010203?';
+        $track2 = ';5581123456781323=160710212423468?';
 
-        $this->request->getCard()->setTracks($track1);
+        $this->request->getCard()->setTracks($track1 . $track2);
         $data = $this->request->getData();
 
         $this->assertEquals(
@@ -101,6 +102,15 @@ class AIMAuthorizeRequestTest extends TestCase
                 ->payment
                 ->trackData
                 ->track1
+        );
+
+        $this->assertEquals(
+            $track2,
+            $data
+                ->transactionRequest
+                ->payment
+                ->trackData
+                ->track2
         );
 
         // With track1 set, the card number must NOT be set.
