@@ -87,6 +87,32 @@ class AIMAuthorizeRequestTest extends TestCase
         $this->assertEquals('jb2RlIjoiNTB', $data->transactionRequest->payment->opaqueData->dataValue);
     }
 
+    public function testGetDataTrack1()
+    {
+        $track1 = '%B5581123456781323^SMITH/JOHN^16071021473810559010203?';
+
+        $this->request->getCard()->setTracks($track1);
+        $data = $this->request->getData();
+
+        $this->assertEquals(
+            $track1,
+            $data
+                ->transactionRequest
+                ->payment
+                ->trackData
+                ->track1
+        );
+
+        // With track1 set, the card number must NOT be set.
+
+        $this->assertNull($data
+                ->transactionRequest
+                ->payment
+                ->creditCard
+                ->cardNumber
+        );
+    }
+
     public function testShouldIncludeDuplicateWindowSetting()
     {
         $data = $this->request->getData();

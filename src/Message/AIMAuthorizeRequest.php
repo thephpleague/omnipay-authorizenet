@@ -48,19 +48,51 @@ class AIMAuthorizeRequest extends AIMAbstractRequest
          * @link http://developer.authorize.net/api/reference/features/acceptjs.html Documentation on opaque data
          */
         if ($this->getOpaqueDataDescriptor() && $this->getOpaqueDataValue()) {
-            $data->transactionRequest->payment->opaqueData->dataDescriptor = $this->getOpaqueDataDescriptor();
-            $data->transactionRequest->payment->opaqueData->dataValue = $this->getOpaqueDataValue();
+            $data
+                ->transactionRequest
+                ->payment
+                ->opaqueData
+                ->dataDescriptor = $this->getOpaqueDataDescriptor();
+
+            $data->transactionRequest
+                ->payment
+                ->opaqueData
+                ->dataValue = $this->getOpaqueDataValue();
+
             return;
         }
 
-        $this->validate('card');
-        /** @var CreditCard $card */
-        $card = $this->getCard();
-        $card->validate();
-        $data->transactionRequest->payment->creditCard->cardNumber = $card->getNumber();
-        $data->transactionRequest->payment->creditCard->expirationDate = $card->getExpiryDate('my');
-        if (!empty($card->getCvv())) {
-            $data->transactionRequest->payment->creditCard->cardCode = $card->getCvv();
+        // Try trackData first.
+
+        $creditCard = $this->getCard();
+
+        if ($track1 = $creditCard->getTrack1()) {
+            $data
+                ->transactionRequest
+                ->payment
+                ->trackData
+                ->track1 = $track1;
+        } else {
+            // Validate the standard credit card number.
+            $this->validate('card');
+
+            /** @var CreditCard $card */
+            $card = $this->getCard();
+            $card->validate();
+            $data
+                ->transactionRequest
+                ->payment
+                ->creditCard
+                ->cardNumber = $card->getNumber();
+            $data
+                ->transactionRequest
+                ->payment
+                ->creditCard
+                ->expirationDate = $card->getExpiryDate('my');
+
+            if (!empty($card->getCvv())) {
+                $data->transactionRequest->payment->creditCard->cardCode = $card->getCvv();
+            }
         }
     }
 
