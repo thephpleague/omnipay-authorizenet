@@ -2,7 +2,7 @@
 
 namespace Omnipay\AuthorizeNet;
 
-use Guzzle\Http\Client;
+use Omnipay\Common\Http\Client;
 use Omnipay\AuthorizeNet\Message\CIMResponse;
 use Omnipay\Tests\TestCase;
 
@@ -67,7 +67,14 @@ class CIMGatewayIntegrationTest extends TestCase
     {
         // Create a customer profile with the specified email (email is the identifier)
         $email = uniqid('', true) . '@example.com';
-        $cardRef = $this->createCard(array('email' => $email));
+        $valid_card = $this->getValidCard();
+        $cardRef = $this->createCard(
+            array(
+                'email' => $email,
+                'card' => $valid_card
+            )
+        );
+        $decodedCardRef = json_decode($cardRef,true);
 
         // Create a new card in an existing customer profile
         $params = array(
@@ -82,9 +89,21 @@ class CIMGatewayIntegrationTest extends TestCase
         $this->assertTrue($response->isSuccessful(), 'Should be successful as we have created a payment profile');
         $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
 
-        // Create a card with same number in an existing customer profile (should fail)
+        // Create a new card in an existing customer profile using its customer profile ID
         $params = array(
             'card' => $this->getValidCard(),
+            'customerProfileId' => $decodedCardRef['customerProfileId']
+        );
+        $params['card']['number'] = '4012888818888';
+        $request = $this->gateway->createAdditionalCard($params);
+        $request->setDeveloperMode(true);
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Should be successful as we have created a payment profile');
+        $this->assertNotNull($response->getCardReference(), 'Card reference should be returned');
+
+        // Create a card with same number in an existing customer profile (should fail)
+        $params = array(
+            'card' => $valid_card,
             'name' => 'Kaywinnet Lee Frye',
             'email' => $email,
         );
@@ -96,7 +115,7 @@ class CIMGatewayIntegrationTest extends TestCase
 
         // Create a card with the same number in an existing customer profile with auto-update enabled
         $params = array(
-            'card' => $this->getValidCard(),
+            'card' => $valid_card,
             'name' => 'Kaywinnet Lee Frye',
             'email' => $email,
             'forceCardUpdate' => true
@@ -109,6 +128,29 @@ class CIMGatewayIntegrationTest extends TestCase
             $cardRef,
             $response->getCardReference(),
             'Card reference should be same as with the one newly created'
+        );
+    }
+
+    public function testGetCustomerProfile()
+    {
+        // Create a customer profile with the specified email (email is the identifier)
+        $email = uniqid('', true) . '@example.com';
+        $cardRef = $this->createCard(array('email' => $email));
+        $cardRef = json_decode($cardRef,true);
+        // Grab the customer Profile ID from the createCard response.
+        $params = array(
+            'customerProfileId' => $cardRef['customerProfileId']
+        );
+        // Return just the customer profile without billing data
+        $request = $this->gateway->getCustomerProfile($params);
+        $request->setDeveloperMode(true);
+        $response = $request->send();
+        $this->assertTrue($response->isSuccessful(), 'Should be successful.');
+        $data = $response->getData();
+        $this->assertEquals(
+            $email,
+            $data['profile']['email'],
+            'Should be the same email'
         );
     }
 
