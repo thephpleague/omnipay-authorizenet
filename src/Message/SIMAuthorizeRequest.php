@@ -64,6 +64,8 @@ class SIMAuthorizeRequest extends SIMAbstractRequest
      * modified en-route.
      * It uses the TransactionKey, which is a shared secret between the merchant
      * and Authorize.Net The sequence and timestamp provide additional salt.
+     * @param $data
+     * @return string
      */
     public function getHash($data)
     {

@@ -3,12 +3,14 @@
 namespace Omnipay\AuthorizeNet;
 
 use Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest;
+use Omnipay\AuthorizeNet\Message\AIMCaptureOnlyRequest;
 use Omnipay\AuthorizeNet\Message\AIMCaptureRequest;
-use Omnipay\AuthorizeNet\Message\AIMPaymentPlanQueryResponse;
+use Omnipay\AuthorizeNet\Message\Query\AIMPaymentPlanQueryResponse;
 use Omnipay\AuthorizeNet\Message\AIMPurchaseRequest;
-use Omnipay\AuthorizeNet\Message\QueryRequest;
 use Omnipay\AuthorizeNet\Message\AIMRefundRequest;
 use Omnipay\AuthorizeNet\Message\AIMVoidRequest;
+use Omnipay\AuthorizeNet\Message\Query\AIMPaymentPlansQueryRequest;
+use Omnipay\AuthorizeNet\Message\Query\QueryResponse;
 use Omnipay\Common\AbstractGateway;
 
 /**
@@ -127,7 +129,7 @@ class AIMGateway extends AbstractGateway
     public function authorize(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\AIMAuthorizeRequest',
+            AIMAuthorizeRequest::class,
             $parameters
         );
     }
@@ -139,7 +141,7 @@ class AIMGateway extends AbstractGateway
     public function capture(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\AIMCaptureRequest',
+            AIMCaptureRequest::class,
             $parameters
         );
     }
@@ -151,7 +153,7 @@ class AIMGateway extends AbstractGateway
     public function captureOnly(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\AIMCaptureOnlyRequest',
+            AIMCaptureOnlyRequest::class,
             $parameters
         );
     }
@@ -163,7 +165,7 @@ class AIMGateway extends AbstractGateway
     public function purchase(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\AIMPurchaseRequest',
+            AIMPurchaseRequest::class,
             $parameters
         );
     }
@@ -175,7 +177,7 @@ class AIMGateway extends AbstractGateway
     public function void(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\AIMVoidRequest',
+            AIMVoidRequest::class,
             $parameters
         );
     }
@@ -187,7 +189,7 @@ class AIMGateway extends AbstractGateway
     public function refund(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\AIMRefundRequest',
+            AIMRefundRequest::class,
             $parameters
         );
     }
@@ -199,19 +201,19 @@ class AIMGateway extends AbstractGateway
     public function paymentPlansQuery(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\Query\AIMPaymentPlansQueryRequest',
+            Message\Query\AIMPaymentPlansQueryRequest::class,
             $parameters
         );
     }
 
     /**
      * @param array $parameters
-     * @return AIMPaymentPlanQueryResponse
+     * @return \Omnipay\Common\Message\AbstractRequest
      */
     public function paymentPlanQuery(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\Query\AIMPaymentPlanQueryRequest',
+            Message\Query\AIMPaymentPlanQueryRequest::class,
             $parameters
         );
     }
@@ -223,43 +225,43 @@ class AIMGateway extends AbstractGateway
     public function query(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\Query\QueryRequest',
+            Message\Query\QueryRequest::class,
             $parameters
         );
     }
 
     /**
      * @param array $parameters
-     * @return QueryBatchResponse
+     * @return Message\Query\QueryBatchRequest
      */
     public function queryBatch(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\Query\QueryBatchRequest',
+            Message\Query\QueryBatchRequest::class,
             $parameters
         );
     }
 
     /**
      * @param array $parameters
-     * @return QueryBatchDetailResponse
+     * @return Message\Query\QueryBatchDetailRequest
      */
     public function queryBatchDetail(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\Query\QueryBatchDetailRequest',
+            Message\Query\QueryBatchDetailRequest::class,
             $parameters
         );
     }
 
     /**
      * @param array $parameters
-     * @return QueryDetailResponse
+     * @return Message\Query\QueryDetailRequest
      */
     public function queryDetail(array $parameters = array())
     {
         return $this->createRequest(
-            '\Omnipay\AuthorizeNet\Message\Query\QueryDetailRequest',
+            Message\Query\QueryDetailRequest::class,
             $parameters
         );
     }

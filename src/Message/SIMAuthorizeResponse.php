@@ -15,8 +15,8 @@ class SIMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
 
     public function __construct(RequestInterface $request, $data, $redirectUrl)
     {
-        $this->request = $request;
-        $this->data = $data;
+        parent::__construct($request, $data);
+
         $this->redirectUrl = $redirectUrl;
     }
 

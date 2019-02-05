@@ -53,6 +53,8 @@ class DPMAuthorizeRequest extends SIMAuthorizeRequest
      * The form may have most of the fields hidden, or may allow the user to change some details -
      * that depends on the use-case.
      * So this method will provide us with an object used to build the form.
+     * @param $data
+     * @return DPMResponse
      */
     public function sendData($data)
     {

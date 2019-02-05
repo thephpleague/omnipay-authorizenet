@@ -155,6 +155,8 @@ abstract class CIMAbstractResponse extends AbstractResponse
     {
         return json_decode(json_encode($xml), true);
 
+        // Old parser below, just keeping on a hunch.
+
         $arr = array();
 
         foreach ($xml as $element) {

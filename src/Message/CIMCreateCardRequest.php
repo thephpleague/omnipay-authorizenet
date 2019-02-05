@@ -26,7 +26,7 @@ class CIMCreateCardRequest extends CIMAbstractRequest
     /**
      * Validate card or skip if opaque data is available
      *
-     * @param \SimpleXMLElement $data
+     * @throws \Omnipay\Common\Exception\InvalidCreditCardException
      */
     protected function cardValidate()
     {
