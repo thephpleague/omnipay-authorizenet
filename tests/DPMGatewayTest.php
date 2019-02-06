@@ -2,6 +2,7 @@
 
 namespace Omnipay\AuthorizeNet;
 
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Tests\GatewayTestCase;
 
 class DPMGatewayTest extends GatewayTestCase
@@ -78,7 +79,7 @@ class DPMGatewayTest extends GatewayTestCase
     }
 
     /**
-     * @expectedException Omnipay\Common\Exception\InvalidRequestException
+     * @expectedException \Omnipay\Common\Exception\InvalidRequestException
      * @expectedExceptionMessage Incorrect amount
      *
      * The hash is correct, so the sender knows the shared secret, but the amount

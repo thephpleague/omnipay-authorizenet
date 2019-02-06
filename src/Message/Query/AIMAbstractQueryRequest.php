@@ -2,15 +2,25 @@
 
 namespace Omnipay\AuthorizeNet\Message\Query;
 
-use Omnipay\AuthorizeNet\Message\AIMAbstractRequest;
-
 /**
  * Authorize.Net AIM Abstract Request
  */
+
+use Omnipay\AuthorizeNet\Message\AIMAbstractRequest;
+use SimpleXMLElement;
+
 abstract class AIMAbstractQueryRequest extends AIMAbstractRequest
 {
     protected $limit = 1000;
     protected $offset = 1;
+
+    /**
+     * Disable validation check on the parent method.
+     */
+    protected function addTransactionType(SimpleXMLElement $data)
+    {
+        // NOOP
+    }
 
     /**
      * Get Limit.

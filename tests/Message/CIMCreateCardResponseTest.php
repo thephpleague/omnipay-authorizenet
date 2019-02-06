@@ -2,6 +2,7 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+use Omnipay\Common\Exception\InvalidResponseException;
 use Omnipay\Tests\TestCase;
 
 class CIMCreateCardResponseTest extends TestCase

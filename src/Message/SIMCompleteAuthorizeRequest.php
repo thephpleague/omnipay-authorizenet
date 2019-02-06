@@ -63,6 +63,9 @@ class SIMCompleteAuthorizeRequest extends SIMAbstractRequest
      * CHECKME: should this be the transactionReference in the hash, not the transactionId?
      * The transaction reference and the amount are both sent by the remote gateway (x_trans_id
      * and x_amount) and it is those that should be checked against.
+     * @param $transaction_reference
+     * @param $amount
+     * @return string
      */
     public function getHash($transaction_reference, $amount)
     {

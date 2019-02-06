@@ -72,8 +72,8 @@ class DPMResponse extends AbstractResponse implements RedirectResponseInterface
 
     public function __construct(RequestInterface $request, $data, $postUrl)
     {
-        $this->request = $request;
-        $this->data = $data;
+        parent::__construct($request, $data);
+
         $this->postUrl = $postUrl;
     }
 
@@ -127,6 +127,7 @@ class DPMResponse extends AbstractResponse implements RedirectResponseInterface
      * Move a field to the list of hidden form fields.
      * The hidden fields are those we don't want to show the user, but
      * must still be posted.
+     * @param $field_name
      */
     public function hideField($field_name)
     {

@@ -2,11 +2,10 @@
 
 namespace Omnipay\AuthorizeNet\Message\Query;
 
-use Omnipay\Common\CreditCard;
-
 /**
  * Authorize.Net AIM Authorize Request
  */
+
 class QueryBatchDetailRequest extends QueryBatchRequest
 {
     protected $action = '';
@@ -29,9 +28,17 @@ class QueryBatchDetailRequest extends QueryBatchRequest
     {
         $headers = array('Content-Type' => 'text/xml; charset=utf-8');
         $data = $data->saveXml();
-        $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
+        $httpResponse = $this->httpClient->request(
+            'POST',
+            $this->getEndpoint(),
+            $headers,
+            $data
+        );
 
-        return $this->response = new QueryBatchDetailResponse($this, $httpResponse->getBody()->getContents());
+        return $this->response = new QueryBatchDetailResponse(
+            $this,
+            $httpResponse->getBody()->getContents()
+        );
     }
 
     public function setBatchID($batchID)

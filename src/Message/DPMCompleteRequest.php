@@ -2,8 +2,6 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Omnipay\Common\Exception\InvalidRequestException;
-
 /**
  * Authorize.Net DPM Complete Authorize Request
  */
