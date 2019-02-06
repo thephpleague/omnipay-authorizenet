@@ -276,8 +276,8 @@ abstract class AIMAbstractRequest extends AbstractRequest
 
     protected function addTransactionType(\SimpleXMLElement $data)
     {
-        if (!$this->action) {
-            // The extending class probably hasn't specified an "action"
+        if (! $this->action) {
+            // The extending class probably hasn't specified an "action".
             throw new InvalidRequestException();
         }
 
