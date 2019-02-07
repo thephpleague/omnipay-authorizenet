@@ -24,6 +24,8 @@ abstract class AbstractQueryResponse extends AbstractResponse
      */
     public function xml2array(\SimpleXMLElement $xml)
     {
+        return json_decode(json_encode($xml), true);
+
         $arr = array();
         foreach ($xml as $element) {
             $tag = $element->getName();

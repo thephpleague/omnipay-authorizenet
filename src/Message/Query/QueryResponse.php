@@ -37,7 +37,7 @@ class QueryResponse extends QueryBatchResponse
                         'transactionReference' => $transaction['transId']
                     ))->send();
 
-                    $result[] = $detailResponse;
+                    $result[] = $detailResponse->transaction;
                 }
             }
         }
