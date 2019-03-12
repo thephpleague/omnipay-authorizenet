@@ -157,7 +157,7 @@ class SIMCompleteAuthorizeRequest extends SIMAbstractRequest
         if (empty($httpRequest)) return null;
 
         if($signatureKey = $this->getSignatureKey()){
-            return strtolower($httpRequest->request->get('x_SHA2_Hash'));
+            return strtoupper($httpRequest->request->get('x_SHA2_Hash'));
         }
         return strtolower($httpRequest->request->get('x_MD5_Hash'));
     }
