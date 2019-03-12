@@ -75,7 +75,6 @@ class SIMCompleteAuthorizeRequest extends SIMAbstractRequest
         } else {
             return $this->getMd5Hash($transaction_reference, $amount);
         }
-
     }
 
     /**
@@ -100,14 +99,16 @@ class SIMCompleteAuthorizeRequest extends SIMAbstractRequest
     /**
      * Generate sha512 hash.
      * Required fields are provided in Table 18 in https://www.authorize.net/content/dam/authorize/documents/SIM_guide.pdf#page=73
-     *
      * @param $httpRequest
      * @return string|null
      */
     public function getSha512Hash($httpRequest)
     {
         $signatureKey = $this->getSignatureKey();
-        if(empty($signatureKey) || empty($httpRequest)) return null;
+        if (empty($signatureKey) || empty($httpRequest)) {
+            return null;
+        }
+
         $hashData = implode('^', [
             $httpRequest->request->get('x_trans_id'),
             $httpRequest->request->get('x_test_request'),
@@ -140,7 +141,7 @@ class SIMCompleteAuthorizeRequest extends SIMAbstractRequest
             $httpRequest->request->get('x_ship_to_country'),
             $httpRequest->request->get('x_invoice_num'),
         ]);
-        $hash = hash_hmac('sha512', '^'.$hashData.'^', hex2bin($signatureKey));
+        $hash = hash_hmac('sha512', '^' . $hashData . '^', hex2bin($signatureKey));
         $hash = strtoupper($hash);
 
         return $hash;
@@ -154,11 +155,14 @@ class SIMCompleteAuthorizeRequest extends SIMAbstractRequest
      */
     public function getPostedHash($httpRequest)
     {
-        if (empty($httpRequest)) return null;
+        if (empty($httpRequest)){
+            return null;
+        }
 
-        if($signatureKey = $this->getSignatureKey()){
+        if ($signatureKey = $this->getSignatureKey()) {
             return strtoupper($httpRequest->request->get('x_SHA2_Hash'));
         }
+
         return strtolower($httpRequest->request->get('x_MD5_Hash'));
     }
 
