@@ -70,7 +70,7 @@ class DPMPurchaseRequestTest extends TestCase
 
         $expected = hash_hmac('md5', 'user^a^b^c^', 'key');
 
-        $this->assertSame($expected, $this->request->getHash($data));
+        $this->assertSame($expected, $this->request->createHash($data));
     }
 
     public function testSend()

@@ -2,14 +2,15 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
+/**
+ * Authorize.Net SIM Complete Authorize Response
+ */
+
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
-/**
- * Authorize.Net SIM Complete Authorize Response
- */
-class SIMCompleteAuthorizeResponse extends AbstractResponse implements RedirectResponseInterface
+class SIMCompleteResponse extends AbstractResponse implements RedirectResponseInterface
 {
     // Response codes returned by Authorize.Net
 

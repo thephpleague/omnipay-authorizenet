@@ -5,7 +5,7 @@ namespace Omnipay\AuthorizeNet\Message;
 /**
  * Authorize.Net DPM Complete Authorize Request
  */
-class DPMCompleteRequest extends SIMCompleteAuthorizeRequest
+class DPMCompleteRequest extends SIMCompleteRequest
 {
     public function sendData($data)
     {
