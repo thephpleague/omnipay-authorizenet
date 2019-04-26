@@ -133,7 +133,7 @@ class CIMGatewayTest extends GatewayTestCase
     public function testShouldCreateCardFromOpaqueDataIfDuplicateCustomerProfileExists()
     {
         $this->setMockHttpResponse(array('CIMCreateCardFailureWithDuplicate.txt', 'CIMCreatePaymentProfileSuccess.txt',
-            'CIMGetProfileSuccess.txt', 'CIMGetPaymentProfileSuccess.txt'));
+            'CIMGetMultipleProfilesSuccess.txt', 'CIMGetPaymentProfileSuccess.txt'));
 
         $response = $this->gateway->createCard($this->createCardFromOpaqueDataOptions)->send();
 
@@ -165,7 +165,7 @@ class CIMGatewayTest extends GatewayTestCase
     {
         // Duplicate **payment** profile
         $this->setMockHttpResponse(array('CIMCreateCardFailureWithDuplicate.txt', 'CIMCreatePaymentProfileFailure.txt',
-            'CIMGetProfileSuccess.txt', 'CIMUpdatePaymentProfileSuccess.txt', 'CIMGetPaymentProfileSuccess.txt'));
+            'CIMGetMultipleProfilesSuccess.txt', 'CIMUpdatePaymentProfileSuccess.txt', 'CIMGetPaymentProfileSuccess.txt'));
 
         $response = $this->gateway->createCard($this->createCardFromOpaqueDataOptions)->send();
 
