@@ -44,4 +44,11 @@ class SIMAuthorizeResponse extends AbstractResponse implements RedirectResponseI
     {
         return $this->getData();
     }
+
+    public function getTransactionId()
+    {
+        return isset($this->data[SIMAbstractRequest::TRANSACTION_ID_PARAM])
+            ? $this->data[SIMAbstractRequest::TRANSACTION_ID_PARAM]
+            : null;
+    }
 }

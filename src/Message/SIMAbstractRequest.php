@@ -2,11 +2,12 @@
 
 namespace Omnipay\AuthorizeNet\Message;
 
-use Omnipay\Common\Message\AbstractRequest;
-
 /**
  * Authorize.Net SIM Abstract Request
  */
+
+use Omnipay\Common\Message\AbstractRequest;
+
 abstract class SIMAbstractRequest extends AbstractRequest
 {
     /**

@@ -60,7 +60,7 @@ class SIMGateway extends AIMGateway
 
     public function completeAuthorize(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\AuthorizeNet\Message\SIMCompleteAuthorizeRequest', $parameters);
+        return $this->createRequest('\Omnipay\AuthorizeNet\Message\SIMCompleteRequest', $parameters);
     }
 
     public function capture(array $parameters = array())

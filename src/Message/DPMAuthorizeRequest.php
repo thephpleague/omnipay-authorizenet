@@ -6,6 +6,7 @@ namespace Omnipay\AuthorizeNet\Message;
  * Authorize.Net DPM Authorize Request.
  * Takes the data that will be used to create the direct-post form.
  */
+
 class DPMAuthorizeRequest extends SIMAuthorizeRequest
 {
     protected $action = 'AUTH_ONLY';

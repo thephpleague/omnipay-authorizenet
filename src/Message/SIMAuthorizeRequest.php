@@ -54,7 +54,8 @@ class SIMAuthorizeRequest extends SIMAbstractRequest
         }
 
         $data = array_merge($data, $this->getBillingData());
-        $data['x_fp_hash'] = $this->getHash($data);
+
+        $data['x_fp_hash'] = $this->createHash($data);
 
         return $data;
     }
@@ -64,10 +65,11 @@ class SIMAuthorizeRequest extends SIMAbstractRequest
      * modified en-route.
      * It uses the TransactionKey, which is a shared secret between the merchant
      * and Authorize.Net The sequence and timestamp provide additional salt.
+     *
      * @param $data
      * @return string
      */
-    public function getHash($data)
+    public function createHash($data)
     {
         $fingerprint = implode(
             '^',
@@ -77,7 +79,7 @@ class SIMAuthorizeRequest extends SIMAbstractRequest
                 $data['x_fp_timestamp'],
                 $data['x_amount']
             )
-        ).'^';
+        ) . '^';
 
         // If x_currency_code is specified, then it must follow the final trailing carat.
 
