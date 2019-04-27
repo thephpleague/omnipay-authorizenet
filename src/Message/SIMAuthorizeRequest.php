@@ -79,7 +79,7 @@ class SIMAuthorizeRequest extends SIMAbstractRequest
                 $data['x_fp_timestamp'],
                 $data['x_amount']
             )
-        ).'^';
+        ) . '^';
 
         // If x_currency_code is specified, then it must follow the final trailing carat.
 
