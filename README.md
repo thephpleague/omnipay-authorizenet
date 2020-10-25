@@ -55,12 +55,21 @@ recipient, but just leave the credit card details of that object blank. For exam
 // $gateway is an instantiation of the AIM driver.
 // $dataDescriptor and $dataValue come from the payment form at the front end.
 
+use Omnipay\Common\CreditCard;
+
 $request = $gateway->purchase(
     [
         'notifyUrl' => '...',
         'amount' => $amount,
+        //
         'opaqueDataDescriptor' => $dataDescriptor,
         'opaqueDataValue' => $dataValue,
+        //
+        'card' => new CreditCard([
+            'firstName' => 'Anne',
+            'lastName' => 'Payee',
+            ...
+        ]),
         ...
     ]
 );
